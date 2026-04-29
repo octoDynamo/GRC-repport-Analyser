@@ -20,6 +20,8 @@ import { api } from '../services/api';
 import type { Analyse, Risque, Conformite, Recommandation } from '../types';
 import { RiskMatrix } from '../components/risks/RiskMatrix';
 import { ComplianceRadar } from '../components/compliance/ComplianceRadar';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export function Analysis() {
   const { id } = useParams<{ id: string }>();
@@ -35,25 +37,51 @@ export function Analysis() {
   const [chatLoading, setChatLoading] = useState(false);
 
   useEffect(() => {
+    if (!id) return;
+
+    let pollInterval: ReturnType<typeof setInterval> | null = null;
+
     const fetchAll = async () => {
       try {
-        const [aRes, rRes, cRes, recRes] = await Promise.all([
-          api.get<{data: Analyse}>(`/analyses/${id}`),
-          api.get<{data: Risque[]}>(`/analyses/${id}/risks`),
-          api.get<{data: Conformite[]}>(`/analyses/${id}/conformite`),
-          api.get<{data: Recommandation[]}>(`/analyses/${id}/recommandations`)
-        ]);
-        setAnalyse(aRes.data.data);
-        setRisques(rRes.data.data);
-        setConformites(cRes.data.data);
-        setRecommandations(recRes.data.data);
+        const aRes = await api.get<{data: Analyse}>(`/analyses/${id}`);
+        const currentAnalyse = aRes.data.data;
+        setAnalyse(currentAnalyse);
+
+        if (currentAnalyse && (currentAnalyse.statut === 'termine' || currentAnalyse.statut === 'COMPLETED')) {
+          // Analysis done — fetch sub-resources and stop polling
+          if (pollInterval) {
+            clearInterval(pollInterval);
+            pollInterval = null;
+          }
+          const [rRes, cRes, recRes] = await Promise.all([
+            api.get<{data: Risque[]}>(`/analyses/${id}/risks`),
+            api.get<{data: Conformite[]}>(`/analyses/${id}/conformite`),
+            api.get<{data: Recommandation[]}>(`/analyses/${id}/recommandations`),
+          ]);
+          setRisques(rRes.data.data);
+          setConformites(cRes.data.data);
+          setRecommandations(recRes.data.data);
+        } else if (currentAnalyse && currentAnalyse.statut === 'erreur') {
+          if (pollInterval) clearInterval(pollInterval);
+        }
+        // else still in progress — keep polling
       } catch (err) {
         console.error("Failed to load analysis details", err);
+        if (pollInterval) clearInterval(pollInterval);
       } finally {
         setLoading(false);
       }
     };
-    if (id) fetchAll();
+
+    // First immediate fetch
+    fetchAll();
+
+    // Then poll every 4 seconds while the analysis might still be running
+    pollInterval = setInterval(fetchAll, 4000);
+
+    return () => {
+      if (pollInterval) clearInterval(pollInterval);
+    };
   }, [id]);
 
   const handleExportPdf = () => {
@@ -185,7 +213,9 @@ export function Analysis() {
               <h3 className="text-xl font-bold mb-6 border-b pb-2">Résumé généré par l'IA</h3>
               {analyse.resume_executif ? (
                 <div className="whitespace-pre-wrap leading-relaxed">
-                  {analyse.resume_executif}
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {analyse.resume_executif}
+                  </ReactMarkdown>
                 </div>
               ) : (
                 <p className="text-muted-foreground">Aucun résumé disponible.</p>
@@ -310,7 +340,9 @@ export function Analysis() {
                       </span>
                     </div>
                     <h4 className="font-semibold text-base">{rec.libelle}</h4>
-                    <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">{rec.description}</p>
+                    <div className="text-sm text-muted-foreground max-w-3xl leading-relaxed prose prose-sm dark:prose-invert">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{rec.description}</ReactMarkdown>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-4 shrink-0 border-t md:border-t-0 md:border-l pt-4 md:pt-0 md:pl-6">
@@ -359,7 +391,11 @@ export function Analysis() {
                         ? 'bg-primary text-primary-foreground tabular-nums rounded-tr-sm shadow-sm' 
                         : 'bg-card border text-foreground rounded-tl-sm shadow-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none'
                     }`}>
-                      {msg.role === 'user' ? msg.content : <div className="whitespace-pre-wrap">{msg.content}</div>}
+                      {msg.role === 'user' ? msg.content : (
+                        <div className="whitespace-pre-wrap">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))

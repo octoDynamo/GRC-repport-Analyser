@@ -3,6 +3,7 @@ import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import get_current_user
@@ -23,14 +24,26 @@ async def upload(
     db: Annotated[AsyncSession, Depends(get_db)],
     current_user: Annotated[Utilisateur, Depends(get_current_user)],
 ):
+    if not file.filename:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Filename is missing")
+
     file_bytes = await file.read()
     try:
         rapport = await upload_report(db, file_bytes, file.filename, current_user)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except Exception as e:
+        logger.exception(f"Upload failed for '{file.filename}': {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Upload failed: {str(e)}")
 
     return api_response(
-        data={"id": str(rapport.id), "nom": rapport.nom, "statut": rapport.statut},
+        data={
+            "id": str(rapport.id),
+            "nom": rapport.nom,
+            "format": rapport.format,
+            "statut": rapport.statut,
+            "created_at": rapport.created_at.isoformat(),
+        },
         message="Report uploaded successfully",
     )
 
@@ -60,3 +73,16 @@ async def get_one(
     return api_response(
         data={"id": str(rapport.id), "nom": rapport.nom, "format": rapport.format, "statut": rapport.statut, "created_at": rapport.created_at.isoformat()}
     )
+
+
+@router.delete("/{rapport_id}")
+async def delete_one(
+    rapport_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[Utilisateur, Depends(get_current_user)],
+):
+    from app.services.report_service import delete_rapport_complet
+    success = await delete_rapport_complet(db, rapport_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Rapport not found")
+    return api_response(message="Report deleted successfully")

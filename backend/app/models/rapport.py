@@ -34,4 +34,4 @@ class Rapport(Base):
 
     # Relationships
     uploade_par_user = relationship("Utilisateur", back_populates="rapports")
-    analyses = relationship("Analyse", back_populates="rapport", lazy="select")
+    analyses = relationship("Analyse", back_populates="rapport", lazy="select", cascade="all, delete-orphan")

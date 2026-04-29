@@ -1,11 +1,15 @@
-"""Alembic environment for async SQLAlchemy migrations."""
-import asyncio
+"""Alembic environment — uses a synchronous psycopg2 connection for migrations.
+
+Using asyncpg inside alembic's synchronous runner causes WinError 121 on
+Windows/WSL2. We switch to the standard psycopg2 driver here (which is already
+installed as psycopg2-binary in requirements.txt) while keeping asyncpg for the
+running FastAPI application.
+"""
+
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import pool
-from sqlalchemy.engine import Connection
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy import engine_from_config, pool
 
 from app.config import settings
 from app.database import Base
@@ -14,7 +18,15 @@ from app.database import Base
 import app.models  # noqa: F401
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.database_url.replace("+asyncpg", ""))
+
+# Build a *synchronous* psycopg2 URL from the asyncpg one stored in settings.
+# e.g. postgresql+asyncpg://user:pass@host/db  →  postgresql+psycopg2://user:pass@host/db
+_sync_url = (
+    settings.database_url
+    .replace("+asyncpg", "+psycopg2")
+    .replace("postgresql+psycopg2", "postgresql")   # keep plain driver name
+)
+config.set_main_option("sqlalchemy.url", _sync_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -34,26 +46,16 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
-    with context.begin_transaction():
-        context.run_migrations()
-
-
-async def run_async_migrations() -> None:
-    async_url = settings.database_url
-    connectable = async_engine_from_config(
-        {"sqlalchemy.url": async_url},
+def run_migrations_online() -> None:
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
-    async with connectable.connect() as connection:
-        await connection.run_sync(do_run_migrations)
-    await connectable.dispose()
-
-
-def run_migrations_online() -> None:
-    asyncio.run(run_async_migrations())
+    with connectable.connect() as connection:
+        context.configure(connection=connection, target_metadata=target_metadata)
+        with context.begin_transaction():
+            context.run_migrations()
 
 
 if context.is_offline_mode():

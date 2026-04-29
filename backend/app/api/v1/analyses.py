@@ -57,7 +57,7 @@ async def lancer_analyse(
     )
     db.add(analyse)
     rapport.statut = "en_cours"
-    await db.flush()
+    await db.commit()
 
     analyse_id = analyse.id
     background_tasks.add_task(_run_analysis_background, analyse_id, rapport_id)
@@ -66,6 +66,23 @@ async def lancer_analyse(
         data={"analyse_id": str(analyse_id), "statut": "en_cours"},
         message="Analysis started",
     )
+
+
+@router.get("/rapport/{rapport_id}")
+async def get_by_rapport(
+    rapport_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[Utilisateur, Depends(get_current_user)],
+):
+    from app.services.analysis_service import list_analyses_for_rapport
+    analyses = await list_analyses_for_rapport(db, rapport_id)
+    data = [{
+        "id": str(a.id),
+        "rapport_id": str(a.rapport_id),
+        "statut": a.statut,
+        "created_at": a.created_at.isoformat(),
+    } for a in analyses]
+    return api_response(data=data)
 
 
 @router.get("/{analyse_id}")

@@ -304,7 +304,7 @@ grc_chromadb      running (healthy)
 
 | Service | Port | URL |
 |---|---|---|
-| PostgreSQL | 5432 | `postgresql://localhost:5432/grc_db` |
+| PostgreSQL | 5433 | `postgresql://localhost:5433/grc_db` |
 | MinIO S3 API | 9000 | `http://localhost:9000` |
 | MinIO Console | 9001 | `http://localhost:9001` |
 | ChromaDB | 8001 | `http://localhost:8001` |
@@ -338,7 +338,23 @@ The API will be available at:
 - **ReDoc:** http://localhost:8000/redoc
 - **OpenAPI JSON:** http://localhost:8000/openapi.json
 
-### 5. Set Up the Frontend
+### 5. Create a Default User Account
+
+Before logging into the application, you must create a user account via the interactive API documentation:
+1. Navigate to **http://localhost:8000/docs**
+2. Expand the `POST /api/v1/auth/register` section and click **Try it out**.
+3. Provide your desired email and password in the JSON body:
+   ```json
+   {
+     "nom": "Admin",
+     "email": "admin@entreprise.com",
+     "password": "password123",
+     "role": "ANALYSTE"
+   }
+   ```
+4. Click **Execute** (you should receive an HTTP 201 response).
+
+### 6. Set Up the Frontend
 
 Open a new terminal window:
 
@@ -501,7 +517,7 @@ Document Upload
 
 | Variable | Default | Required | Description |
 |---|---|---|---|
-| `DATABASE_URL` | `postgresql+asyncpg://...` | ✅ | Async PostgreSQL connection string |
+| `DATABASE_URL` | `postgresql+asyncpg://grc_user:grc_secret@localhost:5433/grc_db` | ✅ | Async PostgreSQL connection string |
 | `MISTRAL_API_KEY` | — | ✅ | Your Mistral AI API key |
 | `MISTRAL_MODEL` | `mistral-large-latest` | ❌ | Mistral model to use |
 | `MINIO_ENDPOINT` | `localhost:9000` | ✅ | MinIO S3 endpoint |

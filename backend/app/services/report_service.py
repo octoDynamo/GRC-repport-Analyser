@@ -1,6 +1,7 @@
 """Report service — file upload to MinIO and database management."""
 import io
 import uuid
+import asyncio
 from pathlib import Path
 
 from loguru import logger
@@ -18,7 +19,7 @@ ALLOWED_FORMATS = {"pdf", "docx", "xlsx"}
 _minio_client: Minio | None = None
 
 
-def get_minio_client() -> Minio:
+async def get_minio_client() -> Minio:
     global _minio_client
     if _minio_client is None:
         _minio_client = Minio(
@@ -29,9 +30,10 @@ def get_minio_client() -> Minio:
         )
         # Ensure bucket exists
         try:
-            if not _minio_client.bucket_exists(settings.minio_bucket):
-                _minio_client.make_bucket(settings.minio_bucket)
-        except S3Error as e:
+            exists = await asyncio.to_thread(_minio_client.bucket_exists, settings.minio_bucket)
+            if not exists:
+                await asyncio.to_thread(_minio_client.make_bucket, settings.minio_bucket)
+        except Exception as e:
             logger.warning(f"MinIO bucket check failed: {e}")
     return _minio_client
 
@@ -54,9 +56,11 @@ async def upload_report(
     object_name = f"reports/{uuid.uuid4()}/{filename}"
 
     # Upload to MinIO
-    client = get_minio_client()
+    client = await get_minio_client()
     content_types = {"pdf": "application/pdf", "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-    client.put_object(
+    
+    await asyncio.to_thread(
+        client.put_object,
         settings.minio_bucket,
         object_name,
         io.BytesIO(file_bytes),
@@ -79,8 +83,8 @@ async def upload_report(
 
 async def get_report_bytes(object_name: str) -> bytes:
     """Download report bytes from MinIO."""
-    client = get_minio_client()
-    response = client.get_object(settings.minio_bucket, object_name)
+    client = await get_minio_client()
+    response = await asyncio.to_thread(client.get_object, settings.minio_bucket, object_name)
     data = response.read()
     response.close()
     return data
@@ -97,3 +101,29 @@ async def list_rapports(db: AsyncSession, user: Utilisateur) -> list[Rapport]:
 async def get_rapport(db: AsyncSession, rapport_id: uuid.UUID) -> Rapport | None:
     result = await db.execute(select(Rapport).where(Rapport.id == rapport_id))
     return result.scalar_one_or_none()
+
+async def delete_rapport_complet(db: AsyncSession, rapport_id: uuid.UUID) -> bool:
+    """Delete a report, its DB records, MinIO file, and ChromaDB collections."""
+    from app.ai.rag.vector_store import delete_collection
+    from app.models.analyse import Analyse
+    
+    rapport = await get_rapport(db, rapport_id)
+    if not rapport:
+        return False
+        
+    # 1. Delete ChromaDB collections for all analyses linked to this report
+    result = await db.execute(select(Analyse).where(Analyse.rapport_id == rapport_id))
+    for analyse in result.scalars().all():
+        await delete_collection(str(analyse.id))
+        
+    # 2. Delete file from MinIO
+    try:
+        client = await get_minio_client()
+        await asyncio.to_thread(client.remove_object, settings.minio_bucket, rapport.chemin)
+    except Exception as e:
+        logger.warning(f"Could not delete MinIO object {rapport.chemin}: {e}")
+        
+    # 3. Delete from DB (cascade handles the rest)
+    await db.delete(rapport)
+    await db.commit()
+    return True

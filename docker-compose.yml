@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: grc_secret
       POSTGRES_DB: grc_db
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -61,16 +61,10 @@ services:
     environment:
       - IS_PERSISTENT=TRUE
       - CHROMA_SERVER_HOST=0.0.0.0
-      - CHROMA_SERVER_HTTP_PORT=8001
     ports:
-      - "8001:8001"
+      - "8001:8000"   # ChromaDB runs on 8000 internally; exposed as 8001 on the host
     volumes:
       - chroma_data:/chroma/chroma
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/heartbeat"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 volumes:
   postgres_data:

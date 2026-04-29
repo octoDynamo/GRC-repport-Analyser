@@ -1,7 +1,7 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileUp, FileText, Loader2, Play, AlertCircle } from 'lucide-react';
+import { FileUp, FileText, Loader2, Play, AlertCircle, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { api } from '../services/api';
@@ -10,7 +10,7 @@ import { useReportStore } from '../store/reportStore';
 
 export function Reports() {
   const navigate = useNavigate();
-  const { reportList, setReports, addReport } = useReportStore();
+  const { reportList, setReports } = useReportStore();
   
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -43,8 +43,10 @@ export function Reports() {
     e.preventDefault();
     if (!file) return;
 
-    const allowed = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-    if (!allowed.includes(file.type)) {
+    // Use extension-based validation because MIME can be empty/inconsistent across browsers/OS.
+    const extension = file.name.split('.').pop()?.toLowerCase();
+    const allowedExtensions = ['pdf', 'docx', 'xlsx'];
+    if (!extension || !allowedExtensions.includes(extension)) {
       setError('Format invalide. PDF, DOCX ou XLSX uniquement.');
       return;
     }
@@ -56,20 +58,35 @@ export function Reports() {
     formData.append('file', file);
 
     try {
-      const response = await api.post<{ data: Rapport }>('/rapports/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      addReport(response.data.data);
+      await api.post<{ data: Rapport }>('/rapports/upload', formData);
+      await fetchReports();
       setFile(null);
       // Reset input
       const input = document.getElementById('file-upload') as HTMLInputElement;
       if (input) input.value = '';
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Erreur lors de l\'upload');
+      const backendDetail =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        (Array.isArray(err.response?.data?.detail) ? err.response.data.detail[0]?.msg : null);
+      setError(backendDetail || 'Erreur lors de l\'upload');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const goToAnalysis = async (rapportId: string) => {
+    try {
+      const analysesList = await api.get<{ data: any[] }>(`/analyses/rapport/${rapportId}`);
+      const analyses = analysesList.data.data;
+      if (analyses && analyses.length > 0) {
+        navigate(`/analysis/${analyses[0].id}`);
+      } else {
+        alert("Aucune analyse trouvée pour ce rapport.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de la récupération de l'analyse.");
     }
   };
 
@@ -83,6 +100,17 @@ export function Reports() {
     } catch (err) {
       console.error(err);
       alert('Erreur lors du lancement de l\'analyse');
+    }
+  };
+
+  const handleDeleteReport = async (rapportId: string) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce rapport et toutes ses analyses ?')) return;
+    try {
+      await api.delete(`/rapports/${rapportId}`);
+      fetchReports();
+    } catch (err) {
+      console.error(err);
+      alert('Erreur lors de la suppression du rapport');
     }
   };
 
@@ -168,7 +196,7 @@ export function Reports() {
                         {r.statut.toUpperCase().replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
                       {r.statut === 'en_attente' || r.statut === 'erreur' ? (
                         <button
                           onClick={() => launchAnalysis(r.id)}
@@ -177,17 +205,22 @@ export function Reports() {
                           <Play className="h-3 w-3 mr-1" /> Analyser
                         </button>
                       ) : r.statut === 'termine' ? (
-                        // If there is an existing analysis for this report, ideally we'd link to it. 
-                        // For simplicity in this demo, let's just make a mock button that says "Voir Résultats"
                         <button
-                          onClick={() => alert('Veuillez aller dans le Tableau de bord pour voir les analyses récentes.')}
+                          onClick={() => goToAnalysis(r.id)}
                           className="inline-flex h-8 items-center justify-center rounded-md border text-foreground hover:bg-muted px-3 text-xs font-medium"
                         >
-                          Voir
+                          Voir l'Analyse
                         </button>
                       ) : (
                         <span className="text-xs text-muted-foreground flex items-center justify-end"><Loader2 className="h-3 w-3 animate-spin mr-1"/> En cours</span>
                       )}
+                      <button
+                        onClick={() => handleDeleteReport(r.id)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-destructive hover:bg-destructive/10 transition-colors"
+                        title="Supprimer ce rapport"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </td>
                   </tr>
                 ))}

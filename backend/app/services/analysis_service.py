@@ -1,4 +1,5 @@
 """Analysis service — orchestrates the full AI analysis pipeline."""
+import asyncio
 import uuid
 
 from loguru import logger
@@ -48,18 +49,36 @@ async def run_analysis(
     try:
         # Step 1: Download document from MinIO and extract text
         file_bytes = await get_report_bytes(rapport.chemin)
-        text = extract_text(file_bytes, rapport.format)
+        text = await asyncio.to_thread(extract_text, file_bytes, rapport.format)
         logger.info(f"Extracted {len(text)} chars from {rapport.nom}")
 
-        # Step 2: Index chunks in ChromaDB for RAG
-        chunks = chunk_text(text)
-        await index_document_chunks(str(analyse_id), chunks)
-        logger.info(f"Indexed {len(chunks)} chunks into ChromaDB")
+        # Phase 1: Parallelize ChromaDB index, Risk extraction, and all Compliance checks
+        chunks = await asyncio.to_thread(chunk_text, text)
 
-        # Step 3: Extract risks
+        task_chroma = index_document_chunks(str(analyse_id), chunks)
+        
         risk_system, risk_user = build_risk_prompt(text)
-        risk_data = await call_mistral_json(risk_system, risk_user)
-        risques_raw = risk_data.get("risques", [])
+        task_risk = call_mistral_json(risk_system, risk_user)
+        
+        tasks_comp = []
+        for framework in FRAMEWORKS:
+            comp_system, comp_user = build_compliance_prompt(text, framework)
+            tasks_comp.append(call_mistral_json(comp_system, comp_user))
+            
+        phase1_results = await asyncio.gather(task_chroma, task_risk, *tasks_comp, return_exceptions=True)
+        
+        # Handle Chroma result
+        if isinstance(phase1_results[0], Exception):
+            logger.error(f"ChromaDB indexing failed: {phase1_results[0]}")
+        else:
+            logger.info(f"Indexed {len(chunks)} chunks into ChromaDB")
+
+        # Handle Risk result
+        if isinstance(phase1_results[1], Exception):
+            logger.error(f"Risk extraction failed: {phase1_results[1]}")
+            risques_raw = []
+        else:
+            risques_raw = phase1_results[1].get("risques", [])
 
         saved_risques: list[Risque] = []
         risk_label_to_id: dict[str, uuid.UUID] = {}
@@ -87,47 +106,73 @@ async def run_analysis(
             except Exception as e:
                 logger.warning(f"Skipping malformed risk: {e}")
 
-        await db.flush()
         logger.info(f"Saved {len(saved_risques)} risks")
 
-        # Step 4: Compliance checks — run all 3 frameworks
+        # Handle Compliance results
         compliance_scores: dict[str, float] = {}
-        for framework in FRAMEWORKS:
+        for i, framework in enumerate(FRAMEWORKS):
+            comp_res = phase1_results[i + 2]
+            if isinstance(comp_res, Exception):
+                logger.error(f"Compliance check failed for {framework}: {comp_res}")
+                compliance_scores[framework] = 0.0
+                continue
+                
+            comp_data = comp_res
             try:
-                comp_system, comp_user = build_compliance_prompt(text, framework)
-                comp_data = await call_mistral_json(comp_system, comp_user)
                 global_rate = float(comp_data.get("taux_global", 0))
                 compliance_scores[framework] = global_rate
 
                 for domaine in comp_data.get("domaines", []):
+                    raw_statut = str(domaine.get("statut", "PARTIEL")).upper()
+                    if raw_statut not in ["CONFORME", "NON_CONFORME", "PARTIEL"]:
+                        raw_statut = "PARTIEL"
+
                     conformite = ResultatConformite(
                         id=uuid.uuid4(),
                         analyse_id=analyse_id,
                         referentiel=framework,
                         domaine=str(domaine.get("nom", ""))[:500],
-                        statut=str(domaine.get("statut", "PARTIEL")).upper(),
+                        statut=raw_statut,
                         ecart=str(domaine.get("ecart", "")),
                         taux_conformite=float(domaine.get("taux", 0)),
                     )
                     db.add(conformite)
             except Exception as e:
-                logger.error(f"Compliance check failed for {framework}: {e}")
+                logger.error(f"Compliance check post-processing failed for {framework}: {e}")
                 compliance_scores[framework] = 0.0
 
         await db.flush()
 
-        # Step 5: Recommendations
+        # Phase 2: Parallelize Recommendations and Executive summary
         risks_summary = "\n".join(
             [f"- {r.libelle} (Sévérité: {r.severite}, Score: {r.score_risque})" for r in saved_risques[:20]]
         )
         rec_system, rec_user = build_recommendation_prompt(risks_summary)
-        rec_data = await call_mistral_json(rec_system, rec_user)
+        task_rec = call_mistral_json(rec_system, rec_user)
+        
+        summary_system, summary_user = build_summary_prompt(
+            text=text,
+            risks_count=len(saved_risques),
+            iso_score=compliance_scores.get("ISO27001", 0),
+            rgpd_score=compliance_scores.get("RGPD", 0),
+            loi_score=compliance_scores.get("LOI0908", 0),
+        )
+        task_summary = call_mistral(summary_system, summary_user, temperature=0.3)
+
+        phase2_results = await asyncio.gather(task_rec, task_summary, return_exceptions=True)
+
+        if isinstance(phase2_results[0], Exception):
+            logger.error(f"Recommendations mapping failed: {phase2_results[0]}")
+            rec_data = {"recommandations": []}
+        else:
+            rec_data = phase2_results[0]
+
+        summary = phase2_results[1] if not isinstance(phase2_results[1], Exception) else "Résumé exécutif indisponible suite à une erreur."
 
         for rec in rec_data.get("recommandations", []):
             try:
                 risque_libelle = rec.get("risque_lie", "")
                 risque_id = risk_label_to_id.get(risque_libelle)
-                # Try fuzzy match
                 if not risque_id:
                     for label, rid in risk_label_to_id.items():
                         if risque_libelle.lower() in label.lower() or label.lower() in risque_libelle.lower():
@@ -148,18 +193,6 @@ async def run_analysis(
                 db.add(recommandation)
             except Exception as e:
                 logger.warning(f"Skipping malformed recommendation: {e}")
-
-        await db.flush()
-
-        # Step 6: Executive summary
-        summary_system, summary_user = build_summary_prompt(
-            text=text,
-            risks_count=len(saved_risques),
-            iso_score=compliance_scores.get("ISO27001", 0),
-            rgpd_score=compliance_scores.get("RGPD", 0),
-            loi_score=compliance_scores.get("LOI0908", 0),
-        )
-        summary = await call_mistral(summary_system, summary_user, temperature=0.3)
 
         # Step 7: Compute maturity score (average of compliance scores)
         all_scores = list(compliance_scores.values())
@@ -182,7 +215,7 @@ async def run_analysis(
         analyse.statut = "erreur"
         rapport.statut = "erreur"
         await db.flush()
-        raise
+        # Do not raise here; allow the transaction to commit the 'erreur' status
 
 
 async def get_analyse(db: AsyncSession, analyse_id: uuid.UUID) -> Analyse | None:

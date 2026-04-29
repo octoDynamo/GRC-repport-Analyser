@@ -1,5 +1,5 @@
-"""ChromaDB vector store operations for RAG."""
 import uuid
+import asyncio
 from typing import Any
 
 import chromadb
@@ -50,29 +50,32 @@ async def index_document_chunks(analyse_id: str, chunks: list[str]) -> int:
 
     try:
         # Get or create collection
-        collection = client.get_or_create_collection(
+        collection = await asyncio.to_thread(
+            client.get_or_create_collection,
             name=collection_name,
             metadata={"hnsw:space": "cosine"},
         )
 
-        # Generate embeddings
-        embeddings = model.encode(chunks, show_progress_bar=False).tolist()
+        # Generate embeddings (CPU intensive)
+        embeddings = await asyncio.to_thread(model.encode, chunks, show_progress_bar=False)
+        embeddings_list = embeddings.tolist()
 
         # Build IDs and metadata
         ids = [str(uuid.uuid4()) for _ in chunks]
         metadatas = [{"chunk_index": i, "analyse_id": analyse_id} for i in range(len(chunks))]
 
-        collection.add(
+        await asyncio.to_thread(
+            collection.add,
             documents=chunks,
-            embeddings=embeddings,
+            embeddings=embeddings_list,
             ids=ids,
             metadatas=metadatas,
         )
         logger.info(f"Indexed {len(chunks)} chunks for analyse {analyse_id}")
         return len(chunks)
     except Exception as exc:
-        logger.error(f"ChromaDB indexing failed: {exc}")
-        raise
+        logger.error(f"ChromaDB indexing failed (non-fatal): {exc}")
+        return 0  # RAG indexing is optional; analysis continues without it
 
 
 async def search_similar_chunks(
@@ -87,12 +90,14 @@ async def search_similar_chunks(
     collection_name = get_collection_name(analyse_id)
 
     try:
-        collection = client.get_collection(collection_name)
-        query_embedding = model.encode([query], show_progress_bar=False).tolist()
+        collection = await asyncio.to_thread(client.get_collection, collection_name)
+        embeddings = await asyncio.to_thread(model.encode, [query], show_progress_bar=False)
+        query_embedding = embeddings.tolist()
 
-        results = collection.query(
+        results = await asyncio.to_thread(
+            collection.query,
             query_embeddings=query_embedding,
-            n_results=min(top_k, collection.count()),
+            n_results=min(top_k, await asyncio.to_thread(collection.count)),
             include=["documents", "distances"],
         )
 
@@ -110,6 +115,6 @@ async def delete_collection(analyse_id: str) -> None:
     client = get_chroma_client()
     collection_name = get_collection_name(analyse_id)
     try:
-        client.delete_collection(collection_name)
+        await asyncio.to_thread(client.delete_collection, collection_name)
     except Exception:
         pass  # Collection may not exist
