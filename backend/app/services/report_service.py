@@ -1,12 +1,8 @@
-"""Report service — file upload to MinIO and database management."""
-import io
+"""Report service — file storage and database management."""
 import uuid
-import asyncio
 from pathlib import Path
 
 from loguru import logger
-from minio import Minio
-from minio.error import S3Error
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -16,26 +12,13 @@ from app.models.utilisateur import Utilisateur
 
 ALLOWED_FORMATS = {"pdf", "docx", "xlsx"}
 
-_minio_client: Minio | None = None
 
-
-async def get_minio_client() -> Minio:
-    global _minio_client
-    if _minio_client is None:
-        _minio_client = Minio(
-            settings.minio_endpoint,
-            access_key=settings.minio_access_key,
-            secret_key=settings.minio_secret_key,
-            secure=settings.minio_secure,
-        )
-        # Ensure bucket exists
-        try:
-            exists = await asyncio.to_thread(_minio_client.bucket_exists, settings.minio_bucket)
-            if not exists:
-                await asyncio.to_thread(_minio_client.make_bucket, settings.minio_bucket)
-        except Exception as e:
-            logger.warning(f"MinIO bucket check failed: {e}")
-    return _minio_client
+def _upload_root() -> Path:
+    root = Path(settings.upload_dir)
+    if not root.is_absolute():
+        root = Path(__file__).parent.parent.parent / root
+    root.mkdir(parents=True, exist_ok=True)
+    return root
 
 
 def validate_file_format(filename: str) -> str:
@@ -51,22 +34,13 @@ async def upload_report(
     filename: str,
     user: Utilisateur,
 ) -> Rapport:
-    """Validate, upload to MinIO, and create DB record."""
+    """Validate, save to disk, and create DB record."""
     fmt = validate_file_format(filename)
     object_name = f"reports/{uuid.uuid4()}/{filename}"
 
-    # Upload to MinIO
-    client = await get_minio_client()
-    content_types = {"pdf": "application/pdf", "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
-    
-    await asyncio.to_thread(
-        client.put_object,
-        settings.minio_bucket,
-        object_name,
-        io.BytesIO(file_bytes),
-        length=len(file_bytes),
-        content_type=content_types.get(fmt, "application/octet-stream"),
-    )
+    dest = _upload_root() / object_name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(file_bytes)
 
     rapport = Rapport(
         id=uuid.uuid4(),
@@ -82,12 +56,11 @@ async def upload_report(
 
 
 async def get_report_bytes(object_name: str) -> bytes:
-    """Download report bytes from MinIO."""
-    client = await get_minio_client()
-    response = await asyncio.to_thread(client.get_object, settings.minio_bucket, object_name)
-    data = response.read()
-    response.close()
-    return data
+    """Read report bytes from disk."""
+    path = _upload_root() / object_name
+    if not path.exists():
+        raise FileNotFoundError(f"Report file not found: {object_name}")
+    return path.read_bytes()
 
 
 async def list_rapports(db: AsyncSession, user: Utilisateur) -> list[Rapport]:
@@ -102,27 +75,35 @@ async def get_rapport(db: AsyncSession, rapport_id: uuid.UUID) -> Rapport | None
     result = await db.execute(select(Rapport).where(Rapport.id == rapport_id))
     return result.scalar_one_or_none()
 
+
 async def delete_rapport_complet(db: AsyncSession, rapport_id: uuid.UUID) -> bool:
-    """Delete a report, its DB records, MinIO file, and ChromaDB collections."""
+    """Delete a report, its DB records, local file, and ChromaDB collections."""
     from app.ai.rag.vector_store import delete_collection
     from app.models.analyse import Analyse
-    
+
     rapport = await get_rapport(db, rapport_id)
     if not rapport:
         return False
-        
+
     # 1. Delete ChromaDB collections for all analyses linked to this report
     result = await db.execute(select(Analyse).where(Analyse.rapport_id == rapport_id))
     for analyse in result.scalars().all():
-        await delete_collection(str(analyse.id))
-        
-    # 2. Delete file from MinIO
+        try:
+            await delete_collection(str(analyse.id))
+        except Exception as e:
+            logger.warning(f"ChromaDB collection deletion skipped (ChromaDB unavailable): {e}")
+
+    # 2. Delete file from disk
     try:
-        client = await get_minio_client()
-        await asyncio.to_thread(client.remove_object, settings.minio_bucket, rapport.chemin)
+        path = _upload_root() / rapport.chemin
+        path.unlink(missing_ok=True)
+        # Remove empty parent directory
+        parent = path.parent
+        if parent.exists() and not any(parent.iterdir()):
+            parent.rmdir()
     except Exception as e:
-        logger.warning(f"Could not delete MinIO object {rapport.chemin}: {e}")
-        
+        logger.warning(f"Could not delete file {rapport.chemin}: {e}")
+
     # 3. Delete from DB (cascade handles the rest)
     await db.delete(rapport)
     await db.commit()

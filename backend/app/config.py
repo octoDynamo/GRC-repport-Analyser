@@ -26,12 +26,8 @@ class Settings(BaseSettings):
     mistral_api_key: str
     mistral_model: str = "mistral-large-latest"
 
-    # ── MinIO ─────────────────────────────────────────────────────────────────
-    minio_endpoint: str = "localhost:9000"
-    minio_access_key: str = "minioadmin"
-    minio_secret_key: str = "minioadmin"
-    minio_bucket: str = "grc-reports"
-    minio_secure: bool = False
+    # ── File Storage ──────────────────────────────────────────────────────────
+    upload_dir: str = "uploads"
 
     # ── ChromaDB ──────────────────────────────────────────────────────────────
     chroma_host: str = "localhost"

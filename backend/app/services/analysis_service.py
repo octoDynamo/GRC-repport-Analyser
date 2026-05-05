@@ -22,6 +22,45 @@ from app.models.utilisateur import Utilisateur
 from app.services.report_service import get_report_bytes
 
 
+def _sample_text(text: str, max_chars: int = 20000) -> str:
+    """Sample from beginning, middle, and end so large documents are covered evenly."""
+    if len(text) <= max_chars:
+        return text
+    part = max_chars // 3
+    mid_start = (len(text) - part) // 2
+    return (
+        text[:part]
+        + "\n\n[... middle section ...]\n\n"
+        + text[mid_start : mid_start + part]
+        + "\n\n[... end section ...]\n\n"
+        + text[-part:]
+    )
+
+
+def _full_or_sampled(text: str, max_chars: int = 30000) -> str:
+    """Return full text if within limit, otherwise sample intelligently."""
+    if len(text) <= max_chars:
+        return text
+    return _sample_text(text, max_chars)
+
+
+VALID_CATEGORIES = {"CYBER", "OPERATIONNEL", "LEGAL", "FINANCIER", "RH"}
+MIN_CONFIDENCE = 30  # lowered — explicit scanner findings are always trustworthy
+
+
+def _as_dict(data: object) -> dict:
+    """Normalize a Mistral JSON response to a dict.
+
+    Mistral occasionally wraps the object in a list ([{...}]) even when
+    json_object format is requested. This unwraps that case silently.
+    """
+    if isinstance(data, dict):
+        return data
+    if isinstance(data, list) and data and isinstance(data[0], dict):
+        return data[0]
+    return {}
+
+
 def compute_severity(score: float) -> str:
     if score >= 20:
         return "CRITIQUE"
@@ -55,14 +94,18 @@ async def run_analysis(
         # Phase 1: Parallelize ChromaDB index, Risk extraction, and all Compliance checks
         chunks = await asyncio.to_thread(chunk_text, text)
 
+        # Use as much text as possible — risk extraction needs the full document
+        risk_text = _full_or_sampled(text, max_chars=30000)
+        comp_text = _full_or_sampled(text, max_chars=20000)
+
         task_chroma = index_document_chunks(str(analyse_id), chunks)
-        
-        risk_system, risk_user = build_risk_prompt(text)
+
+        risk_system, risk_user = build_risk_prompt(risk_text)
         task_risk = call_mistral_json(risk_system, risk_user)
-        
+
         tasks_comp = []
         for framework in FRAMEWORKS:
-            comp_system, comp_user = build_compliance_prompt(text, framework)
+            comp_system, comp_user = build_compliance_prompt(comp_text, framework)
             tasks_comp.append(call_mistral_json(comp_system, comp_user))
             
         phase1_results = await asyncio.gather(task_chroma, task_risk, *tasks_comp, return_exceptions=True)
@@ -78,22 +121,40 @@ async def run_analysis(
             logger.error(f"Risk extraction failed: {phase1_results[1]}")
             risques_raw = []
         else:
-            risques_raw = phase1_results[1].get("risques", [])
+            risques_raw = _as_dict(phase1_results[1]).get("risques") or []
 
         saved_risques: list[Risque] = []
         risk_label_to_id: dict[str, uuid.UUID] = {}
+        seen_libelles: set[str] = set()
 
         for r in risques_raw:
             try:
+                confiance = int(r.get("confiance", 100))
+                if confiance < MIN_CONFIDENCE:
+                    logger.debug(f"Skipping low-confidence risk (confiance={confiance}): {r.get('libelle')}")
+                    continue
+
+                libelle = str(r.get("libelle", "Risque inconnu"))[:500].strip()
+                libelle_key = libelle.lower()
+                if libelle_key in seen_libelles:
+                    logger.debug(f"Skipping duplicate risk: {libelle}")
+                    continue
+                seen_libelles.add(libelle_key)
+
                 prob = max(1, min(5, int(r.get("probabilite", 3))))
                 impact = max(1, min(5, int(r.get("impact", 3))))
                 score = float(prob * impact)
+
+                categorie = str(r.get("categorie", "OPERATIONNEL")).upper()
+                if categorie not in VALID_CATEGORIES:
+                    categorie = "OPERATIONNEL"
+
                 risque = Risque(
                     id=uuid.uuid4(),
                     analyse_id=analyse_id,
-                    libelle=str(r.get("libelle", "Risque inconnu"))[:500],
+                    libelle=libelle,
                     description=str(r.get("description", "")),
-                    categorie=str(r.get("categorie", "OPERATIONNEL")).upper(),
+                    categorie=categorie,
                     probabilite=prob,
                     impact=impact,
                     score_risque=score,
@@ -117,12 +178,12 @@ async def run_analysis(
                 compliance_scores[framework] = 0.0
                 continue
                 
-            comp_data = comp_res
+            comp_data = _as_dict(comp_res)
             try:
                 global_rate = float(comp_data.get("taux_global", 0))
                 compliance_scores[framework] = global_rate
 
-                for domaine in comp_data.get("domaines", []):
+                for domaine in (comp_data.get("domaines") or []):
                     raw_statut = str(domaine.get("statut", "PARTIEL")).upper()
                     if raw_statut not in ["CONFORME", "NON_CONFORME", "PARTIEL"]:
                         raw_statut = "PARTIEL"
@@ -144,20 +205,37 @@ async def run_analysis(
         await db.flush()
 
         # Phase 2: Parallelize Recommendations and Executive summary
-        risks_summary = "\n".join(
-            [f"- {r.libelle} (Sévérité: {r.severite}, Score: {r.score_risque})" for r in saved_risques[:20]]
+        risks_summary = "\n".join([
+            f"- [{r.severite}] {r.libelle} (Score: {r.score_risque}, Catégorie: {r.categorie})\n"
+            f"  Description: {r.description[:200] if r.description else 'N/A'}"
+            for r in saved_risques
+        ])
+        rec_system, rec_user = build_recommendation_prompt(
+            risks_summary, text_excerpt=_full_or_sampled(text, max_chars=4000)
         )
-        rec_system, rec_user = build_recommendation_prompt(risks_summary)
         task_rec = call_mistral_json(rec_system, rec_user)
-        
+
+        # Build severity breakdown and top risks for richer summary
+        risks_by_severity = {}
+        for r in saved_risques:
+            risks_by_severity[r.severite] = risks_by_severity.get(r.severite, 0) + 1
+
+        top_risks = [
+            {"libelle": r.libelle, "severite": r.severite, "score": r.score_risque}
+            for r in sorted(saved_risques, key=lambda x: x.score_risque, reverse=True)[:5]
+        ]
+
         summary_system, summary_user = build_summary_prompt(
             text=text,
             risks_count=len(saved_risques),
             iso_score=compliance_scores.get("ISO27001", 0),
             rgpd_score=compliance_scores.get("RGPD", 0),
             loi_score=compliance_scores.get("LOI0908", 0),
+            risks_by_severity=risks_by_severity,
+            top_risks=top_risks,
+            recs_count=len(saved_risques),  # one recommendation generated per risk
         )
-        task_summary = call_mistral(summary_system, summary_user, temperature=0.3)
+        task_summary = call_mistral(summary_system, summary_user, temperature=0.2)
 
         phase2_results = await asyncio.gather(task_rec, task_summary, return_exceptions=True)
 
@@ -165,15 +243,15 @@ async def run_analysis(
             logger.error(f"Recommendations mapping failed: {phase2_results[0]}")
             rec_data = {"recommandations": []}
         else:
-            rec_data = phase2_results[0]
+            rec_data = _as_dict(phase2_results[0])
 
         summary = phase2_results[1] if not isinstance(phase2_results[1], Exception) else "Résumé exécutif indisponible suite à une erreur."
 
-        for rec in rec_data.get("recommandations", []):
+        for rec in (rec_data.get("recommandations") or []):
             try:
                 risque_libelle = rec.get("risque_lie", "")
                 risque_id = risk_label_to_id.get(risque_libelle)
-                if not risque_id:
+                if not risque_id and risque_libelle:
                     for label, rid in risk_label_to_id.items():
                         if risque_libelle.lower() in label.lower() or label.lower() in risque_libelle.lower():
                             risque_id = rid

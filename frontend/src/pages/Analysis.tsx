@@ -84,13 +84,29 @@ export function Analysis() {
     };
   }, [id]);
 
-  const handleExportPdf = () => {
-    window.open(`http://localhost:8000/api/v1/export/${id}/pdf`, '_blank');
+  const downloadBlob = async (path: string, filename: string, mimeType: string) => {
+    try {
+      const resp = await api.get(path, { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([resp.data], { type: mimeType }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert('Erreur lors du téléchargement du rapport.');
+    }
   };
 
-  const handleExportExcel = () => {
-    window.open(`http://localhost:8000/api/v1/export/${id}/excel`, '_blank');
-  };
+  const handleExportPdf = () =>
+    downloadBlob(`/export/${id}/pdf`, `analyse_${id}.pdf`, 'application/pdf');
+
+  const handleExportExcel = () =>
+    downloadBlob(
+      `/export/${id}/excel`,
+      `analyse_${id}.xlsx`,
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
 
   const handleChat = async (e: FormEvent) => {
     e.preventDefault();
