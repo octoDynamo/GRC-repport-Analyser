@@ -1,0 +1,97 @@
+\babel@toc {french}{}\relax 
+\contentsline {chapter}{D\'edicace}{I}{chapter*.1}%
+\contentsline {chapter}{Remerciements}{II}{chapter*.2}%
+\contentsline {chapter}{R\'esum\'e}{III}{chapter*.3}%
+\contentsline {chapter}{Abstract}{IV}{chapter*.4}%
+\contentsline {chapter}{Liste des acronymes}{XI}{chapter*.8}%
+\contentsline {chapter}{\numberline {1}Pr\'esentation du cadre du projet}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Pr\'esentation de l'organisme d'accueil}{1}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Pr\'esentation g\'en\'erale}{1}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Domaines d'expertise et offre de services}{1}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Positionnement et client\`ele}{2}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Cadre du projet GRC AI Analyzer}{2}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}Contexte m\'etier : la Gouvernance, le Risque et la Conformit\'e (GRC)}{3}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Les trois piliers de la GRC}{3}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Cadres r\'eglementaires et normatifs retenus}{4}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Enjeux de l'analyse documentaire GRC}{6}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}\'Etude de l'existant}{7}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Pratiques actuelles d'analyse des rapports GRC}{7}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Limites des approches existantes}{8}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Solutions du march\'e et limites de l'existant}{8}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}Probl\'ematique du projet}{9}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Solution envisag\'ee}{9}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Objectifs du projet}{10}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Conduite du projet}{11}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Conclusion}{11}{section.1.9}%
+\contentsline {chapter}{\numberline {2}Etude et Analyse de L'existant}{12}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Analyse des Besoins}{12}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Identification des acteurs}{12}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Besoins fonctionnels}{12}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Besoins non fonctionnels}{15}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}Diagramme des Cas d'Utilisation}{16}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Description générale}{16}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Description des cas d'utilisation principaux}{18}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Diagramme de Classes}{19}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Vue d'ensemble}{19}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Description des classes principales}{20}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Relations entre classes}{22}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}Diagramme de Séquence}{23}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Séquence principale : Analyse d'un rapport GRC}{24}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Description détaillée des interactions}{24}{subsection.2.4.2}%
+\contentsline {section}{\numberline {2.5}Diagramme d'Activité}{26}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Vue d'ensemble du flux de traitement}{26}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Description des activités}{28}{subsection.2.5.2}%
+\contentsline {chapter}{\numberline {3}Conception technique et choix technologiques}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{31}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Vision g\'en\'erale de la solution cible}{31}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Principes directeurs}{31}{subsection.3.2.1}%
+\contentsline {section}{\numberline {3.3}Architecture en couches du backend}{32}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Pipeline d'analyse asynchrone en deux phases}{32}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Mod\`ele RAG}{32}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Mod\`ele de donn\'ees (PostgreSQL)}{33}{section.3.6}%
+\contentsline {paragraph}{Calcul de criticit\'e d'un risque.}{33}{paragraph*.9}%
+\contentsline {section}{\numberline {3.7}Choix technologiques}{33}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Principes de s\'ecurit\'e retenus}{33}{section.3.8}%
+\contentsline {section}{\numberline {3.9}Conclusion}{34}{section.3.9}%
+\contentsline {chapter}{\numberline {4}Sprint 1 : Authentification et gestion des utilisateurs}{36}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{36}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Objectifs et p\'erim\`etre}{36}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Diagramme de s\'equence : connexion}{36}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Extrait de code : g\'en\'eration JWT}{36}{section.4.4}%
+\contentsline {section}{\numberline {4.5}R\'esultats fonctionnels}{37}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Interface de connexion}{37}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Interface d'inscription}{37}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Politique de mot de passe}{38}{subsection.4.5.3}%
+\contentsline {section}{\numberline {4.6}Difficult\'es rencontr\'ees}{38}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Bilan du Sprint 1}{38}{section.4.7}%
+\contentsline {chapter}{\numberline {5}Sprint 2 : Upload et parsing documentaire}{39}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{39}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Objectifs}{39}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Architecture du module}{39}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Strat\'egies d'extraction par format}{40}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Chunking et pr\'eparation pour le RAG}{40}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Bilan du Sprint 2}{40}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Sprint 3 : Pipeline d'analyse IA}{41}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Introduction}{41}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Architecture du pipeline}{41}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Prompt engineering}{42}{section.6.3}%
+\contentsline {section}{\numberline {6.4}S\'erialisation des appels Mistral}{42}{section.6.4}%
+\contentsline {section}{\numberline {6.5}R\'esultats}{43}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Matrice probabilit\'e/impact des risques}{43}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Radar de conformit\'e}{43}{subsection.6.5.2}%
+\contentsline {section}{\numberline {6.6}Bilan du Sprint 3}{43}{section.6.6}%
+\contentsline {chapter}{\numberline {7}Sprint 4 : RAG et chat conversationnel}{44}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Introduction}{44}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Indexation vectorielle}{44}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Pipeline de question-r\'eponse}{44}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Tol\'erance aux pannes}{45}{section.7.4}%
+\contentsline {section}{\numberline {7.5}R\'esultats}{45}{section.7.5}%
+\contentsline {chapter}{\numberline {8}Sprint 5 : Dashboards, exports et supervision}{46}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Introduction}{46}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Tableau de bord utilisateur}{46}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Exports professionnels}{46}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Polling c\^ot\'e frontend}{47}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Tableau d'administration}{47}{section.8.5}%
+\contentsline {chapter}{Conclusion g\'en\'erale}{48}{chapter*.10}%
+\contentsline {chapter}{Bibliographie}{50}{chapter*.11}%
