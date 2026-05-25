@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.17)  19 MAY 2026 03:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.5.17)  25 MAY 2026 00:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -833,6 +833,20 @@ Package: enumitem 2025/02/06 v3.11 Customized lists
 \enit@count@id=\count344
 \enitdp@description=\count345
 )
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\pifont.sty
+Package: pifont 2020/03/25 PSNFSS-v9.3 Pi font support (SPQR) 
+LaTeX Font Info:    Trying to load font information for U+pzd on input line 63.
+
+
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Trying to load font information for U+psy on input line 64.
+
+
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/tcolorbox\tcolorbox.sty
 Package: tcolorbox 2025/11/28 version 6.9.0 text color boxes
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
@@ -1162,12 +1176,12 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 Package french3.ldf Info: Setting StandardItemizeEnv=true for
 (french3.ldf)             compatibility with enumitem package,
-(french3.ldf)             reported on input line 132.
+(french3.ldf)             reported on input line 134.
 Package french3.ldf Info: Setting StandardEnumerateEnv=true for
 (french3.ldf)             compatibility with enumitem package,
-(french3.ldf)             reported on input line 132.
+(french3.ldf)             reported on input line 134.
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 13
-2.
+4.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -1179,28 +1193,32 @@ File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 ) (rapport_pfe.aux
 Package babel Info: 'french' activates 'french' shorthands.
 (babel)             Reported on input line 11.
+
+
+LaTeX Warning: Label `tab:stack' multiply defined.
+
 )
 \openout1 = `rapport_pfe.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 132.
-LaTeX Font Info:    ... okay on input line 132.
-LaTeX Info: Redefining \degres on input line 132.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 134.
+LaTeX Font Info:    ... okay on input line 134.
+LaTeX Info: Redefining \degres on input line 134.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1219,7 +1237,7 @@ LaTeX Info: Redefining \degres on input line 132.
 * \oddsidemargin=-1.1381pt
 * \evensidemargin=-1.1381pt
 * \topmargin=-38.1381pt
-* \headheight=12.0pt
+* \headheight=14.5pt
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
@@ -1266,74 +1284,67 @@ Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
 \c@lstlisting=\count382
-Package hyperref Info: Link coloring ON on input line 132.
+Package hyperref Info: Link coloring ON on input line 134.
 (rapport_pfe.out) (rapport_pfe.out)
 \@outlinefile=\write4
 \openout4 = `rapport_pfe.out'.
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-43.
+45.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-43.
+45.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-143.
+145.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-143.
+145.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 143.
+(Font)              <10.95> on input line 145.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 143.
+(Font)              <8> on input line 145.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 143.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 143
+(Font)              <6> on input line 145.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 145
 .
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 143
+LaTeX Font Info:    Trying to load font information for U+msb on input line 145
 .
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 160.
+(Font)              <12> on input line 162.
 
 [1
 
 {C:/Users/mahdi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/mahd
 i/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/mahdi/Ap
-pData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[2] [1
-
-] [2
+pData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}] [2] [1
 
 ]
-Overfull \hbox (0.1063pt too wide) in paragraph at lines 275--276
+[2
+
+]
+Overfull \hbox (0.1063pt too wide) in paragraph at lines 277--278
 []\T1/lmr/bx/n/12 Mots-clés : \T1/lmr/m/n/12 GRC, In-tel-li-gence Ar-ti-fi-ciel
 le, Mis-tral, RAG, Chro-maDB, Fas-tAPI, React,
  []
@@ -1344,41 +1355,18 @@ le, Mis-tral, RAG, Chro-maDB, Fas-tAPI, React,
 
 ] (rapport_pfe.toc [5
 
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[6]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[7])
+] [6] [7])
 \tf@toc=\write5
 \openout5 = `rapport_pfe.toc'.
 
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[8] (rapport_pfe.lof)
+ [8] (rapport_pfe.lof)
 \tf@lof=\write6
 \openout6 = `rapport_pfe.lof'.
 
  [9
 
-] (rapport_pfe.lot)
+]
+(rapport_pfe.lot)
 \tf@lot=\write7
 \openout7 = `rapport_pfe.lot'.
 
@@ -1393,528 +1381,244 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.351 	\item \textbf
+l.352 	\item \textbf
                     {ISS As A Service~:} Ce mod\`ele de prestation externali...
 [1
 
 
 ]
-Overfull \hbox (66.52101pt too wide) in paragraph at lines 372--373
- [][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.389 
-       [2]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[3]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[4]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[5]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[6]
-
-LaTeX Warning: Reference `fig:flux_manuel' on page 7 undefined on input line 48
-3.
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[7]
-Overfull \hbox (0.14684pt too wide) in paragraph at lines 525--526
+l.370 \subsubsection*{Gouvernance}
+                                   [2] [3] [4]
+Overfull \hbox (0.14684pt too wide) in paragraph at lines 459--460
 []\T1/lmr/m/n/12 L'intégration des mo-dèles de lan-gage dans le do-maine GRC es
 t em-bryon-naire. Quelques
  []
 
+[5] [6] [7] [8]
+Chapitre 2.
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+Overfull \hbox (0.20457pt too wide) in paragraph at lines 567--568
+[]\T1/lmr/bx/n/12 Recoupement ma-nuel avec les contrôles : \T1/lmr/m/n/12 mise 
+en cor-res-pon-dance avec ISO 27001,
+ []
 
-[8]
+[9
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[9]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+]
+Overfull \hbox (0.14684pt too wide) in paragraph at lines 597--598
+[]\T1/lmr/m/n/12 L'intégration des mo-dèles de lan-gage dans le do-maine GRC es
+t em-bryon-naire. Quelques
+ []
 
 [10]
+Overfull \hbox (106.42947pt too wide) in paragraph at lines 649--650
+ [][] 
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[11]
-Chapitre 2.
+[11] [12]
+Chapitre 3.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 6
-53.
+93.
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [12
+) [13
 
 ]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 7
-02.
+42.
 
 (C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[13{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}
-{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[14]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[15]
-Overfull \hbox (43.86024pt too wide) in paragraph at lines 842--846
+) [14{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.en
+c}{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.en
+c}]
+[15] [16]
+Overfull \hbox (43.86024pt too wide) in paragraph at lines 882--886
 []\T1/lmr/bx/n/12 BNF-12 \T1/lmr/m/n/12 : Les prompts Mis-tral sont ex-ter-na-l
 i-sés dans des mo-dules dé-diés (\T1/lmtt/m/n/12 risk_prompts.py\T1/lmr/m/n/12 
 ,
  []
 
 
-Overfull \hbox (4.91113pt too wide) in paragraph at lines 842--846
+Overfull \hbox (4.91113pt too wide) in paragraph at lines 882--886
 \T1/lmtt/m/n/12 compliance_prompts.py\T1/lmr/m/n/12 , \T1/lmtt/m/n/12 recommend
 ation_prompts.py\T1/lmr/m/n/12 , \T1/lmtt/m/n/12 summary_prompts.py\T1/lmr/m/n/
 12 ), fa-
  []
 
 
-Overfull \hbox (4.01534pt too wide) in paragraph at lines 851--855
+Overfull \hbox (4.01534pt too wide) in paragraph at lines 891--895
 []\T1/lmr/bx/n/12 BNF-13 \T1/lmr/m/n/12 : Le mo-dèle d'em-bed-ding \T1/lmtt/m/n
 /12 paraphrase-multilingual-MiniLM-L12-v2 \T1/lmr/m/n/12 sup-
  []
 
-<figures/useC.png, id=708, 1239.63126pt x 2051.665pt>
+<figures/useC.png, id=728, 1239.63126pt x 2051.665pt>
 File: figures/useC.png Graphic file (type png)
 <use figures/useC.png>
-Package pdftex.def Info: figures/useC.png  used on input line 870.
+Package pdftex.def Info: figures/useC.png  used on input line 910.
 (pdftex.def)             Requested size: 418.82375pt x 693.17407pt.
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[16]
+[17]
 Overfull \vbox (20.71877pt too high) has occurred while \output is active []
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[17 <./figures/useC.png (PNG copy)>]
-Overfull \hbox (33.33331pt too wide) in paragraph at lines 903--905
+[18 <./figures/useC.png (PNG copy)>]
+Overfull \hbox (33.33331pt too wide) in paragraph at lines 943--945
 []\T1/lmr/m/n/12 L'analyste dé-clenche l'ana-lyse via \T1/lmtt/m/n/12 POST /api
 /v1/analyses/lancer/{rapport_id}\T1/lmr/m/n/12 . 
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[18]
-<figures/class.png, id=732, 1340.00626pt x 1398.22375pt>
+[19]
+<figures/class.png, id=752, 1340.00626pt x 1398.22375pt>
 File: figures/class.png Graphic file (type png)
 <use figures/class.png>
-Package pdftex.def Info: figures/class.png  used on input line 970.
+Package pdftex.def Info: figures/class.png  used on input line 1010.
 (pdftex.def)             Requested size: 432.48051pt x 451.25974pt.
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[19]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[20 <./figures/class.png (PNG copy)>]
-Overfull \hbox (22.29498pt too wide) in paragraph at lines 1015--1017
+ [20] [21 <./figures/class.png (PNG copy)>]
+Overfull \hbox (22.29498pt too wide) in paragraph at lines 1055--1057
 []\T1/lmtt/m/n/12 severite \T1/lmr/m/n/12 ^^V cal-cu-lée au-to-ma-ti-que-ment s
 e-lon les seuils dé-fi-nis dans \T1/lmtt/m/n/12 compute_severity() 
  []
 
 
-Overfull \hbox (4.44522pt too wide) in paragraph at lines 1034--1041
+Overfull \hbox (4.44522pt too wide) in paragraph at lines 1074--1081
 \T1/lmr/m/n/12 / HAUTE / MOYENNE / FAIBLE), le type d'ac-tion (QUICK_WIN ou LON
 G_TERME),
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[21]
-Underfull \hbox (badness 10000) in paragraph at lines 1085--1085
-[]|\T1/lmr/m/n/12 Un rap-port peut
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1085--1085
-\T1/lmr/m/n/12 une re-com-man-da-
- []
-
-
-Underfull \hbox (badness 5681) in paragraph at lines 1085--1085
-[]|\T1/lmr/m/n/12 Une ana-lyse peut
- []
-
-
-Underfull \hbox (badness 2318) in paragraph at lines 1085--1085
-\T1/lmr/m/n/12 faire l'ob-jet de N
- []
-
-
-Underfull \hbox (badness 3492) in paragraph at lines 1085--1085
-[]|\T1/lmr/m/n/12 Les ré-sul-tats ré-fé-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1085--1085
-\T1/lmr/m/n/12 rencent un cadre
- []
-
-
-Underfull \hbox (badness 3009) in paragraph at lines 1085--1085
-\T1/lmr/m/n/12 teur ali-mentent la
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
 [22]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[23]
-<figures/seq.png, id=759, 1392.20125pt x 1179.40625pt>
+<figures/seq.png, id=771, 1392.20125pt x 1179.40625pt>
 File: figures/seq.png Graphic file (type png)
 <use figures/seq.png>
-Package pdftex.def Info: figures/seq.png  used on input line 1101.
+Package pdftex.def Info: figures/seq.png  used on input line 1116.
 (pdftex.def)             Requested size: 455.24411pt x 385.66pt.
-
-Overfull \hbox (22.00589pt too wide) in paragraph at lines 1114--1117
+ [23]
+Overfull \hbox (22.00589pt too wide) in paragraph at lines 1129--1132
 []\T1/lmr/m/n/12 L'analyste sou-met son fi-chier de-puis le fron-tend React via
  \T1/lmtt/m/n/12 POST /api/rapports/upload\T1/lmr/m/n/12 .
  []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[24 <./figures/seq.png>]
-Overfull \hbox (13.157pt too wide) in paragraph at lines 1125--1129
+Overfull \hbox (13.157pt too wide) in paragraph at lines 1140--1144
 \T1/lmr/m/n/12 gistre la tâche de fond via \T1/lmtt/m/n/12 BackgroundTasks\T1/l
 mr/m/n/12 , et re-tourne HTTP 202 avec l'\T1/lmtt/m/n/12 analyse_id\T1/lmr/m/n/
 12 . 
  []
 
+[24 <./figures/seq.png>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1140.
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[25]
-<figures/act.png, id=782, 838.13126pt x 1472.50125pt>
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1155.
+<figures/act.png, id=787, 838.13126pt x 1472.50125pt>
 File: figures/act.png Graphic file (type png)
 <use figures/act.png>
-Package pdftex.def Info: figures/act.png  used on input line 1194.
-(pdftex.def)             Requested size: 386.96027pt x 679.83035pt.
+Package pdftex.def Info: figures/act.png  used on input line 1206.
+(pdftex.def)             Requested size: 309.56265pt x 543.8508pt.
+ [25] [26 <./figures/act.png>] [27]
+<figures/archi.png, id=816, 1981.4025pt x 861.2175pt>
+File: figures/archi.png Graphic file (type png)
+<use figures/archi.png>
+Package pdftex.def Info: figures/archi.png  used on input line 1320.
+(pdftex.def)             Requested size: 569.05513pt x 247.34186pt.
+ [28] [29 <./figures/archi.png (PNG copy)>]
+<figures/deploi.png, id=832, 1304.875pt x 1155.31625pt>
+File: figures/deploi.png Graphic file (type png)
+<use figures/deploi.png>
+Package pdftex.def Info: figures/deploi.png  used on input line 1379.
+(pdftex.def)             Requested size: 455.24411pt x 403.06223pt.
+ [30 <./figures/deploi.png (PNG copy)>]
+Overfull \hbox (0.3168pt too wide) in paragraph at lines 1416--1421
+[] []\T1/lmr/bx/n/12 Post-greSQL Ser-ver ( :5433).[] \T1/lmr/m/n/12 Base de don
+-nées re-la-tion-nelle hé-ber-geant la base \T1/lmtt/m/n/12 grc_db
+ []
 
+[31] [32]
+Chapitre 4.
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[26]
-Overfull \vbox (7.37505pt too high) has occurred while \output is active []
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[27 <./figures/act.png>]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[28]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[29]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[30]
-Chapitre 3.
-
-Overfull \hbox (17.42403pt too wide) in paragraph at lines 1315--1315
+Overfull \hbox (17.42403pt too wide) in paragraph at lines 1449--1449
 |[]\T1/lmr/bx/n/24.88 Conception tech-nique et choix tech-
  []
 
-[31
 
-]
-Overfull \hbox (3.68918pt too wide) in paragraph at lines 1445--1446
-[]\T1/lmr/m/n/12 Le mo-dèle d'em-bed-dings re-tenu est \T1/lmtt/m/n/12 paraphra
-se-multilingual-MiniLM-L12-v2\T1/lmr/m/n/12 , choisi
+Underfull \hbox (badness 1571) in paragraph at lines 1497--1497
+[]|\T1/lmr/m/n/12 État glo-bal JWT, in-ter-cep-teur to-ken
  []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 1497--1497
+[]|\T1/lmr/m/n/12 Validation en-trées, en-ve-loppe
+ []
 
-[32]
-Overfull \hbox (10.27615pt too wide) in paragraph at lines 1481--1517
+[33
+
+]
+Overfull \hbox (1.70709pt too wide) in paragraph at lines 1549--1550
  [][] 
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[33{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[34]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[35]
-Chapitre 4.
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 1585.
+nput line 1558.
+[34]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1586.
-[36
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1584.
 
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[37]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[38]
-Chapitre 5.
-[39
-
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[40]
-Chapitre 6.
-[41
-
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[42]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[43]
-Chapitre 7.
-
-Overfull \hbox (146.08904pt too wide) in paragraph at lines 1867--1868
-[]\T1/lmr/m/n/12 À la fin de l'ana-lyse, les chunks pré-pa-rés au Sprint 2 sont
- vec-to-ri-sés par \T1/lmtt/m/n/12 paraphrase-multilingual-MiniLM-L12-v2
+Overfull \hbox (37.25229pt too wide) in paragraph at lines 1630--1631
+ [][] 
  []
 
-[44
+[35] [36]
+Underfull \hbox (badness 2600) in paragraph at lines 1723--1723
+[]|\T1/lmr/m/n/12 Upload PDF/DOCX/XLSX vers
+ []
 
-]
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 1723--1723
+[]|\T1/lmr/m/n/12 Statut et ré-sumé exé-cu-tif
+ []
 
-[45]
-Chapitre 8.
-[46
+[37{C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{
+C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}]
+[38]
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+[39]
+Overfull \hbox (22.62015pt too wide) in paragraph at lines 1869--1870
+ [][] 
+ []
 
-]
+[40] [41] [42] [43] [44] [45]
+Overfull \hbox (34.71344pt too wide) in paragraph at lines 2143--2147
+[]\T1/lmr/m/n/12 Le c÷ur tech-nique de la pla-te-forme est le pi-pe-line asyn-c
+hrone en deux phases \T1/lmtt/m/n/12 asyncio.gather
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+[46] [47] [48] [49] [50] [51] [52]
+Chapitre 5.
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+(C:\Users\mahdi\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+[53
 
-[47] [48
+] [54] [55] [56] [57]
+Underfull \hbox (badness 3815) in paragraph at lines 2682--2682
+[]|\T1/lmr/m/n/12 Chunks 1500 ca-rac-tères,
+ []
 
-]
+[58] [59]
+Overfull \hbox (38.1821pt too wide) in paragraph at lines 2742--2743
+\T1/lmr/m/n/12 d'un pi-pe-line asyn-chrone \T1/lmr/m/it/12 full-stack \T1/lmr/m
+/n/12 : ex-trac-tion do-cu-men-taire multi-format (PDF/DOCX/XLSX),
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+[60
 
-[49] [50
+] [61
 
 ] (rapport_pfe.aux)
  ***********
@@ -1923,37 +1627,44 @@ L3 programming layer <2026-03-20>
  ***********
 
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `rapport_pfe.out' has not changed.
-(rerunfilecheck)             Checksum: 89D607F73A8D69A9234CF0C7A5BEDC53;18146.
+(rerunfilecheck)             Checksum: 30C7A74048A8B0BE657FC9BB0356E146;19305.
  ) 
 Here is how much of TeX's memory you used:
- 44281 strings out of 467691
- 1032831 string characters out of 5414987
- 1766802 words of memory out of 5000000
- 72301 multiletter control sequences out of 15000+600000
- 725140 words of font info for 93 fonts, out of 8000000 for 9000
+ 44770 strings out of 467691
+ 1034133 string characters out of 5414987
+ 2098306 words of memory out of 5000000
+ 72275 multiletter control sequences out of 15000+600000
+ 732050 words of font info for 99 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,13n,96p,895b,2216s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pf
-b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pf
-b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.p
-fb><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.
-pfb><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.
-pfb><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.p
-fb><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pf
-b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb>
-<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C
-:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb>
-Output written on rapport_pfe.pdf (63 pages, 1165543 bytes).
+ 86i,13n,96p,895b,2241s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{table.4.3} has been referenced but does not exist, 
+replaced by a fixed one
+
+<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb>
+<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb>
+<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.pfb
+><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pf
+b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmex10.pf
+b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pf
+b><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb
+><C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb>
+<C:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C
+:/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/
+Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtti10.pfb><C:
+/Users/mahdi/AppData/Local/Programs/MiKTeX/fonts/type1/urw/zapfding/uzdr.pfb>
+Output written on rapport_pfe.pdf (74 pages, 1608746 bytes).
 PDF statistics:
- 1152 PDF objects out of 1200 (max. 8388607)
- 328 named destinations out of 1000 (max. 500000)
- 937 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1813 PDF objects out of 2073 (max. 8388607)
+ 823 named destinations out of 1000 (max. 500000)
+ 939 words of extra memory for PDF output out of 10000 (max. 10000000)
 

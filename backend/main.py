@@ -1,6 +1,8 @@
 """FastAPI application entry point."""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.api.v1 import (
     analyses,
@@ -11,12 +13,16 @@ from app.api.v1 import (
     recommandations,
 )
 from app.config import settings
+from app.core.limiter import limiter
 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="GRC AI Analyzer API",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS configuration — allow both the configured URL and the Vite dev server
 app.add_middleware(

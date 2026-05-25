@@ -1,4 +1,5 @@
 """Report service — file storage and database management."""
+import re
 import uuid
 from pathlib import Path
 
@@ -11,6 +12,14 @@ from app.models.rapport import Rapport
 from app.models.utilisateur import Utilisateur
 
 ALLOWED_FORMATS = {"pdf", "docx", "xlsx"}
+
+# FIX 4 — magic bytes for each supported format
+# DOCX and XLSX are ZIP-based (Office Open XML), so both start with PK\x03\x04
+_MAGIC_BYTES: dict[str, list[bytes]] = {
+    "pdf":  [b"%PDF"],
+    "docx": [b"PK\x03\x04"],
+    "xlsx": [b"PK\x03\x04"],
+}
 
 
 def _upload_root() -> Path:
@@ -28,6 +37,25 @@ def validate_file_format(filename: str) -> str:
     return ext
 
 
+# FIX 1 — sanitize filename to prevent path traversal
+def _sanitize_filename(filename: str) -> str:
+    """Strip directory components and keep only safe characters."""
+    name = Path(filename).name  # drops any ../../ prefix
+    safe = re.sub(r"[^\w.\-]", "_", name)
+    if safe.startswith("."):
+        safe = "_" + safe
+    return safe or "fichier_sans_nom"
+
+
+# FIX 4 — validate file content matches declared extension
+def _check_magic_bytes(file_bytes: bytes, fmt: str) -> None:
+    expected = _MAGIC_BYTES.get(fmt, [])
+    if expected and not any(file_bytes.startswith(sig) for sig in expected):
+        raise ValueError(
+            f"Le contenu du fichier ne correspond pas au format '{fmt}' déclaré."
+        )
+
+
 async def upload_report(
     db: AsyncSession,
     file_bytes: bytes,
@@ -36,7 +64,9 @@ async def upload_report(
 ) -> Rapport:
     """Validate, save to disk, and create DB record."""
     fmt = validate_file_format(filename)
-    object_name = f"reports/{uuid.uuid4()}/{filename}"
+    _check_magic_bytes(file_bytes, fmt)               # FIX 4
+    safe_name = _sanitize_filename(filename)           # FIX 1
+    object_name = f"reports/{uuid.uuid4()}/{safe_name}"
 
     dest = _upload_root() / object_name
     dest.parent.mkdir(parents=True, exist_ok=True)

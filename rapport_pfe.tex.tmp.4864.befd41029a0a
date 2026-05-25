@@ -1446,1359 +1446,1216 @@ et HTTPS + API Key (API $\leftrightarrow$ Mistral AI).
 
 Ce chapitre a \'etabli les fondements conceptuels de GRC AI Analyzer. Les 24 besoins fonctionnels et 13 besoins non fonctionnels ont \'et\'e identifi\'es et organis\'es en modules coh\'erents. Les diagrammes UML --- cas d'utilisation, classes, s\'equence, activit\'e, architecture globale et d\'eploiement --- constituent la r\'ef\'erence compl\`ete de toute la phase d'impl\'ementation. Le chapitre suivant d\'etaille les choix techniques et l'architecture retenue.
 
+% =============================================================================
+%  CHAPITRE 4 — CONCEPTION TECHNIQUE ET CHOIX TECHNOLOGIQUES
+% =============================================================================
 \chapter{Conception technique et choix technologiques}
 
 \begin{tcolorbox}[infobox]
-	\itshape Ce chapitre suit le fil de la donn\'ee~: depuis l'upload d'un
-	document jusqu'\`a la r\'eponse du chat RAG. Pour chaque \'etape,
-	les choix technologiques sont justifi\'es, les d\'ecisions de conception
-	expos\'ees, et les extraits de code repr\'esentatifs comment\'es.
+\itshape Ce chapitre pr\'esente en premier lieu la pile technologique retenue et le r\^ole pr\'ecis de chaque outil dans la plateforme, puis d\'etaille la conception de chaque composant \`a travers des extraits de code repr\'esentatifs.
 \end{tcolorbox}
+
+\section{Introduction}
+
+La solution GRC AI Analyzer repose sur un \'ecosyst\`eme technologique soigneusement s\'electionn\'e pour satisfaire trois contraintes majeures~: la \textbf{performance} des traitements IA (analyse asynchrone parall\`ele), la \textbf{robustesse} de la persistance (donn\'ees relationnelles, stockage objet et vectoriel) et la \textbf{s\'ecurit\'e} des acc\`es (authentification JWT, validation stricte, limitation de d\'ebit). Ce chapitre pr\'esente ces technologies, puis d\'etaille la conception de chaque composant.
 
 % =============================================================================
 \section{Pile technologique retenue}
 % =============================================================================
 
+% Couleurs par categorie (locales a ce chapitre)
 \definecolor{fecolor}{RGB}{40,60,110}
 \definecolor{becolor}{RGB}{30,50,90}
 \definecolor{aicolor}{RGB}{30,90,50}
 \definecolor{dbcolor}{RGB}{80,80,80}
 \definecolor{seccolor}{RGB}{150,30,30}
 
-GRC AI Analyzer repose sur cinq couches technologiques s\'electionn\'ees
-pour satisfaire trois contraintes~: \textbf{performance} (pipeline IA
-parall\`ele), \textbf{robustesse} (persistance multi-moteurs) et
-\textbf{s\'ecurit\'e} (JWT, bcrypt, validation stricte, rate limiting).
+\begin{center}
+\small
+\colorbox{fecolor}{\textcolor{white}{\bfseries~~Interface~~}}~~
+\colorbox{becolor}{\textcolor{white}{\bfseries~~Backend~~}}~~
+\colorbox{aicolor}{\textcolor{white}{\bfseries~~IA / NLP~~}}~~
+\colorbox{dbcolor}{\textcolor{white}{\bfseries~~Infrastructure~~}}~~
+\colorbox{seccolor}{\textcolor{white}{\bfseries~~S\'ecurit\'e~~}}
+\end{center}
 
-\begin{table}[H]
-	\centering
-	\begin{tabularx}{\textwidth}{|l|l|X|}
-		\hline
-		\textbf{Couche} & \textbf{Technologie} & \textbf{R\^ole / justification} \\
-		\hline
-		Interface & React 18 + Vite + TypeScript & SPA avec HMR, typage statique, code-splitting \\
-		\hline
-		Interface & Zustand + Axios & \'Etat global JWT, intercepteur token auto-inject\'e \\
-		\hline
-		Interface & Recharts & Matrice risques (ScatterChart) et radar conformit\'e \\
-		\hline
-		Backend & FastAPI 0.115 + Python 3.12 & ASGI async, doc OpenAPI auto, BackgroundTask \\
-		\hline
-		Backend & SQLAlchemy 2 + asyncpg & ORM async natif, z\'ero thread bloquant \\
-		\hline
-		Backend & Alembic + psycopg2 & Migrations versionnées (driver sync pour Alembic) \\
-		\hline
-		Backend & Pydantic v2 & Validation entr\'ees, enveloppe \texttt{\{data,message,success\}} \\
-		\hline
-		IA / NLP & Mistral Large (API cloud) & LLM central~: extraction, conformit\'e, chat RAG \\
-		\hline
-		IA / NLP & sentence-transformers MiniLM & Embeddings 384 dims, 50+ langues, singleton \\
-		\hline
-	\end{tabularx}
-\end{table}
+% ── Interface utilisateur ────────────────────────────────────────────────────
+\subsection{Interface utilisateur}
 
-\begin{table}[H]
-	\centering
-	\begin{tabularx}{\textwidth}{|l|l|X|}
-		\hline
-		\textbf{Couche} & \textbf{Technologie} & \textbf{R\^ole / justification} \\
-		\hline
-		Infrastructure & PostgreSQL 15 & SGBDR principal, 6 entit\'es UUID, enums natifs \\
-		\hline
-		Infrastructure & MinIO (S3-compatible) & Stockage objet des fichiers bruts \\
-		\hline
-		Infrastructure & ChromaDB (HTTP :8001) & Base vectorielle HNSW cosinus, 1 collection/analyse \\
-		\hline
-		S\'ecurit\'e & JWT HS256 + bcrypt & Tokens stateless, salt al\'eatoire par appel \\
-		\hline
-		S\'ecurit\'e & slowapi + magic bytes & Rate limiting IP, validation signature binaire \\
-		\hline
-	\end{tabularx}
-	\caption{Pile technologique de GRC AI Analyzer}
-	\label{tab:stack}
-\end{table}
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=fecolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{fecolor}{\rule{7pt}{7pt}}\enspace\textbf{React 18 + Vite}
+\hfill\textcolor{gray}{\footnotesize v18.3\,/\,v5.4}\\[3pt]
+\small Construit la SPA (Single Page Application). Vite assure un rechargement \`a chaud en d\'eveloppement et un build optimis\'e (code-splitting) en production.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=fecolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{fecolor}{\rule{7pt}{7pt}}\enspace\textbf{Zustand}
+\hfill\textcolor{gray}{\footnotesize v4.5}\\[3pt]
+\small Gestion d'\'etat global l\'eger~: session utilisateur (token JWT, r\^ole), liste des rapports et statut de l'analyse en cours.
+\end{tcolorbox}
+\end{minipage}
+
+\vspace{4pt}\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=fecolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{fecolor}{\rule{7pt}{7pt}}\enspace\textbf{Recharts}
+\hfill\textcolor{gray}{\footnotesize v2.12}\\[3pt]
+\small Visualisations interactives~: \texttt{ScatterChart} pour la matrice probabilit\'e\,/\,impact et \texttt{RadarChart} pour le radar de conformit\'e ISO\,/\,RGPD\,/\,Loi\,09-08.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=fecolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{fecolor}{\rule{7pt}{7pt}}\enspace\textbf{Axios + Intercepteur JWT}
+\hfill\textcolor{gray}{\footnotesize v1.7}\\[3pt]
+\small Client HTTP centralis\'e. Un intercepteur injecte l'en-t\^ete \texttt{Authorization:\,Bearer} automatiquement et redirige vers la connexion en cas de 401.
+\end{tcolorbox}
+\end{minipage}
+
+% ── Backend applicatif ───────────────────────────────────────────────────────
+\subsection{Backend applicatif}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=becolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{becolor}{\rule{7pt}{7pt}}\enspace\textbf{FastAPI 0.115}
+\hfill\textcolor{gray}{\footnotesize Python 3.12}\\[3pt]
+\small Framework asynchrone natif. G\'en\`ere la documentation OpenAPI automatiquement, valide via Pydantic\,v2, et supporte \texttt{BackgroundTask} pour l'analyse non-bloquante.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=becolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{becolor}{\rule{7pt}{7pt}}\enspace\textbf{SQLAlchemy 2 + asyncpg}
+\hfill\textcolor{gray}{\footnotesize v2.0}\\[3pt]
+\small ORM avec sessions asynchrones (\texttt{AsyncSession}). asyncpg est le pilote PostgreSQL async natif, \'evitant tout blocage de la boucle d'\'ev\'enements.
+\end{tcolorbox}
+\end{minipage}
+
+\vspace{4pt}\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=becolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{becolor}{\rule{7pt}{7pt}}\enspace\textbf{Alembic + psycopg2}
+\hfill\textcolor{gray}{\footnotesize v1.13}\\[3pt]
+\small Migrations versionnées du sch\'ema PostgreSQL. Utilise psycopg2 (synchrone) dans \texttt{env.py} pour contourner les limitations d'asyncpg avec Alembic sous Windows.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=becolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{becolor}{\rule{7pt}{7pt}}\enspace\textbf{Pydantic v2}
+\hfill\textcolor{gray}{\footnotesize v2.9}\\[3pt]
+\small Validation et s\'erialisation \`a la fronti\`ere de l'API. Les sch\'emas (\texttt{LoginRequest}, \texttt{RegisterRequest}...) garantissent l'int\'egrit\'e des donn\'ees entrantes.
+\end{tcolorbox}
+\end{minipage}
+
+% ── Intelligence artificielle ────────────────────────────────────────────────
+\subsection{Intelligence artificielle et traitement du langage}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=aicolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{aicolor}{\rule{7pt}{7pt}}\enspace\textbf{Mistral AI}
+\hfill\textcolor{gray}{\footnotesize mistral-large-latest}\\[3pt]
+\small LLM central de la plateforme. R\'ealise en JSON structur\'e~: extraction des risques, \'evaluation de conformit\'e (3 r\'ef\'erentiels), recommandations, r\'esum\'e ex\'ecutif et chat RAG.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=aicolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{aicolor}{\rule{7pt}{7pt}}\enspace\textbf{sentence-transformers}
+\hfill\textcolor{gray}{\footnotesize MiniLM-L12-v2}\\[3pt]
+\small G\'en\`ere les embeddings multilingues (384 dimensions) pour l'indexation RAG. Supporte nativement le fran\c{c}ais. Charg\'e une seule fois (singleton).
+\end{tcolorbox}
+\end{minipage}
+
+\vspace{4pt}\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=aicolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{aicolor}{\rule{7pt}{7pt}}\enspace\textbf{ChromaDB}
+\hfill\textcolor{gray}{\footnotesize v0.5+, mode HTTP}\\[3pt]
+\small Base vectorielle open-source. Chaque analyse dispose d'une collection d\'edi\'ee \texttt{analyse\_\{uuid\}} stockant les chunks du document avec leurs embeddings (similarit\'e cosinus).
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=aicolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{aicolor}{\rule{7pt}{7pt}}\enspace\textbf{PyMuPDF / python-docx / openpyxl}
+\hfill\textcolor{gray}{\footnotesize parseurs}\\[3pt]
+\small Extraction de texte selon le format~: PyMuPDF (fitz) pour les PDF, python-docx pour les DOCX (paragraphes + tableaux), openpyxl pour les classeurs XLSX (toutes feuilles).
+\end{tcolorbox}
+\end{minipage}
+
+% ── Infrastructure ───────────────────────────────────────────────────────────
+\subsection{Infrastructure de persistance}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=dbcolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{dbcolor}{\rule{7pt}{7pt}}\enspace\textbf{PostgreSQL 15}
+\hfill\textcolor{gray}{\footnotesize port 5433}\\[3pt]
+\small SGBDR principal. Stocke les 6 entit\'es m\'etier~: utilisateurs, rapports, analyses, risques, r\'esultats de conformit\'e et recommandations. Cl\'es primaires UUID\,v4.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=dbcolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{dbcolor}{\rule{7pt}{7pt}}\enspace\textbf{MinIO}
+\hfill\textcolor{gray}{\footnotesize port 9000, S3-compatible}\\[3pt]
+\small Stockage objet. Les fichiers upload\'es sont enregistr\'es dans le bucket \texttt{grc-reports} sous le chemin \texttt{reports/\{uuid\}/\{nom\_sanitiz\'e\}}.
+\end{tcolorbox}
+\end{minipage}
+
+% ── Securite ─────────────────────────────────────────────────────────────────
+\subsection{S\'ecurit\'e applicative}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=seccolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{seccolor}{\rule{7pt}{7pt}}\enspace\textbf{JWT HS256 + bcrypt}
+\hfill\textcolor{gray}{\footnotesize python-jose}\\[3pt]
+\small Authentification stateless~: tokens sign\'es HS256 (expiration 8h), mots de passe hash\'es avec bcrypt (salt al\'eatoire). Validation via la d\'ependance \texttt{get\_current\_user}.
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tcolorbox}[enhanced,colback=boxgray,colframe=seccolor,
+  leftrule=5pt,rightrule=0.3pt,toprule=0.3pt,bottomrule=0.3pt,
+  arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,boxsep=0pt]
+\textcolor{seccolor}{\rule{7pt}{7pt}}\enspace\textbf{slowapi + validation fichiers}
+\hfill\textcolor{gray}{\footnotesize v0.1.9}\\[3pt]
+\small Rate limiting IP~: 10\,req/min sur \texttt{/login}, 20\,req/h sur \texttt{/upload}. Validation par magic bytes et sanitisation des noms de fichiers (anti-path traversal).
+\end{tcolorbox}
+\end{minipage}
+
+% =============================================================================
+\section{Vision g\'en\'erale de l'architecture}
+% =============================================================================
+
+L'architecture cible repose sur une s\'eparation nette entre la pr\'esentation (React), l'orchestration et la s\'ecurit\'e (FastAPI), les services IA (Mistral + ChromaDB) et la persistance (PostgreSQL + MinIO).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1.2cm]
+  \tikzstyle{client}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=4cm,minimum height=1cm,rounded corners=3pt,align=center]
+  \tikzstyle{server}=[rectangle,draw=darknavy,thick,fill=darknavy!15,minimum width=4cm,minimum height=1cm,rounded corners=3pt,align=center]
+  \tikzstyle{store}=[cylinder,draw=darknavy,thick,fill=boxgray,minimum width=2cm,minimum height=1.5cm,shape border rotate=90,aspect=0.3,align=center]
+  \tikzstyle{ext}=[rectangle,draw=darkgreen,thick,fill=darkgreen!10,minimum width=3cm,minimum height=1cm,rounded corners=3pt,align=center]
+
+  \node[client] (front) {\textbf{React + Vite}\\Frontend SPA};
+  \node[server,below=of front] (api) {\textbf{FastAPI Backend}\\API REST asynchrone};
+
+  \node[store,below left=of api,xshift=-0.5cm] (pg) {\textbf{Postgres}\\m\'etadonn\'ees};
+  \node[store,below=of api,yshift=-0.3cm] (minio) {\textbf{MinIO}\\fichiers};
+  \node[store,below right=of api,xshift=0.5cm] (chroma) {\textbf{ChromaDB}\\vecteurs};
+
+  \node[ext,right=of api] (mistral) {\textbf{Mistral AI}\\(externe)};
+
+  \draw[-{Latex[length=2mm]},thick] (front) -- node[right]{\small HTTPS + JWT} (api);
+  \draw[-{Latex[length=2mm]}] (api) -- (pg);
+  \draw[-{Latex[length=2mm]}] (api) -- (minio);
+  \draw[-{Latex[length=2mm]}] (api) -- (chroma);
+  \draw[-{Latex[length=2mm]},dashed] (api) -- node[above]{\small REST} (mistral);
+\end{tikzpicture}
+\caption{Architecture technique d\'etaill\'ee de GRC AI Analyzer}
+\label{fig:archi-technique}
+\end{figure}
 
 % =============================================================================
 \section{Architecture en couches du backend}
 % =============================================================================
 
-Le backend est organis\'e en cinq couches verticales strictement
-s\'epar\'ees~: une couche ne peut appeler que les couches
-sous-jacentes, ce qui garantit la testabilit\'e unitaire de chaque niveau.
+Le backend est organis\'e en cinq couches verticales ind\'ependantes~: chaque couche ne peut appeler que les couches inf\'erieures, ce qui facilite la maintenabilit\'e et les tests.
 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[node distance=0.28cm]
-		\tikzstyle{layer}=[rectangle,draw=darknavy,thick,minimum width=14cm,
-		minimum height=0.85cm,rounded corners=2pt,align=center,font=\small]
-		\node[layer,fill=fecolor!20]  (api)
-		{\textbf{Couche API} \enspace \texttt{app/api/v1/}
-			\enspace --- routes FastAPI, validation Pydantic, aucune logique m\'etier};
-		\node[layer,fill=becolor!15,below=of api] (svc)
-		{\textbf{Couche Services} \enspace \texttt{app/services/}
-			\enspace --- orchestration~: upload, analyse, export, chat};
-		\node[layer,fill=aicolor!15,below=of svc] (ai)
-		{\textbf{Couche IA} \enspace \texttt{app/ai/}
-			\enspace --- prompts, parseurs, client Mistral, RAG, embeddings};
-		\node[layer,fill=dbcolor!10,below=of ai] (model)
-		{\textbf{Couche Mod\`eles} \enspace \texttt{app/models/}
-			\enspace --- ORM SQLAlchemy 2, 6 entit\'es, enums PostgreSQL};
-		\node[layer,fill=seccolor!10,below=of model] (core)
-		{\textbf{Couche Core} \enspace \texttt{app/core/}
-			\enspace --- JWT, d\'ependances FastAPI, rate limiter, Pydantic Settings};
-	\end{tikzpicture}
-	\caption{Organisation en cinq couches du backend FastAPI}
-	\label{fig:layers}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=0.3cm]
+  \tikzstyle{layer}=[rectangle,draw=darknavy,thick,minimum width=11cm,minimum height=0.85cm,rounded corners=2pt,align=center,font=\small]
+  \node[layer,fill=lightgray]      (api)   {\textbf{Couche API} \quad \texttt{app/api/v1/} --- routes FastAPI minces, aucune logique m\'etier};
+  \node[layer,fill=lightgray!70,below=of api] (svc) {\textbf{Couche Services} \quad \texttt{app/services/} --- logique m\'etier (upload, analyse, export, chat)};
+  \node[layer,fill=darknavy!15,below=of svc] (ai)  {\textbf{Couche IA} \quad \texttt{app/ai/} --- prompts, parseurs, client Mistral, RAG, embeddings};
+  \node[layer,fill=boxgray,below=of ai]   (model) {\textbf{Couche Mod\`eles} \quad \texttt{app/models/} --- ORM SQLAlchemy, 6 entit\'es};
+  \node[layer,fill=boxgray!50,below=of model] (core) {\textbf{Couche Core} \quad \texttt{app/core/} --- JWT, d\'ependances, rate limiter, configuration};
+\end{tikzpicture}
+\caption{Organisation en couches du backend FastAPI}
+\label{fig:layers}
 \end{figure}
 
-Le point d'entr\'ee \texttt{main.py} enregistre les cinq routeurs
-et configure les middlewares globaux~:
+Le point d'entr\'ee \texttt{main.py} enregistre les routeurs et configure le rate limiter global~:
 
-\begin{lstlisting}[language=Python,
-	caption={Configuration CORS, rate-limit et routeurs (main.py)}]
-	app = FastAPI(title="GRC AI Analyzer", version="1.0.0")
-	
-	# Rate limiter global -- HTTP 429 si depassement par IP
-	app.state.limiter = limiter
-	app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-	
-	# CORS restreint aux origines connues (frontend Vite :5173 et prod)
-	app.add_middleware(CORSMiddleware,
-	allow_origins=[settings.frontend_url, "http://localhost:5173"],
-	allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
-	
-	# Cinq routeurs metier, tous sous le prefixe /api/v1
-	app.include_router(auth.router,     prefix="/api/v1")  # /login, /register
-	app.include_router(rapports.router, prefix="/api/v1")  # /rapports/*
-	app.include_router(analyses.router, prefix="/api/v1")  # /analyses/*
-	app.include_router(chat.router,     prefix="/api/v1")  # /chat/*
-	app.include_router(export.router,   prefix="/api/v1")  # /export/*
+\begin{lstlisting}[caption={Point d'entr\'ee FastAPI --- routeurs et rate limiter (main.py)}, label={lst:main}]
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from app.core.limiter import limiter
+
+app = FastAPI(title="GRC AI Analyzer", version="1.0.0")
+
+# Rate limiter global -- retourne HTTP 429 si depassement par IP
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# CORS restreint aux origines connues du frontend
+app.add_middleware(CORSMiddleware,
+    allow_origins=[settings.frontend_url, "http://localhost:5173"],
+    allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+app.include_router(auth.router,     prefix="/api/v1")
+app.include_router(rapports.router, prefix="/api/v1")
+app.include_router(analyses.router, prefix="/api/v1")
+app.include_router(chat.router,     prefix="/api/v1")
+app.include_router(export.router,   prefix="/api/v1")
 \end{lstlisting}
-
-La configuration globale est centralis\'ee via Pydantic Settings,
-ce qui garantit que le fichier \texttt{.env} est r\'esolu
-ind\'ependamment du r\'epertoire courant au d\'emarrage~:
-
-\begin{lstlisting}[language=Python,
-	caption={Configuration via Pydantic Settings (app/config.py)}]
-	class Settings(BaseSettings):
-	database_url: str              # postgresql+asyncpg://...
-	mistral_api_key: str
-	mistral_model: str = "mistral-large-latest"
-	secret_key: str                # secrets.token_hex(32)
-	algorithm: str = "HS256"
-	access_token_expire_minutes: int = 480
-	minio_endpoint: str = "localhost:9000"
-	minio_bucket: str  = "grc-reports"
-	frontend_url: str  = "http://localhost:5173"
-	chroma_host: str   = "localhost"
-	chroma_port: int   = 8001
-	
-	model_config = SettingsConfigDict(
-	# Chemin absolu : fonctionne quel que soit le cwd
-	env_file=Path(__file__).parent.parent / ".env",
-	extra="ignore"
-	)
-	
-	settings = Settings()   # singleton importe dans toute l'application
-\end{lstlisting}
-
-% =============================================================================
-\section{Conception du mod\`ele de donn\'ees}
-% =============================================================================
-
-Le mod\`ele relationnel repose sur six entit\'es PostgreSQL
-reli\'ees par cl\'es \'etrang\`eres UUID~v4.
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[node distance=1cm and 1.8cm,>={Latex[length=2mm]}]
-		\tikzstyle{ent}=[rectangle,draw=darknavy,thick,fill=lightgray,
-		minimum width=3.2cm,minimum height=0.85cm,align=center,font=\small\bfseries]
-		\node[ent] (user)    {Utilisateur};
-		\node[ent,right=2.2cm of user]    (rapport)  {Rapport};
-		\node[ent,right=2.2cm of rapport] (analyse)  {Analyse};
-		\node[ent,below=1.6cm of analyse,xshift=-3cm] (risque) {Risque};
-		\node[ent,below=1.6cm of analyse]              (conf)   {ResultatConformite};
-		\node[ent,below=1.6cm of analyse,xshift=3cm]   (reco)   {Recommandation};
-		\draw[->] (user)    -- node[above]{\tiny 1..n} (rapport);
-		\draw[->] (rapport) -- node[above]{\tiny 1..1} (analyse);
-		\draw[->] (analyse) -- (risque);
-		\draw[->] (analyse) -- (conf);
-		\draw[->] (analyse) -- (reco);
-		\draw[->,dashed] (risque) -- node[right]{\tiny 0..1} (reco);
-	\end{tikzpicture}
-	\caption{Mod\`ele relationnel de GRC AI Analyzer (PostgreSQL)}
-	\label{fig:erd}
-\end{figure}
-
-L'entit\'e \texttt{Analyse} est le pivot~: elle aggr\`ege les r\'esultats
-des trois axes GRC. La relation optionnelle \texttt{Risque} $\to$
-\texttt{Recommandation} (\texttt{risque\_id} FK nullable) permet
-\`a Mistral de lier une recommandation \`a un risque pr\'ecis
-tout en autorisant des recommandations globales non li\'ees.
-
-\begin{lstlisting}[language=Python,
-	caption={Mod\`ele ORM \texttt{Risque} --- SQLAlchemy 2 (models/risque.py)}]
-	class Risque(Base):
-	__tablename__ = "risques"
-	
-	id:           Mapped[uuid.UUID] = mapped_column(
-	UUID(as_uuid=True), primary_key=True,
-	default=uuid.uuid4)
-	analyse_id:   Mapped[uuid.UUID] = mapped_column(
-	ForeignKey("analyses.id", ondelete="CASCADE"))
-	libelle:      Mapped[str]  = mapped_column(String(500))
-	categorie:    Mapped[str]  = mapped_column(
-	Enum("CYBER","OPERATIONNEL","LEGAL","FINANCIER","RH",
-	name="categorie_risque_enum"))
-	probabilite:  Mapped[int]   = mapped_column(Integer)   # 1--5
-	impact:       Mapped[int]   = mapped_column(Integer)   # 1--5
-	score_risque: Mapped[float] = mapped_column(Float)     # prob x impact
-	severite:     Mapped[str]   = mapped_column(
-	Enum("CRITIQUE","ELEVE","MOYEN","FAIBLE",
-	name="severite_enum"))
-	section_source: Mapped[Optional[str]] = mapped_column(String(500))
-\end{lstlisting}
-
-La clause \texttt{ondelete="CASCADE"} garantit la suppression
-automatique en cascade~: supprimer une analyse entra\^ine la
-suppression de tous ses risques, r\'esultats et recommandations
-sans logique applicative suppl\'ementaire.
-La formule de s\'ev\'erit\'e est d\'eterministe~:
-
-\[
-\text{score} = p \times i,\quad p,i \in \{1,\ldots,5\}
-\qquad
-\text{s\'ev\'erit\'e} =
-\begin{cases}
-	\textsc{Faible}   & \text{score} < 6 \\
-	\textsc{Moyen}    & 6 \leq \text{score} < 12 \\
-	\textsc{\'Elev\'e}    & 12 \leq \text{score} < 20 \\
-	\textsc{Critique} & \text{score} \geq 20
-\end{cases}
-\]
-
-% =============================================================================
-\section{Conception des routes API}
-% =============================================================================
-
-Toutes les routes suivent la convention \texttt{/api/v1/\{ressource\}}
-et retournent une enveloppe JSON uniforme
-\texttt{\{"data":~...,~"message":~"...",~"success":~bool\}}.
-Le tableau~\ref{tab:routes} r\'ecapitule les endpoints principaux.
-
-\begin{table}[H]
-	\centering
-	\begin{tabularx}{\textwidth}{|l|l|X|}
-		\hline
-		\textbf{M\'ethode} & \textbf{Route} & \textbf{Description} \\
-		\hline
-		POST & \texttt{/auth/login} & Authentification~; retourne un token JWT HS256 \\
-		\hline
-		POST & \texttt{/auth/register} & Cr\'eation de compte utilisateur \\
-		\hline
-		POST & \texttt{/rapports/upload} & Upload PDF/DOCX/XLSX vers MinIO \\
-		\hline
-		GET  & \texttt{/rapports/} & Liste des rapports de l'utilisateur \\
-		\hline
-		DELETE & \texttt{/rapports/\{id\}} & Supprime rapport + analyse + collection ChromaDB \\
-		\hline
-		POST & \texttt{/analyses/lancer/\{rapport\_id\}} & D\'eclenche l'analyse en arri\`ere-plan (HTTP~202) \\
-		\hline
-		GET  & \texttt{/analyses/\{id\}} & Statut et r\'esum\'e ex\'ecutif (\texttt{en\_cours} / \texttt{termine}) \\
-		\hline
-		GET  & \texttt{/analyses/\{id\}/risks} & Liste des risques extraits \\
-		\hline
-		GET  & \texttt{/analyses/\{id\}/conformite} & R\'esultats de conformit\'e par r\'ef\'erentiel \\
-		\hline
-		GET  & \texttt{/analyses/\{id\}/recommandations} & Recommandations prioris\'ees \\
-		\hline
-		POST & \texttt{/chat/\{analyse\_id\}} & Question RAG sur le rapport analys\'e \\
-		\hline
-		GET  & \texttt{/export/\{id\}/pdf} & Export PDF du rapport complet \\
-		\hline
-		GET  & \texttt{/export/\{id\}/excel} & Export Excel (audit trail) \\
-		\hline
-	\end{tabularx}
-	\caption{Routes API principales de GRC AI Analyzer}
-	\label{tab:routes}
-\end{table}
-
-\subsection{Lancement d'une analyse (HTTP 202 + BackgroundTask)}
-
-La route la plus importante est \texttt{POST /analyses/lancer/\{rapport\_id\}}~:
-elle retourne imm\'ediatement un HTTP~202 pendant que l'analyse
-tourne en arri\`ere-plan dans une session de base de donn\'ees ind\'ependante.
-
-\begin{lstlisting}[language=Python,
-	caption={Route de lancement d'analyse avec BackgroundTask (analyses.py)}]
-	@router.post("/lancer/{rapport_id}", status_code=202)
-	async def lancer_analyse(
-	rapport_id: uuid.UUID,
-	background_tasks: BackgroundTasks,
-	db: Annotated[AsyncSession, Depends(get_db)],
-	current_user: Annotated[Utilisateur, Depends(get_current_user)],
-	):
-	# Verification existence du rapport
-	result = await db.execute(
-	select(Rapport).where(Rapport.id == rapport_id)
-	)
-	rapport = result.scalar_one_or_none()
-	if not rapport:
-	raise HTTPException(status_code=404, detail="Rapport not found")
-	
-	# Creation de l'enregistrement analyse avec statut en_cours
-	analyse = Analyse(
-	id=uuid.uuid4(),
-	rapport_id=rapport_id,
-	lance_par=current_user.id,
-	statut="en_cours",
-	)
-	db.add(analyse)
-	rapport.statut = "en_cours"
-	await db.commit()   # commit avant le background task
-	
-	# Lancement en arriere-plan (nouvelle session DB independante)
-	background_tasks.add_task(
-	_run_analysis_background, analyse.id, rapport_id
-	)
-	# Reponse immediate : le frontend va poller GET /analyses/{id}
-	return api_response(
-	data={"analyse_id": str(analyse.id), "statut": "en_cours"},
-	message="Analysis started",
-	)
-\end{lstlisting}
-
-Le commit \textit{avant} l'ajout de la t\^ache de fond est essentiel~:
-le background task ouvre sa propre session \texttt{AsyncSessionLocal}
-et doit trouver l'enregistrement en base. Sans ce commit,
-la t\^ache de fond \'echouerait avec une erreur de cl\'e \'etrang\`ere.
-
-\subsection{Polling du statut d'analyse (frontend)}
-
-Le frontend React poll GET \texttt{/analyses/\{id\}} toutes les
-3~secondes jusqu'\`a \texttt{statut === "termine"}~:
-
-\begin{lstlisting}[language=Python,
-	caption={Endpoint de polling du statut d'analyse (analyses.py)}]
-	@router.get("/{analyse_id}")
-	async def get_one(
-	analyse_id: uuid.UUID,
-	db: Annotated[AsyncSession, Depends(get_db)],
-	current_user: Annotated[Utilisateur, Depends(get_current_user)],
-	):
-	analyse = await get_analyse(db, analyse_id)
-	if not analyse:
-	raise HTTPException(status_code=404, detail="Analyse not found")
-	return api_response(data={
-		"id":              str(analyse.id),
-		"rapport_id":      str(analyse.rapport_id),
-		"resume_executif": analyse.resume_executif,
-		"score_maturite":  analyse.score_maturite,
-		"statut":          analyse.statut,   # "en_cours"|"termine"|"erreur"
-		"created_at":      analyse.created_at.isoformat(),
-	})
-\end{lstlisting}
-
-\subsection{Interface de chat RAG}
-
-L'intercepteur Axios injecte automatiquement le token JWT
-dans toutes les requ\^etes sortantes~:
-
-\begin{lstlisting}[language=Java,
-	caption={Intercepteur JWT Axios (frontend/src/services/api.ts)}]
-	const api = axios.create({ baseURL: import.meta.env.VITE_API_URL });
-	
-	// Injection automatique du token a chaque requete
-	api.interceptors.request.use((config) => {
-		const token = useAuthStore.getState().token;
-		if (token) config.headers.Authorization = `Bearer ${token}`;
-		return config;
-	});
-	
-	// Deconnexion automatique si le token expire (401)
-	api.interceptors.response.use(
-	(res) => res,
-	(err) => {
-		if (err.response?.status === 401) {
-			useAuthStore.getState().logout();
-			window.location.href = "/login";
-		}
-		return Promise.reject(err);
-	}
-	);
-\end{lstlisting}
-
-Ce m\'ecanisme centralise la gestion du cycle de vie de
-l'authentification~: aucun composant React n'a \`a g\'erer
-explicitement le token.
-
-% =============================================================================
-\section{Conception des prompts IA}
-% =============================================================================
-
-GRC AI Analyzer utilise quatre prompts distincts envoy\'es \`a
-Mistral~Large. Chaque prompt est compos\'e d'un \textit{system prompt}
-(r\^ole et r\`egles strictes) et d'un \textit{user prompt}
-(donn\'ees et format de sortie attendu).
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[node distance=0.5cm and 1.2cm]
-		\tikzstyle{pm}=[rectangle,draw=darknavy,thick,fill=darknavy!12,
-		minimum width=3cm,minimum height=0.8cm,rounded corners=3pt,
-		align=center,font=\small]
-		\tikzstyle{outbox}=[rectangle,draw=darkgreen,thick,fill=darkgreen!10,
-		minimum width=3cm,minimum height=0.7cm,rounded corners=3pt,
-		align=center,font=\small]
-		\tikzstyle{arr}=[-{Latex[length=2mm]},thick]
-		
-		\node[pm] (p1) {Prompt\\extraction risques};
-		\node[pm,right=1.4cm of p1] (p2) {Prompts\\conformit\'e (x3)};
-		\node[pm,right=1.4cm of p2] (p3) {Prompt\\recommandations};
-		\node[pm,right=1.4cm of p3] (p4) {Prompt\\r\'esum\'e ex\'ecutif};
-		
-		\node[outbox,below=0.8cm of p1] (o1) {JSON risques[]};
-		\node[outbox,below=0.8cm of p2,align=center] (o2) {JSON domaines[]\\(x3 r\'ef\'erentiels)};
-		\node[outbox,below=0.8cm of p3,align=center] (o3) {JSON recomman-\\dations[]};
-		\node[outbox,below=0.8cm of p4] (o4) {Texte brut\\350--450 mots};
-		
-		\draw[arr] (p1)--(o1); \draw[arr] (p2)--(o2);
-		\draw[arr] (p3)--(o3); \draw[arr] (p4)--(o4);
-	\end{tikzpicture}
-	\caption{Les quatre prompts Mistral et leurs sorties}
-	\label{fig:prompts}
-\end{figure}
-
-\subsection{Prompt d'extraction des risques}
-
-Le prompt d'extraction est le plus complexe~: il d\'etecte
-automatiquement le type de document (scan de vuln\'erabilit\'es,
-rapport de pentest, audit, registre des risques, incident...) et
-adapte sa strat\'egie d'extraction en cons\'equence.
-
-\begin{lstlisting}[language=Python,
-	caption={System prompt d'extraction des risques (risk\_prompts.py)}]
-	RISK_SYSTEM_PROMPT = """You are a senior GRC and cybersecurity expert.
-	Your task is to perform an EXHAUSTIVE extraction of every risk,
-	vulnerability, finding, gap, weakness, and issue in the document.
-	
-	STEP 1 -- IDENTIFY THE DOCUMENT TYPE and apply the matching strategy:
-	
-	TYPE A -- VULNERABILITY SCAN (ZAP, Nessus, Burp, Qualys)
-	- Extract EVERY individual alert -- one risk per alert.
-	- DO NOT merge similar alerts (four CSP issues = four risks).
-	- Severity mapping: Critical->P5/I5, High->P4/I4, Medium->P3/I3,
-	Low->P2/I2, Informational->P1/I2.
-	
-	TYPE B -- PENETRATION TEST REPORT
-	- Extract each finding with CVSS score and proof-of-concept.
-	- CVSS: Critical(9+)->P5/I5, High(7-8.9)->P4/I4, Medium->P3/I3.
-	
-	TYPE C -- AUDIT / GAP ANALYSIS
-	- Major non-conformance->P4/I4, Minor->P3/I3, Observation->P2/I2.
-	- Specify the exact control/clause not met.
-	
-	TYPE D -- RISK REGISTER
-	- Preserve original probability/impact scores when provided.
-	
-	TYPE G -- DPIA / PRIVACY REPORT
-	- Reference specific GDPR/Loi 09-08 article for each risk.
-	
-	UNIVERSAL RULES:
-	1. EXHAUSTIVE : nothing is too minor to extract.
-	2. NO MERGING : each distinct finding = one risk object.
-	3. GROUNDED   : every risk must be supported by document text.
-	4. Respond ONLY in valid JSON. No text outside the JSON."""
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,
-	caption={User prompt d'extraction des risques (risk\_prompts.py)}]
-	RISK_USER_PROMPT = """Perform an exhaustive risk extraction.
-	
-	Return ONLY this JSON (no text outside):
-	{
-		"document_type": "VULNERABILITY_SCAN|PENTEST|AUDIT|RISK_REGISTER|...",
-		"risques": [
-		{
-			"libelle":       "Exact name of the finding (max 200 chars)",
-			"description":   "Full technical detail: CWE/CVE IDs, affected URLs,
-			instance count, scanner evidence, remediation.
-			Minimum 100 chars, maximum 1000 chars.",
-			"categorie":     "CYBER|OPERATIONNEL|LEGAL|FINANCIER|RH",
-			"probabilite":   3,
-			"impact":        3,
-			"section_source":"Alert ID, section, page, or finding ID",
-			"confiance":     90
-		}
-		]
-	}
-	
-	SCORING:
-	- probabilite : likelihood of exploitation (1=rare, 5=near-certain)
-	- impact      : business/security impact if it occurs (1=negligible, 5=catastrophic)
-	- confiance   : how clearly stated in document (0-100; use >=60 for explicit)
-	
-	DOCUMENT TEXT:
-	{text}"""
-\end{lstlisting}
-
-Le champ \texttt{confiance} (0--100) est un m\'eta-indicateur~:
-il permet au service m\'etier de filtrer les risques peu fiables
-(confiance~$<$~40) avant de les persister, \'evitant d'enregistrer
-des extrapolations hasardeuses de Mistral.
-
-\subsection{Prompts de v\'erification de conformit\'e}
-
-Le m\^eme template est utilis\'e trois fois, param\'etr\'e par le
-r\'ef\'erentiel (\texttt{ISO27001}, \texttt{RGPD}, \texttt{LOI0908}).
-Le system prompt instaure une philosophie d'\'evaluation en deux formes
-d'\'evidence~:
-
-\begin{lstlisting}[language=Python,
-	caption={System prompt de conformit\'e --- philosophie d'\'evaluation (compliance\_prompts.py)}]
-	COMPLIANCE_SYSTEM_PROMPT = """You are a {framework} compliance expert.
-	
-	EVALUATION PHILOSOPHY -- evaluate BOTH forms of evidence:
-	
-	1. EXPLICIT evidence: policies mentioned, controls described,
-	the document directly addresses the requirement.
-	
-	2. IMPLICIT evidence: findings IMPLY the compliance state even
-	without explicit mention. Examples:
-	- Vulnerability scan showing missing HSTS -> A.13 weak
-	- Audit finding CSRF vulnerabilities     -> access control gaps
-	- Incident report describing a breach    -> A.16 incident mgmt risk
-	
-	SCORING GUIDE:
-	- CONFORME     (75-100%) : clear evidence of implementation.
-	- PARTIEL      (10-74%)  : partial or implicit evidence exists.
-	- NON_CONFORME (0-9%)    : no evidence, or explicit failure.
-	
-	taux_global = weighted average of all domain scores.
-	Respond ONLY in valid JSON. No text outside the JSON."""
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,
-	caption={User prompt de conformit\'e ISO 27001 (extrait) (compliance\_prompts.py)}]
-	COMPLIANCE_USER_PROMPT = """Evaluate compliance with {framework_display}.
-	
-	{domains}
-	# Exemple pour ISO 27001 :
-	# A.5  Information Security Policies
-	# A.9  Access Control
-	# A.12 Operational Security (vulnerability mgmt, logging, patching)
-	# A.16 Information Security Incident Management
-	# ... (14 domaines au total)
-	
-	Return ONLY this JSON:
-	{
-		"referentiel": "{framework}",
-		"taux_global": 0,
-		"domaines": [
-		{
-			"nom":      "Domain name",
-			"statut":   "CONFORME|NON_CONFORME|PARTIEL",
-			"taux":     0,
-			"ecart":    "Specific gap description referencing document content.",
-			"evidence": "Direct quote or reference from the document."
-		}
-		]
-	}
-	
-	IMPORTANT: list ALL domains. taux_global = rounded average of taux[].
-	
-	DOCUMENT TEXT:
-	{text}"""
-\end{lstlisting}
-
-La distinction \texttt{ecart} / \texttt{evidence} est d\'elib\'er\'ee~:
-\texttt{ecart} d\'ecrit le probl\`eme (ce qui manque), \texttt{evidence}
-cite le document (ce qui justifie le score). Cette s\'eparation permet
-au frontend d'afficher une explication actionnable et une r\'ef\'erence
-source distinctes dans le tableau de conformit\'e.
-
-\subsection{Prompt de g\'en\'eration des recommandations}
-
-Le prompt de recommandations re\c{c}oit la liste des risques extraits
-en phase~1 et exige une recommandation \textit{technique et sp\'ecifique}
-par risque~:
-
-\begin{lstlisting}[language=Python,
-	caption={System prompt des recommandations --- standards qualit\'e (recommendation\_prompts.py)}]
-	RECOMMENDATION_SYSTEM_PROMPT = """You are a senior GRC consultant.
-	Generate specific, actionable, technically detailed recommendations.
-	
-	Each recommendation MUST:
-	1. DIRECTLY address the specific risk -- no generic advice.
-	2. Include concrete steps (HTTP header values, config snippets,
-	OWASP/NIST controls, specific tools).
-	3. Reference industry standards (OWASP Top 10, NIST SP 800-53,
-	ISO 27001 controls, GDPR articles, CWE mitigations).
-	4. Distinguish QUICK_WIN (<2 weeks) from LONG_TERME.
-	
-	QUICK_WIN examples:
-	- Add HTTP security headers (HSTS, X-Frame-Options, nosniff)
-	- Disable X-Powered-By header in server config
-	- Patch a vulnerable library version
-	
-	LONG_TERME examples:
-	- Implement full CSP policy (design + allowlists)
-	- Establish DPO role and ROPA
-	- Build incident response plan
-	
-	PRIORITIZATION: CRITIQUE risk -> CRITIQUE priority,
-	ELEVE -> HAUTE, MOYEN -> MOYENNE, FAIBLE -> FAIBLE.
-	
-	Respond ONLY in valid JSON. No text outside the JSON."""
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,
-	caption={User prompt des recommandations (recommendation\_prompts.py)}]
-	RECOMMENDATION_USER_PROMPT = """Generate one recommendation per risk.
-	
-	IDENTIFIED RISKS:
-	{risks_summary}
-	
-	Return ONLY this JSON:
-	{
-		"recommandations": [
-		{
-			"libelle":      "Concise action title (max 150 chars)",
-			"description":  "Detailed steps: what to do, how to do it,
-			specific values/commands/configs, expected
-			outcome, standard reference. Min 150 chars.",
-			"priorite":     "CRITIQUE|HAUTE|MOYENNE|FAIBLE",
-			"type_action":  "QUICK_WIN|LONG_TERME",
-			"effort_estime":"FAIBLE|MOYEN|ELEVE",
-			"risque_lie":   "Exact libelle of the linked risk (verbatim)"
-		}
-		]
-	}"""
-\end{lstlisting}
-
-Le champ \texttt{risque\_lie} copie verbatim le \texttt{libelle}
-du risque concern\'e, ce qui permet au service m\'etier de
-r\'e\'etablir la jointure \texttt{Recommandation.risque\_id}
-par recherche exacte dans la liste des risques persist\'es.
-
-\subsection{Prompt du r\'esum\'e ex\'ecutif}
-
-Le r\'esum\'e ex\'ecutif est le seul prompt qui retourne du texte brut
-(pas de JSON). Le system prompt impose un format strict
-pour \'eviter l'injection de Markdown dans le PDF export\'e~:
-
-\begin{lstlisting}[language=Python,
-	caption={System prompt du r\'esum\'e ex\'ecutif (summary\_prompts.py)}]
-	SUMMARY_SYSTEM_PROMPT = """You are a GRC consultant writing for a CISO.
-	
-	CRITICAL FORMAT RULES:
-	1. Write ONLY plain text. NO Markdown whatsoever.
-	- No #, ##, ### headings.
-	- No **, __ bold or * italic.
-	- No bullet points (*, -, +).
-	- Use numbered sections: "1. KEY FINDINGS", "2. TOP RISKS", etc.
-	2. Write in French. Professional, executive-level.
-	3. Be factual -- only reference data provided.
-	4. Length: 350-450 words total.
-	
-	STRUCTURE:
-	1. CONTEXTE ET OBJET DU DOCUMENT (2-3 sentences)
-	2. PRINCIPALES CONCLUSIONS (numbered list, 4-6 items)
-	3. RISQUES PRIORITAIRES (top 3-5 with severity + impact statement)
-	4. ETAT DE CONFORMITE  (ISO: X% | RGPD: X% | Loi 09-08: X%)
-	5. ACTIONS IMMEDIATES RECOMMANDEES (top 3, numbered)
-	6. CONCLUSION (1 paragraph)"""
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,
-	caption={User prompt du r\'esum\'e ex\'ecutif avec donn\'ees agr\'eg\'ees (summary\_prompts.py)}]
-	SUMMARY_USER_PROMPT = """Write the executive summary using the data below.
-	
-	ANALYSIS DATA:
-	- Total risks identified    : {risks_count}
-	- Risks by severity         : {risks_by_severity}
-	- Top risks (most critical) : {top_risks}
-	- ISO 27001 compliance      : {iso_score}%
-	- RGPD compliance           : {rgpd_score}%
-	- Loi 09-08 compliance      : {loi_score}%
-	- Overall maturity score    : {maturity_score}%
-	- Recommendations generated : {recs_count}
-	
-	DOCUMENT EXCERPT (first 4000 chars):
-	{text_excerpt}"""
-\end{lstlisting}
-
-Les chiffres inject\'es dans le user prompt (\texttt{risks\_count},
-\texttt{iso\_score}...) proviennent des r\'esultats de la phase~1~:
-le r\'esum\'e est donc ancr\'e sur des valeurs num\'eriques r\'eelles
-et non sur la perception de Mistral, ce qui \'elimine les
-hallucinations chiffr\'ees.
 
 % =============================================================================
 \section{Pipeline d'analyse IA asynchrone}
 % =============================================================================
 
-Le c\oe{}ur technique de la plateforme est le pipeline asynchrone
-en deux phases \texttt{asyncio.gather} successives.
-La phase~1 lance cinq t\^aches simultan\'ement~; la phase~2
-consomme leurs r\'esultats agr\'eg\'es.
+Le c\oe{}ur technique de la plateforme est le pipeline d'analyse d\'ecompos\'e en deux phases parall\`eles successives.
 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[node distance=0.65cm and 0.55cm]
-		\tikzstyle{se}=[rectangle,draw=darknavy,thick,fill=darknavy!15,
-		minimum width=3cm,minimum height=0.75cm,rounded corners=3pt,
-		align=center,font=\small]
-		\tikzstyle{ai}=[rectangle,draw=darknavy,thick,fill=lightgray,
-		minimum width=2.6cm,minimum height=0.75cm,rounded corners=2pt,
-		align=center,font=\small]
-		\tikzstyle{bar}=[rectangle,draw=darkgreen,thick,fill=darkgreen!12,
-		minimum width=13cm,minimum height=0.75cm,rounded corners=2pt,
-		align=center,font=\small\bfseries]
-		
-		\node[se] (start) {Upload + parsing\\+ chunking};
-		
-		\node[ai,below right=0.7cm and -5.8cm of start] (p1a) {Indexation\\ChromaDB};
-		\node[ai,right=0.3cm of p1a] (p1b) {Extraction\\risques};
-		\node[ai,right=0.3cm of p1b] (p1c) {ISO~27001};
-		\node[ai,right=0.3cm of p1c] (p1d) {RGPD};
-		\node[ai,right=0.3cm of p1d] (p1e) {Loi~09-08};
-		
-		\node[bar,below=1.1cm of p1c] (g1) {asyncio.gather() --- Phase 1 \quad (return\_exceptions=True)};
-		
-		\node[ai,below left=0.8cm and -2cm of g1] (p2a) {Recommandations};
-		\node[ai,below right=0.8cm and -2cm of g1] (p2b) {R\'esum\'e ex\'ecutif};
-		
-		\node[bar,below=1.8cm of g1] (g2) {asyncio.gather() --- Phase 2};
-		\node[se,below=0.6cm of g2] (endn) {statut = \texttt{termin\'e}};
-		
-		\foreach \n in {p1a,p1b,p1c,p1d,p1e}
-		\draw[-{Latex[length=2mm]}] (start) -- (\n);
-		\foreach \n in {p1a,p1b,p1c,p1d,p1e}
-		\draw[-{Latex[length=2mm]}] (\n) -- (g1);
-		\draw[-{Latex[length=2mm]}] (g1) -- (p2a);
-		\draw[-{Latex[length=2mm]}] (g1) -- (p2b);
-		\draw[-{Latex[length=2mm]}] (p2a) -- (g2);
-		\draw[-{Latex[length=2mm]}] (p2b) -- (g2);
-		\draw[-{Latex[length=2mm]}] (g2) -- (endn);
-	\end{tikzpicture}
-	\caption{Pipeline d'analyse IA en deux phases parall\`eles}
-	\label{fig:pipeline}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=0.7cm and 0.6cm]
+  \tikzstyle{phase}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.7cm,minimum height=0.9cm,rounded corners=2pt,align=center,font=\small]
+  \tikzstyle{phase2}=[rectangle,draw=darknavy,thick,fill=darknavy!15,minimum width=2.7cm,minimum height=0.9cm,rounded corners=2pt,align=center,font=\small]
+  \tikzstyle{startend}=[rectangle,draw=darkgreen,thick,fill=darkgreen!10,minimum width=2cm,minimum height=0.7cm,rounded corners=4pt,align=center,font=\small]
+
+  \node[startend] (start) {Upload};
+  \node[phase,below right=of start,xshift=-1.5cm] (p1a) {\textbf{Phase 1}\\Indexation RAG};
+  \node[phase,right=of p1a] (p1b) {\textbf{Phase 1}\\Extraction risques};
+  \node[phase,right=of p1b] (p1c) {\textbf{Phase 1}\\ISO/RGPD/Loi};
+  \node[phase2,below=1cm of p1b] (gather1) {asyncio.gather};
+  \node[phase,below left=of gather1,xshift=0.5cm] (p2a) {\textbf{Phase 2}\\Recommandations};
+  \node[phase,below right=of gather1,xshift=-0.5cm] (p2b) {\textbf{Phase 2}\\Synth\`ese ex\'ecutive};
+  \node[phase2,below=of gather1,yshift=-1.6cm] (gather2) {asyncio.gather};
+  \node[startend,below=of gather2] (endn) {Statut = termin\'e};
+
+  \draw[-{Latex[length=2mm]}] (start) -- (p1a);
+  \draw[-{Latex[length=2mm]}] (start) -- (p1b);
+  \draw[-{Latex[length=2mm]}] (start) -- (p1c);
+  \draw[-{Latex[length=2mm]}] (p1a) -- (gather1);
+  \draw[-{Latex[length=2mm]}] (p1b) -- (gather1);
+  \draw[-{Latex[length=2mm]}] (p1c) -- (gather1);
+  \draw[-{Latex[length=2mm]}] (gather1) -- (p2a);
+  \draw[-{Latex[length=2mm]}] (gather1) -- (p2b);
+  \draw[-{Latex[length=2mm]}] (p2a) -- (gather2);
+  \draw[-{Latex[length=2mm]}] (p2b) -- (gather2);
+  \draw[-{Latex[length=2mm]}] (gather2) -- (endn);
+\end{tikzpicture}
+\caption{Pipeline d'analyse en deux phases parall\`eles (asyncio)}
+\label{fig:pipeline}
 \end{figure}
 
-\subsection{Phase 1 --- cinq t\^aches simultan\'ees}
+\subsection{Phase 1 --- appels IA parall\`eles}
 
-\begin{lstlisting}[language=Python,
-	caption={Phase 1 : indexation + extraction + 3 conformit\'es en parall\`ele (analysis\_service.py)}]
-	# Construction des taches (pas encore lancees)
-	task_chroma = index_document_chunks(str(analyse_id), chunks)
-	
-	risk_sys, risk_usr = build_risk_prompt(risk_text)
-	task_risk = call_mistral_json(risk_sys, risk_usr)
-	
-	tasks_comp = []
-	for framework in ["ISO27001", "RGPD", "LOI0908"]:
-	sys_p, usr_p = build_compliance_prompt(comp_text, framework)
-	tasks_comp.append(call_mistral_json(sys_p, usr_p))
-	
-	# Lancement simultane des 5 taches
-	# return_exceptions=True : une erreur partielle ne stoppe pas l'analyse
-	phase1 = await asyncio.gather(
-	task_chroma, task_risk, *tasks_comp,
-	return_exceptions=True
-	)
-	# phase1[0] = nb chunks indexes (ou Exception si ChromaDB down)
-	# phase1[1] = dict risques Mistral
-	# phase1[2..4] = dict conformite ISO, RGPD, Loi 09-08
+La phase~1 lance simultan\'ement l'indexation vectorielle, l'extraction des risques et les trois contr\^oles de conformit\'e~:
+
+\begin{lstlisting}[caption={Phase 1 --- lancement de 5 t\^aches IA en parall\`ele (analysis\_service.py)}, label={lst:phase1}]
+# Construction des taches (non encore lancees)
+task_chroma = index_document_chunks(str(analyse_id), chunks)
+
+risk_sys, risk_usr = build_risk_prompt(risk_text)
+task_risk = call_mistral_json(risk_sys, risk_usr)
+
+tasks_comp = []
+for framework in FRAMEWORKS:  # ["ISO27001", "RGPD", "LOI0908"]
+    comp_sys, comp_usr = build_compliance_prompt(comp_text, framework)
+    tasks_comp.append(call_mistral_json(comp_sys, comp_usr))
+
+# Execution simultanee des 5 taches
+phase1_results = await asyncio.gather(
+    task_chroma, task_risk, *tasks_comp,
+    return_exceptions=True   # une erreur partielle n'interrompt pas l'analyse
+)
 \end{lstlisting}
 
-\subsection{Phase 2 --- recommandations et r\'esum\'e}
+\subsection{S\'erialisation des appels Mistral et anti-429}
 
-La phase~2 re\c{c}oit les r\'esultats agr\'eg\'es de la phase~1.
-Cette s\'eparation est impos\'ee par une d\'ependance de donn\'ees~:
-les recommandations n\'ecessitent de conna\^itre \textit{\`a la fois}
-les risques ET les taux de conformit\'e.
+Bien que les t\^aches soient lanc\'ees en parall\`ele, les appels \`a l'API Mistral sont s\'erialis\'es par un \texttt{asyncio.Semaphore(1)} global. En cas d'erreur HTTP\,429, un cooldown exponentiel partag\'e est appliqu\'e~:
 
-\begin{lstlisting}[language=Python,
-	caption={Phase 2 : recommandations + r\'esum\'e en parall\`ele (analysis\_service.py)}]
-	# Consolidation des resultats de phase 1
-	gap_analysis = _build_gap_analysis(conformity_results)
-	risks_summary = _format_risks_for_prompt(risks_extracted)
-	
-	reco_sys, reco_usr = build_recommendation_prompt(
-	risks_summary=risks_summary,
-	text_excerpt=risk_text[:3000],
-	)
-	summary_sys, summary_usr = build_summary_prompt(
-	text=risk_text,
-	risks_count=len(risks_extracted),
-	iso_score=conformity_results["ISO27001"]["taux_global"],
-	rgpd_score=conformity_results["RGPD"]["taux_global"],
-	loi_score=conformity_results["LOI0908"]["taux_global"],
-	risks_by_severity=severity_counts,
-	top_risks=top5_risks,
-	recs_count=len(risks_extracted),
-	)
-	# Recommandations (JSON) et resume (texte brut) en parallele
-	phase2 = await asyncio.gather(
-	call_mistral_json(reco_sys, reco_usr),
-	call_mistral(summary_sys, summary_usr),   # texte brut, pas JSON
-	return_exceptions=True
-	)
-\end{lstlisting}
+\begin{lstlisting}[caption={Client Mistral --- s\'emaphore et cooldown anti-429 (mistral\_client.py)}, label={lst:mistral}]
+_semaphore        = asyncio.Semaphore(1)  # 1 seul appel Mistral a la fois
+_rate_limited_until: float = 0.0          # timestamp; 0 = pas de cooldown actif
+_last_call_at:      float = 0.0
+_INTER_CALL_DELAY = 1.5                   # secondes min. entre deux appels
 
-\subsection{S\'erialisation anti-429 des appels Mistral}
-
-Les cinq t\^aches de la phase~1 sont lanc\'ees simultan\'ement
-par \texttt{asyncio.gather}, mais les appels Mistral sont
-s\'erialis\'es par un \texttt{Semaphore(1)} global avec
-backoff exponentiel en cas de HTTP~429~:
-
-\begin{lstlisting}[language=Python,
-	caption={Client Mistral --- s\'emaphore et backoff (mistral\_client.py)}]
-	_semaphore         = asyncio.Semaphore(1)
-	_rate_limited_until: float = 0.0
-	_last_call_at:      float = 0.0
-	_INTER_CALL_DELAY   = 1.5   # secondes minimum entre deux appels
-	
-	async def call_mistral(system_prompt, user_prompt,
-	temperature=0.7, max_tokens=4096,
-	max_retries=5) -> str:
-	for attempt in range(1, max_retries + 1):
-	try:
-	async with _semaphore:
-	# Attendre la fin d'un eventuel cooldown rate-limit
-	cooldown = _rate_limited_until - time.monotonic()
-	if cooldown > 0:
-	await asyncio.sleep(cooldown)
-	# Espacement minimum entre appels consecutifs
-	gap = _last_call_at + _INTER_CALL_DELAY - time.monotonic()
-	if gap > 0:
-	await asyncio.sleep(gap)
-	_last_call_at = time.monotonic()
-	response = await client.chat.complete_async(
-	model=settings.mistral_model,
-	messages=[{"role":"system","content":system_prompt},
-	{"role":"user",  "content":user_prompt}],
-	temperature=temperature,
-	max_tokens=max_tokens,
-	)
-	return response.choices[0].message.content
-	except Exception as exc:
-	if _is_rate_limit_error(exc):        # HTTP 429
-	wait = 30 * attempt              # 30s, 60s, 90s...
-	_rate_limited_until = time.monotonic() + wait
-	await asyncio.sleep(wait)
-\end{lstlisting}
-
-Le s\'emaphore r\'esout une tension fondamentale~:
-\texttt{asyncio.gather} veut lancer tous les appels imm\'ediatement,
-mais l'API Mistral impose un d\'ebit limit\'e.
-Le s\'emaphore sert de file d'attente FIFO~: les cinq coroutines
-sont toutes ``actives'' du point de vue d'\texttt{asyncio},
-mais une seule d\'etient le verrou et appelle r\'eellement l'API.
-
-% =============================================================================
-\section{Parseur de documents et pipeline RAG}
-% =============================================================================
-
-\subsection{Extraction de texte multi-format}
-
-Le module \texttt{document\_parser.py} normalise les trois formats
-en texte brut structur\'e, pr\'eservant les marqueurs de sections
-pour que Mistral puisse citer la source pr\'ecise d'un risque~:
-
-\begin{lstlisting}[language=Python,
-	caption={Extraction de texte PDF/DOCX/XLSX (document\_parser.py)}]
-	def extract_text(file_bytes: bytes, file_format: str) -> str:
-	fmt = file_format.lower().strip(".")
-	if fmt == "pdf":
-	doc = fitz.open(stream=file_bytes, filetype="pdf")
-	return "\n\n".join(
-	f"=== Page {i+1} ===\n{p.get_text()}"
-	for i, p in enumerate(doc)
-	)
-	elif fmt == "docx":
-	doc = Document(io.BytesIO(file_bytes))
-	parts = [p.text for p in doc.paragraphs if p.text.strip()]
-	for table in doc.tables:   # contenu des tableaux inclus
-	for row in table.rows:
-	parts.append(" | ".join(c.text for c in row.cells))
-	return "\n".join(parts)
-	elif fmt == "xlsx":
-	wb = openpyxl.load_workbook(io.BytesIO(file_bytes), data_only=True)
-	parts = []
-	for sheet in wb.worksheets:
-	parts.append(f"=== Feuille : {sheet.title} ===")
-	for row in sheet.iter_rows(values_only=True):
-	line = " | ".join(str(v) for v in row if v is not None)
-	if line.strip():
-	parts.append(line)
-	return "\n".join(parts)
-	
-	def chunk_text(text: str,
-	chunk_size: int = 1500,
-	overlap: int = 200) -> list[str]:
-	"""Fenetres glissantes : garantit le contexte aux frontieres."""
-	chunks, start = [], 0
-	while start < len(text):
-	chunks.append(text[start : start + chunk_size])
-	if start + chunk_size >= len(text):
-	break
-	start += chunk_size - overlap   # avance de 1300 chars
-	return chunks
-\end{lstlisting}
-
-\subsection{Indexation et recherche vectorielle ChromaDB}
-
-\begin{lstlisting}[language=Python,
-	caption={Indexation des chunks (vector\_store.py)}]
-	async def index_document_chunks(analyse_id: str,
-	chunks: list[str]) -> int:
-	collection = await asyncio.to_thread(
-	get_chroma_client().get_or_create_collection,
-	name=f"analyse_{analyse_id.replace('-', '_')}",
-	metadata={"hnsw:space": "cosine"},   # distance cosinus
-	)
-	embeddings = await asyncio.to_thread(   # CPU -> thread
-	get_embedding_model().encode, chunks, show_progress_bar=False
-	)
-	await asyncio.to_thread(collection.add,
-	documents=chunks, embeddings=embeddings.tolist(),
-	ids=[str(uuid.uuid4()) for _ in chunks],
-	metadatas=[{"chunk_index": i} for i in range(len(chunks))],
-	)
-	return len(chunks)
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,
-	caption={G\'en\'eration augment\'ee --- chat RAG (chat\_engine.py)}]
-	async def answer_question(analyse_id: str,
-	question: str, top_k: int = 5) -> dict:
-	# 1. Retrieval : top-5 chunks semantiquement proches
-	results = await search_similar_chunks(analyse_id, question, top_k)
-	
-	# 2. Construction du contexte
-	context = "\n\n".join(
-	f"[Extrait {i+1}]: {r['text']}"
-	for i, r in enumerate(results)
-	)
-	# 3. Generation (temperature=0.3 : reponses factuelles)
-	reponse = await call_mistral(
-	CHAT_SYSTEM_PROMPT,
-	CHAT_USER_PROMPT.format(context_chunks=context,
-	question=question),
-	temperature=0.3,    # faible creativite = moins d'hallucinations
-	)
-	return {"reponse": reponse,
-		"sources": [r["text"][:300] for r in results]}
-\end{lstlisting}
-
-La \texttt{temperature=0.3} (vs.\ 0.7 par d\'efaut) r\'eduit
-la cr\'eativit\'e du mod\`ele au profit de la pr\'ecision factuelle~:
-dans un contexte d'audit GRC, une r\'eponse invent\'ee peut
-avoir des cons\'equences r\'eglementaires.
-
-% =============================================================================
-\section{S\'ecurit\'e applicative}
-% =============================================================================
-
-\subsection{Authentification JWT et hachage bcrypt}
-
-\begin{lstlisting}[language=Python,
-	caption={Hachage bcrypt et token JWT (core/security.py)}]
-	def hash_password(password: str) -> str:
-	# Salt aleatoire par appel : deux memes mdp -> hashs differents
-	return bcrypt.hashpw(
-	password.encode("utf-8"), bcrypt.gensalt()
-	).decode("utf-8")
-	
-	def create_access_token(data: dict) -> str:
-	to_encode = data.copy()
-	to_encode["exp"] = datetime.now(timezone.utc) + timedelta(
-	minutes=settings.access_token_expire_minutes  # 480 min
-	)
-	return jwt.encode(to_encode, settings.secret_key, algorithm="HS256")
-\end{lstlisting}
-
-\subsection{Validation des fichiers (magic bytes)}
-
-\begin{lstlisting}[language=Python,
-	caption={Validation par signature binaire et sanitisation (report\_service.py)}]
-	_MAGIC = {
-		"pdf":  [b"%PDF"],
-		"docx": [b"PK\x03\x04"],   # Office Open XML = ZIP
-		"xlsx": [b"PK\x03\x04"],
-	}
-	
-	def _check_magic_bytes(data: bytes, fmt: str) -> None:
-	sigs = _MAGIC.get(fmt, [])
-	if sigs and not any(data.startswith(s) for s in sigs):
-	raise ValueError(f"Signature binaire invalide pour '{fmt}'.")
-	
-	def _sanitize_filename(filename: str) -> str:
-	name = Path(filename).name          # neutralise ../../
-	safe = re.sub(r"[^\w.\-]", "_", name)
-	return ("_" + safe) if safe.startswith(".") else (safe or "fichier")
-\end{lstlisting}
-
-\subsection{Rate limiting par adresse IP}
-
-\begin{lstlisting}[language=Python,
-	caption={Rate limiting sur les endpoints sensibles (auth.py, rapports.py)}]
-	limiter = Limiter(key_func=get_remote_address)
-	
-	@router.post("/login")
-	@limiter.limit("10/minute")   # protection brute-force
-	async def login(request: Request, body: LoginRequest, ...): ...
-	
-	@router.post("/upload")
-	@limiter.limit("20/hour")     # protection DoS
-	async def upload_rapport(request: Request, file: UploadFile, ...):
-	data = await file.read()
-	if len(data) > 20 * 1024 * 1024:
-	raise HTTPException(413, "Fichier trop volumineux (max 20 Mo)")
+async def call_mistral(system_prompt, user_prompt, ...) -> str:
+    for attempt in range(1, max_retries + 1):
+        try:
+            async with _semaphore:
+                cooldown = _rate_limited_until - time.monotonic()
+                if cooldown > 0:
+                    await asyncio.sleep(cooldown)   # attendre fin du cooldown
+                gap = _last_call_at + _INTER_CALL_DELAY - time.monotonic()
+                if gap > 0:
+                    await asyncio.sleep(gap)        # espacer les appels
+                _last_call_at = time.monotonic()
+                response = await client.chat.complete_async(**kwargs)
+            return response.choices[0].message.content
+        except Exception as exc:
+            if _is_rate_limit_error(exc):           # HTTP 429
+                wait = 30 * attempt                 # backoff : 30s, 60s, 90s
+                _rate_limited_until = time.monotonic() + wait
+                await asyncio.sleep(wait)
 \end{lstlisting}
 
 % =============================================================================
-\section{Synth\`ese du chapitre}
+\section{Parseur de documents et pr\'eparation du texte}
 % =============================================================================
 
-Ce chapitre a pr\'esent\'e la conception technique int\'egrale
-de GRC AI Analyzer en suivant le parcours de la donn\'ee~:
-upload $\to$ parsing $\to$ pipeline IA $\to$ API REST $\to$ interface.
+Le module \texttt{app/ai/parsers/document\_parser.py} normalise les trois formats support\'es en texte brut structur\'e, puis d\'ecoupe ce texte en segments chevauchants pour l'indexation RAG~:
 
-Les d\'ecisions cl\'es sont~:
-la d\'ecomposition en deux phases \texttt{asyncio.gather} qui maximise
-le parall\'elisme tout en respectant les d\'ependances de donn\'ees~;
-le s\'emaphore Mistral qui r\'esout la tension entre parall\'elisme
-logique et contraintes de d\'ebit API~;
-les quatre prompts sp\'ecialis\'es qui dirigent Mistral vers des
-sorties JSON strictement typ\'ees et actionables~;
-et l'architecture en cinq couches qui s\'epare clairement les
-responsabilit\'es.
-Le chapitre suivant pr\'esente les r\'esultats obtenus sur des
-rapports r\'eels.
+\begin{lstlisting}[caption={Extraction de texte et d\'ecoupage en chunks (document\_parser.py)}, label={lst:parser}]
+def extract_text(file_bytes: bytes, file_format: str) -> str:
+    fmt = file_format.lower().strip(".")
+    if fmt == "pdf":
+        doc = fitz.open(stream=file_bytes, filetype="pdf")
+        return "\n\n".join(
+            f"=== Page {i+1} ===\n{p.get_text()}" for i, p in enumerate(doc)
+        )
+    elif fmt == "docx":
+        doc = Document(io.BytesIO(file_bytes))
+        return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+    elif fmt == "xlsx":
+        wb = openpyxl.load_workbook(io.BytesIO(file_bytes), data_only=True)
+        # iteration sur toutes les feuilles et lignes du classeur ...
 
+def chunk_text(text: str, chunk_size: int = 1500, overlap: int = 200) -> list[str]:
+    """Fenetres glissantes avec recouvrement de 200 caracteres."""
+    chunks, start = [], 0
+    while start < len(text):
+        chunks.append(text[start : start + chunk_size])
+        if start + chunk_size >= len(text):
+            break
+        start += chunk_size - overlap   # avance de 1300 chars par iteration
+    return chunks
+\end{lstlisting}
 
-\chapter{Impl\'ementation et r\'esultats}
+Le chevauchement garantit qu'une phrase \`a cheval entre deux chunks est int\'egralement captur\'ee dans l'un d'eux, \'evitant la perte d'information lors de la recherche s\'emantique.
 
-\section{Environnement de d\'eveloppement}
+% =============================================================================
+\section{Moteur de recherche augment\'ee (RAG)}
+% =============================================================================
 
-\subsection{Configuration de l'environnement}
-
-Le projet a \'et\'e d\'evelopp\'e et test\'e dans l'environnement suivant~:
-
-\begin{table}[H]
+\begin{figure}[ht]
 \centering
-\begin{tabularx}{\textwidth}{|l|X|}
+\begin{tikzpicture}[node distance=0.7cm and 1cm]
+  \tikzstyle{stepbox}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.7cm,minimum height=0.8cm,rounded corners=2pt,align=center,font=\small]
+  \tikzstyle{stepai}=[rectangle,draw=darknavy,thick,fill=darknavy!15,minimum width=2.7cm,minimum height=0.8cm,rounded corners=2pt,align=center,font=\small]
+
+  \node[stepbox] (doc) {Document\\(PDF/DOCX/XLSX)};
+  \node[stepbox,right=of doc] (chunk) {Chunking\\1500 / 200};
+  \node[stepbox,right=of chunk] (embed) {Embeddings\\MiniLM-L12};
+  \node[stepbox,right=of embed] (chroma) {ChromaDB};
+  \node[stepai,below=1.2cm of chunk] (query) {Question\\utilisateur};
+  \node[stepai,right=of query] (search) {Recherche\\top-k};
+  \node[stepai,right=of search] (mistral) {Mistral\\(contexte)};
+
+  \draw[-{Latex[length=2mm]}] (doc) -- (chunk);
+  \draw[-{Latex[length=2mm]}] (chunk) -- (embed);
+  \draw[-{Latex[length=2mm]}] (embed) -- (chroma);
+  \draw[-{Latex[length=2mm]}] (query) -- (search);
+  \draw[-{Latex[length=2mm]}] (search) -- (mistral);
+  \draw[-{Latex[length=2mm]},dashed] (chroma) -- (search);
+\end{tikzpicture}
+\caption{Pipeline RAG : indexation et requ\^etage}
+\label{fig:rag}
+\end{figure}
+
+Le mod\`ele d'embeddings retenu est \texttt{paraphrase-multilingual-MiniLM-L12-v2}, choisi pour ses bonnes performances multilingues et sa taille raisonnable.
+
+\section{Mod\`ele de donn\'ees (PostgreSQL)}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1.3cm,>={Latex[length=2mm]}]
+  \tikzstyle{ent}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.6cm,minimum height=0.9cm,align=center,font=\small\bfseries]
+  \node[ent] (user) {Utilisateur};
+  \node[ent,right=of user] (rapport) {Rapport};
+  \node[ent,right=of rapport] (analyse) {Analyse};
+  \node[ent,below=of analyse,xshift=-2.5cm] (risque) {Risque};
+  \node[ent,below=of analyse] (conf) {ResultatConf};
+  \node[ent,below=of analyse,xshift=2.5cm] (reco) {Recommandation};
+
+  \draw[->] (user) -- (rapport);
+  \draw[->] (rapport) -- (analyse);
+  \draw[->] (analyse) -- (risque);
+  \draw[->] (analyse) -- (conf);
+  \draw[->] (analyse) -- (reco);
+  \draw[->,dashed] (risque) -- (reco);
+\end{tikzpicture}
+\caption{Mod\`ele relationnel simplifi\'e}
+\label{fig:erd}
+\end{figure}
+
+\paragraph{Calcul de criticit\'e d'un risque.} La s\'ev\'erit\'e d'un risque est d\'efinie par :
+$$\text{score} = \text{probabilit\'e} \times \text{impact}, \quad (\text{probabilit\'e}, \text{impact}) \in [1,5]^2$$
+
+avec les seuils : FAIBLE $< 6$, MOYEN $< 12$, \'ELEV\'E $< 20$, CRITIQUE $\geq 20$.
+
+\section{Choix technologiques}
+
+\begin{table}[ht]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|l|l|}
 \hline
-\textbf{Composant} & \textbf{Version / D\'etail} \\
+\rowcolor{lightgray}
+\textbf{Cat\'egorie} & \textbf{Outil retenu} & \textbf{Justification} \\
 \hline
-Syst\`eme d'exploitation & Windows 11 + WSL2 (Ubuntu 22.04) \\
+Frontend & React 18 + Vite & \parbox[t]{8cm}{\vspace{2pt}SPA performante, \'ecosyst\`eme riche\vspace{2pt}} \\
 \hline
-Python & 3.11 \\
+UI Library & Tailwind / shadcn & \parbox[t]{8cm}{\vspace{2pt}Design moderne, customisable\vspace{2pt}} \\
 \hline
-Node.js & 20 LTS \\
+Charts & Recharts & \parbox[t]{8cm}{\vspace{2pt}Composants React natifs\vspace{2pt}} \\
 \hline
-PostgreSQL & 15 (natif Windows, port 5433) \\
+\'Etat global & Zustand & \parbox[t]{8cm}{\vspace{2pt}Simple, l\'eger\vspace{2pt}} \\
 \hline
-MinIO & RELEASE.2024-01 (binaire Windows) \\
+HTTP & Axios + interceptor & \parbox[t]{8cm}{\vspace{2pt}Gestion JWT centralis\'ee\vspace{2pt}} \\
 \hline
-ChromaDB & 0.4.x (pip, mode HTTP) \\
+Backend & FastAPI 0.110+ & \parbox[t]{8cm}{\vspace{2pt}Async natif, Pydantic, OpenAPI auto\vspace{2pt}} \\
 \hline
-Mistral AI & mistral-large-latest (API cloud) \\
+ORM & SQLAlchemy 2 + asyncpg & \parbox[t]{8cm}{\vspace{2pt}Async, mature\vspace{2pt}} \\
 \hline
-IDE & VS Code + extensions Python/Volar \\
+Migrations & Alembic & \parbox[t]{8cm}{\vspace{2pt}R\'ef\'erence Python\vspace{2pt}} \\
 \hline
-\end{tabularx}
-\caption{Environnement de d\'eveloppement}
-\label{tab:env-dev}
+LLM & Mistral AI & \parbox[t]{8cm}{\vspace{2pt}Bon rapport qualit\'e/prix, multilingue\vspace{2pt}} \\
+\hline
+Embeddings & sentence-transformers & \parbox[t]{8cm}{\vspace{2pt}Multilingue, l\'eger\vspace{2pt}} \\
+\hline
+Vector DB & ChromaDB & \parbox[t]{8cm}{\vspace{2pt}Open-source, Python natif\vspace{2pt}} \\
+\hline
+Object Store & MinIO & \parbox[t]{8cm}{\vspace{2pt}Compatible S3\vspace{2pt}} \\
+\hline
+RDBMS & PostgreSQL 15 & \parbox[t]{8cm}{\vspace{2pt}Robustesse, JSONB\vspace{2pt}} \\
+\hline
+PDF Parser & PyMuPDF & \parbox[t]{8cm}{\vspace{2pt}Rapide, qualit\'e \'elev\'ee\vspace{2pt}} \\
+\hline
+Auth & JWT + bcrypt & \parbox[t]{8cm}{\vspace{2pt}Standard, stateless\vspace{2pt}} \\
+\hline
+\end{tabular}
+\caption{Synth\`ese des choix techniques}
+\label{tab:tech}
 \end{table}
 
-\subsection{Lancement du projet}
+\section{Principes de s\'ecurit\'e retenus}
+\begin{enumerate}[leftmargin=1.8em,itemsep=2pt]
+  \item Hash des mots de passe avec bcrypt (cost~12).
+  \item JWT sign\'e HS256, expiration 24h, stock\'e c\^ot\'e client.
+  \item Validation stricte des entr\'ees via Pydantic.
+  \item Limitation des types de fichiers et taille maximale (50~MB).
+  \item Isolation des analyses par utilisateur.
+  \item Variables sensibles externalis\'ees dans \texttt{.env}.
+\end{enumerate}
 
-Un script \texttt{start.bat} automatise le d\'emarrage de l'ensemble des services~:
+\section{Synth\`ese du chapitre}
+La conception technique repose sur une architecture en couches asynchrone, un pipeline IA parall\'elis\'e et un mod\`ele RAG bas\'e sur des embeddings multilingues. Ces choix sont d\'etaill\'es et valid\'es dans le chapitre d'impl\'ementation qui suit.
 
-\begin{lstlisting}[language=bash, caption={Script de d\'emarrage start.bat}]
-@echo off
-REM Lancement MinIO
-start "" "C:\minio\minio.exe" server C:\minio\data --address :9000 --console-address :9001
+% =============================================================================
+%  CHAPITRE 5 — IMPLÉMENTATION ET RÉSULTATS
+% =============================================================================
+\chapter{Impl\'ementation et r\'esultats}
 
-REM Lancement ChromaDB
-start "" chroma run --path ./chroma_data --host 0.0.0.0 --port 8001
+\begin{tcolorbox}[infobox]
+\itshape Ce chapitre d\'ecrit les r\'ealisations concr\`etes de la plateforme : le socle d'authentification, le module d'ingestion documentaire, le pipeline d'analyse IA, l'assistant RAG conversationnel, les exports et l'interface utilisateur.
+\end{tcolorbox}
 
-REM Migrations Alembic
-cd backend
-call venv\Scripts\activate
-alembic upgrade head
+\section{Introduction}
+L'impl\'ementation de GRC AI Analyzer a \'et\'e conduite en quatre phases de d\'eveloppement successives et compl\'ementaires. Chaque phase livrait un ensemble de fonctionnalit\'es testables, permettant une validation incr\'ementale. Ce chapitre pr\'esente les r\'ealisations techniques de chaque phase, les extraits de code significatifs, les difficult\'es rencontr\'ees et leurs solutions, ainsi que les r\'esultats obtenus.
 
-REM Demarrage backend FastAPI
-uvicorn main:app --reload --port 8000
+% -----------------------------------------------------------------------
+\section{Phase 1 — Socle d'authentification et gestion des utilisateurs}
+% -----------------------------------------------------------------------
+
+\subsection{P\'erim\`etre et objectifs}
+
+Cette phase pose le socle s\'ecuritaire de la plateforme. Sans authentification fiable, aucune fonctionnalit\'e m\'etier ne peut \^etre expos\'ee de mani\`ere s\'ecuris\'ee. Les objectifs couvrent l'inscription et la connexion s\'ecuris\'ees, la g\'en\'eration et la v\'erification de tokens JWT, le hachage bcrypt des mots de passe, le mod\`ele utilisateur avec r\^oles RBAC (\texttt{ADMIN}/\texttt{ANALYSTE}), et l'intercepteur Axios pour l'injection automatique du token c\^ot\'e frontend.
+
+\subsection{Flux de connexion}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=2cm,>={Latex[length=2mm]}]
+  \tikzstyle{seqactor}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2cm,minimum height=0.7cm,align=center,font=\small\bfseries]
+  \node[seqactor] (u) {Utilisateur};
+  \node[seqactor,right=of u] (front) {Frontend};
+  \node[seqactor,right=of front] (api) {API};
+  \node[seqactor,right=of api] (db) {Postgres};
+  \draw[densely dotted] (u.south) -- ++(0,-6);
+  \draw[densely dotted] (front.south) -- ++(0,-6);
+  \draw[densely dotted] (api.south) -- ++(0,-6);
+  \draw[densely dotted] (db.south) -- ++(0,-6);
+  \draw[->] ([yshift=-0.5cm]u.south) -- node[above,font=\tiny]{email + mot de passe} ([yshift=-0.5cm]front.south);
+  \draw[->] ([yshift=-1.5cm]front.south) -- node[above,font=\tiny]{POST /auth/login} ([yshift=-1.5cm]api.south);
+  \draw[->] ([yshift=-2.5cm]api.south) -- node[above,font=\tiny]{SELECT utilisateur} ([yshift=-2.5cm]db.south);
+  \draw[<-] ([yshift=-3.3cm]api.south) -- node[above,font=\tiny]{enregistrement} ([yshift=-3.3cm]db.south);
+  \draw[<-] ([yshift=-4.3cm]front.south) -- node[above,font=\tiny]{access\_token + user} ([yshift=-4.3cm]api.south);
+  \draw[<-] ([yshift=-5.3cm]u.south) -- node[above,font=\tiny]{redirection tableau de bord} ([yshift=-5.3cm]front.south);
+\end{tikzpicture}
+\caption{S\'equence de connexion JWT}
+\label{fig:seq-login}
+\end{figure}
+
+\subsection{Impl\'ementation}
+
+La s\'ecurit\'e repose sur deux composants~: le hachage bcrypt des mots de passe et la g\'en\'eration de tokens JWT sign\'es HS256. Le code r\'eel utilis\'e est pr\'esent\'e ci-dessous.
+
+\begin{lstlisting}[caption={S\'ecurit\'e : hachage et JWT (\texttt{app/core/security.py})},label=lst:auth]
+import bcrypt
+from jose import jwt
+from datetime import datetime, timedelta, timezone
+from app.config import settings
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(
+        password.encode("utf-8"), bcrypt.gensalt()
+    ).decode("utf-8")
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return bcrypt.checkpw(
+        plain.encode("utf-8"), hashed.encode("utf-8")
+    )
+
+def create_access_token(data: dict) -> str:
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.access_token_expire_minutes
+    )
+    to_encode.update({"exp": expire})
+    return jwt.encode(
+        to_encode, settings.secret_key,
+        algorithm=settings.algorithm
+    )
 \end{lstlisting}
 
-\section{R\'esultats obtenus}
-\label{sec:screenshots}
+\subsection{Difficult\'es et solutions}
 
-Les captures d'\'ecran suivantes illustrent les fonctionnalit\'es principales de la plateforme GRC AI Analyzer apr\`es d\'eploiement complet.
-
-\subsection{Authentification et tableau de bord}
-
-\subsubsection{Page de connexion}
-
-\begin{figure}[H]
+\begin{table}[ht]
 \centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Page de connexion JWT]}\\[0.3cm]
-\small Formulaire email / mot de passe, logo GRC AI Analyzer,\\
-redirection automatique vers le dashboard apr\`es authentification.
-}}
-\caption{Page de connexion de GRC AI Analyzer}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{5.5cm}|p{8.5cm}|}
+\hline
+\rowcolor{lightgray}
+\textbf{Difficult\'e} & \textbf{Solution} \\
+\hline
+Persistance du token c\^ot\'e client & Zustand avec middleware \texttt{persist} (\textit{localStorage}) + intercepteur Axios pour injection automatique \\
+\hline
+CORS entre Vite (:5173) et FastAPI (:8000) & Configuration explicite de \texttt{CORSMiddleware} avec origines autoris\'ees \\
+\hline
+Migrations Alembic sous Windows WSL2 & Driver psycopg2 (sync) pour Alembic, asyncpg pour le runtime FastAPI \\
+\hline
+\end{tabular}
+\caption{Difficult\'es de la Phase 1 et solutions apport\'ees}
+\label{tab:diff-p1}
+\end{table}
+
+% -----------------------------------------------------------------------
+\section{Phase 2 — Ingestion documentaire et parsing}
+% -----------------------------------------------------------------------
+
+\subsection{P\'erim\`etre et objectifs}
+
+Cette phase adresse l'entr\'ee du pipeline~: transformer un fichier h\'et\'erog\`ene en texte exploitable par le LLM. Le p\'erim\`etre comprend l'upload multipart de fichiers PDF, DOCX et XLSX, la validation du format, le stockage sur le syst\`eme de fichiers local, l'extraction de texte multi-format, et la cr\'eation de l'entit\'e \texttt{Rapport} en base.
+
+\subsection{Architecture du module d'ingestion}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=0.8cm and 1.2cm]
+  \tikzstyle{ubox}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.7cm,minimum height=0.9cm,rounded corners=2pt,align=center,font=\small]
+  \node[ubox] (upload) {Endpoint\\POST /rapports/upload};
+  \node[ubox,right=of upload] (validate) {Validation\\format};
+  \node[ubox,right=of validate] (store) {Stockage\\disque local};
+  \node[ubox,below=of store,fill=darknavy!15] (parser) {Parser\\multi-format};
+  \node[ubox,below=of validate,fill=boxgray] (db) {Insertion\\Postgres};
+  \draw[-{Latex[length=2mm]}] (upload) -- (validate);
+  \draw[-{Latex[length=2mm]}] (validate) -- (store);
+  \draw[-{Latex[length=2mm]}] (store) -- (parser);
+  \draw[-{Latex[length=2mm]}] (parser) -- (db);
+  \draw[-{Latex[length=2mm]}] (validate) -- (db);
+\end{tikzpicture}
+\caption{Pipeline d'ingestion documentaire}
+\label{fig:upload-pipeline}
+\end{figure}
+
+\subsection{Strat\'egies d'extraction par format}
+
+\begin{table}[ht]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|l|p{7cm}|}
+\hline
+\rowcolor{lightgray}
+\textbf{Format} & \textbf{Biblioth\`eque} & \textbf{Strat\'egie d'extraction} \\
+\hline
+PDF & PyMuPDF (\texttt{fitz}) & It\'eration page par page, marquage \texttt{=== Page N ===}, pr\'eservation de l'ordre de lecture \\
+\hline
+DOCX & python-docx & It\'eration sur paragraphes (d\'etection des styles Heading) et sur les cellules de tableaux \\
+\hline
+XLSX & openpyxl & Lecture de toutes les feuilles, concat\'enation des valeurs de cellules par ligne \\
+\hline
+\end{tabular}
+\caption{Strat\'egies d'extraction par format documentaire}
+\label{tab:parsers}
+\end{table}
+
+\subsection{Chunking pour le RAG}
+
+Le texte extrait est d\'ecoup\'e en fragments de 1\,500 caract\`eres avec un chevauchement de 200 caract\`eres, garantissant la continuit\'e s\'emantique entre chunks adjacents.
+
+\begin{lstlisting}[caption={Fonction de d\'ecoupage (\texttt{document\_parser.py})},label=lst:chunk]
+def chunk_text(
+    text: str,
+    chunk_size: int = 1500,
+    overlap: int = 200
+) -> list[str]:
+    if len(text) <= chunk_size:
+        return [text]
+    chunks, start = [], 0
+    while start < len(text):
+        end = start + chunk_size
+        chunks.append(text[start:end])
+        if end >= len(text):
+            break
+        start = end - overlap
+    return chunks
+\end{lstlisting}
+
+% -----------------------------------------------------------------------
+\section{Phase 3 — Pipeline d'analyse IA}
+% -----------------------------------------------------------------------
+
+\subsection{Vue d'ensemble}
+
+Cette phase constitue l'apport diff\'erenciant du projet~: la transformation d'un texte non structur\'e en une analyse GRC structur\'ee, exploitable et actionnable. Le pipeline s'organise en deux phases asynchrones parall\`eles.
+
+\subsection{Pipeline en deux phases parall\`eles}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=0.7cm and 0.8cm]
+  \tikzstyle{stepbox}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.5cm,minimum height=0.8cm,rounded corners=2pt,align=center,font=\small]
+  \tikzstyle{aibox}=[rectangle,draw=darknavy,thick,fill=darknavy!15,minimum width=2.5cm,minimum height=0.8cm,rounded corners=2pt,align=center,font=\small]
+  \node[stepbox] (start) {D\'ebut analyse};
+  \node[aibox,below=of start,xshift=-3.5cm] (rag) {Indexation\\ChromaDB};
+  \node[aibox,below=of start,xshift=-1.2cm] (risks) {Extraction\\risques};
+  \node[aibox,below=of start,xshift=1.2cm] (iso) {Conformit\'e\\ISO 27001};
+  \node[aibox,below=of start,xshift=3.5cm] (rgpd) {Conformit\'e\\RGPD};
+  \node[aibox,below=of rag,xshift=2.3cm] (loi) {Conformit\'e\\Loi 09-08};
+  \node[stepbox,below=of iso,yshift=-0.6cm,fill=darkgreen!15,draw=darkgreen] (g1) {asyncio.gather() --- Phase 1};
+  \node[aibox,below=of g1,xshift=-1.5cm] (reco) {Recomman-\\dations};
+  \node[aibox,below=of g1,xshift=1.5cm] (synth) {R\'esum\'e\\ex\'ecutif};
+  \node[stepbox,below=of g1,yshift=-1.5cm,fill=darkgreen!15,draw=darkgreen] (g2) {asyncio.gather() --- Phase 2};
+  \node[stepbox,below=of g2,fill=darkgreen!30,draw=darkgreen] (endnode) {\textbf{statut = termin\'e}};
+  \draw[-{Latex[length=2mm]}] (start) -- (rag);
+  \draw[-{Latex[length=2mm]}] (start) -- (risks);
+  \draw[-{Latex[length=2mm]}] (start) -- (iso);
+  \draw[-{Latex[length=2mm]}] (start) -- (rgpd);
+  \draw[-{Latex[length=2mm]}] (start) -- (loi);
+  \draw[-{Latex[length=2mm]}] (rag) -- (g1);
+  \draw[-{Latex[length=2mm]}] (risks) -- (g1);
+  \draw[-{Latex[length=2mm]}] (iso) -- (g1);
+  \draw[-{Latex[length=2mm]}] (rgpd) -- (g1);
+  \draw[-{Latex[length=2mm]}] (loi) -- (g1);
+  \draw[-{Latex[length=2mm]}] (g1) -- (reco);
+  \draw[-{Latex[length=2mm]}] (g1) -- (synth);
+  \draw[-{Latex[length=2mm]}] (reco) -- (g2);
+  \draw[-{Latex[length=2mm]}] (synth) -- (g2);
+  \draw[-{Latex[length=2mm]}] (g2) -- (endnode);
+\end{tikzpicture}
+\caption{Pipeline d'analyse en deux phases parall\`eles (\texttt{analysis\_service.py})}
+\label{fig:full-pipeline}
+\end{figure}
+
+\subsection{Prompt engineering}
+
+Chaque t\^ache d'extraction est pilot\'ee par un prompt sp\'ecialis\'e, s\'epar\'e dans un module d\'edi\'e. Le prompt d'extraction des risques est con\c{c}u pour g\'en\'erer un JSON structur\'e d\'ecrivant chaque risque avec son libelle, sa cat\'egorie, sa probabilit\'e, son impact et sa r\'ef\'erence source.
+
+\begin{lstlisting}[caption={Extrait du prompt d'extraction de risques (\texttt{risk\_prompts.py})},label=lst:prompt-risque]
+RISK_USER_PROMPT = """Perform an exhaustive risk extraction.
+Return ONLY this JSON:
+{
+  "risques": [
+    {
+      "libelle": "Nom exact du risque (max 200 chars)",
+      "description": "Description technique detaillee",
+      "categorie": "CYBER|OPERATIONNEL|LEGAL|FINANCIER|RH",
+      "probabilite": 3,
+      "impact": 3,
+      "section_source": "Reference dans le document",
+      "confiance": 90
+    }
+  ]
+}
+DOCUMENT: {text}
+"""
+\end{lstlisting}
+
+
+\subsection{S\'erialisation et gestion du rate limiting}
+
+Pour \'eviter les erreurs HTTP~429 de l'API Mistral, tous les appels sont s\'erialis\'es via un s\'emaphore global (\texttt{asyncio.Semaphore(1)}) avec un d\'elai minimum de 1,5~secondes entre appels et un m\'ecanisme de backoff exponentiel en cas de rate limit. Ce choix garantit la stabilit\'e du pipeline sur des documents longs qui g\'en\`erent jusqu'\`a huit appels Mistral successifs.
+
+\begin{lstlisting}[caption={S\'emaphore anti rate-limit (\texttt{mistral\_client.py})},label=lst:semaphore]
+_semaphore = asyncio.Semaphore(1)
+_INTER_CALL_DELAY = 1.5  # secondes entre appels
+
+async def call_mistral(system_prompt, user_prompt, ...):
+    async with _semaphore:
+        cooldown = _rate_limited_until - time.monotonic()
+        if cooldown > 0:
+            await asyncio.sleep(cooldown)
+        gap = _last_call_at + _INTER_CALL_DELAY - time.monotonic()
+        if gap > 0:
+            await asyncio.sleep(gap)
+        response = await client.chat.complete_async(...)
+        return response.choices[0].message.content
+\end{lstlisting}
+
+\subsection{Scoring des risques}
+
+Chaque risque extrait par Mistral est soumis \`a un calcul de score d\'eterministe~:
+
+\begin{lstlisting}[caption={Calcul de s\'ev\'erit\'e (\texttt{analysis\_service.py})},label=lst:severity]
+def compute_severity(probabilite: int, impact: int) -> str:
+    score = probabilite * impact
+    if score >= 20:
+        return "CRITIQUE"
+    elif score >= 12:
+        return "ELEVE"
+    elif score >= 6:
+        return "MOYEN"
+    return "FAIBLE"
+\end{lstlisting}
+
+Les seuils (FAIBLE~$<6$, MOYEN~$<12$, \'ELEV\'E~$<20$, CRITIQUE~$\geq 20$) sont align\'es sur les pratiques standard de la gestion des risques ISO~27005.
+
+% ============================================================
+\section{Phase 4 --- RAG conversationnel, export et interface}
+% ============================================================
+
+\subsection{Pipeline RAG}
+
+L'assistant conversationnel repose sur un pipeline RAG (\textit{Retrieval-Augmented Generation}) impl\'ement\'e dans \texttt{chat\_engine.py} et \texttt{vector\_store.py}. Lors de l'analyse, le texte du document est d\'ecoup\'e en chunks (1\,500 caract\`eres, chevauchement de 200) et index\'e dans ChromaDB via le mod\`ele \texttt{paraphrase-multilingual-MiniLM-L12-v2} (vecteurs de 384 dimensions, 50+ langues).
+
+\begin{lstlisting}[caption={Indexation des chunks dans ChromaDB (\texttt{vector\_store.py})},label=lst:rag-index]
+async def index_document_chunks(analyse_id, chunks):
+    collection = chroma_client.get_or_create_collection(
+        name=f"analyse_{analyse_id}",
+        metadata={"hnsw:space": "cosine"}
+    )
+    embedder = get_embedder()   # singleton MiniLM-L12-v2
+    embeddings = embedder.encode(chunks).tolist()
+    collection.add(
+        documents=chunks,
+        embeddings=embeddings,
+        ids=[f"chunk_{i}" for i in range(len(chunks))]
+    )
+\end{lstlisting}
+
+\`A la r\'eception d'une question, le syst\`eme encode la requ\^ete, interroge ChromaDB (top-5 par similarit\'e cosinus), construit un prompt contextuel et soumet l'ensemble \`a Mistral pour g\'en\'eration. L'\'echec de l'indexation RAG est non-fatal~: l'analyse se poursuit sans capacit\'e de chat.
+
+\subsection{Exports PDF et Excel}
+
+Le service d'export (\texttt{export\_service.py}) produit deux formats~:
+
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{PDF (ReportLab)~:} rapport complet avec page de couverture, tableau ex\'ecutif color\'e, tableau des risques class\'es par s\'ev\'erit\'e avec badges couleur, taux de conformit\'e par r\'ef\'erentiel et recommandations prioritaires.
+  \item \textbf{Excel (XlsxWriter)~:} classeur \`a quatre feuilles (Risques, Conformit\'e, Recommandations, R\'esum\'e) avec mise en forme conditionnelle sur la s\'ev\'erit\'e, en-t\^etes gel\'es et largeurs auto.
+\end{itemize}
+
+\subsection{Interface utilisateur}
+
+Le frontend React~19 (Vite, TypeScript, Tailwind CSS) s'organise autour de quatre vues principales dont les captures d'\'ecran sont pr\'esent\'ees dans la section~\ref{sec:screenshots}. L'\'etat global (authentification, liste des rapports) est g\'er\'e par Zustand avec persistance \textit{localStorage}. Les requ\^etes API passent par un intercepteur Axios qui injecte automatiquement le JWT dans l'en-t\^ete \texttt{Authorization}.
+
+% ============================================================
+\section{R\'esultats et captures d'\'ecran de la plateforme}
+\label{sec:screenshots}
+% ============================================================
+
+Cette section pr\'esente les principales vues de la plateforme GRC AI Analyzer
+telle qu'elle a \'et\'e d\'eploy\'ee et valid\'ee.
+Chaque capture illustre une fonctionnalit\'e cl\'e du syst\`eme.
+
+\begin{tcolorbox}[colback=darknavy!5,colframe=darknavy,arc=2pt,boxrule=0.5pt]
+\small\textbf{Note.} Les zones gris\'ees sont des r\'eservations pour vos captures r\'eelles.
+Placez les fichiers PNG dans \texttt{figures/screenshots/} et remplacez chaque bloc
+\texttt{\textbackslash fbox\{...\}} par
+\texttt{\textbackslash includegraphics[width=...]\{figures/screenshots/nom.png\}}.
+\end{tcolorbox}
+
+% ----------------------------------------------------------
+\subsection{Page de connexion}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.82\textwidth}{\centering\vspace{2.8cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Page de connexion ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/login.png}
+  \vspace{2.8cm}}}
+\caption{Page de connexion s\'ecuris\'ee --- GRC AI Analyzer}
 \label{fig:sc-login}
 \end{figure}
 
-\subsubsection{Tableau de bord principal}
+La page de connexion pr\'esente un formulaire email + mot de passe avec validation
+c\^ot\'e client (champs obligatoires, format email). En cas de succ\`es,
+l'API retourne un \texttt{access\_token} JWT stock\'e dans Zustand et l'utilisateur
+est redirig\'e vers le tableau de bord. Les erreurs (identifiants incorrects,
+compte d\'esactiv\'e) sont affich\'ees en message contextuel rouge.
+Le bouton est d\'esactiv\'e pendant la requ\^ete pour pr\'evenir les doubles soumissions.
 
-\begin{figure}[H]
+% ----------------------------------------------------------
+\subsection{Tableau de bord --- liste des rapports}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Dashboard principal]}\\[0.3cm]
-\small Vue synth\'etique~: liste des rapports upload\'es, statuts d'analyse\\
-(\texttt{en\_cours} / \texttt{termine} / \texttt{erreur}), bouton d'import.
-}}
-\caption{Tableau de bord principal}
+\fbox{\parbox{0.92\textwidth}{\centering\vspace{3.0cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Tableau de bord ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/dashboard.png}
+  \vspace{3.0cm}}}
+\caption{Tableau de bord --- cartes de rapports avec statuts et zone d'upload}
 \label{fig:sc-dashboard}
 \end{figure}
 
-\subsection{Analyse d'un rapport GRC}
+Le tableau de bord est la vue centrale de l'analyste GRC. Il affiche ses rapports
+sous forme de cartes indiquant le nom du fichier, le format (PDF/DOCX/XLSX),
+la date d'upload et le statut mat\'erialis\'e par un badge color\'e~:
+\texttt{en\_attente} (gris), \texttt{en\_cours} (bleu avec spinner),
+\texttt{termin\'e} (vert) et \texttt{erreur} (rouge).
+Un bouton \og Nouveau rapport \fg{} ouvre une modale drag-and-drop~;
+le fichier est envoy\'e via \texttt{POST /api/v1/rapports/upload}
+et la carte appara\^it imm\'ediatement.
+L'analyste peut lancer l'analyse en un clic ou supprimer un rapport
+(suppression en cascade~: fichier physique, enregistrement PostgreSQL,
+collection ChromaDB).
 
-\subsubsection{T\'el\'echargement d'un document}
+% ----------------------------------------------------------
+\subsection{Progression de l'analyse IA}
+% ----------------------------------------------------------
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Upload d'un rapport PDF/DOCX]}\\[0.3cm]
-\small Zone de drag-and-drop, s\'election du fichier (PDF, DOCX, XLSX),\\
-validation magic bytes c\^ot\'e serveur avant stockage MinIO.
-}}
-\caption{Interface de t\'el\'echargement d'un rapport}
-\label{fig:sc-upload}
+\fbox{\parbox{0.82\textwidth}{\centering\vspace{2.8cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Analyse en cours ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/analyse\_progress.png}
+  \vspace{2.8cm}}}
+\caption{Indicateur de progression pendant l'analyse IA (polling toutes les 3~s)}
+\label{fig:sc-progress}
 \end{figure}
 
-\subsubsection{R\'esultats de l'analyse des risques}
+Apr\`es lancement, le frontend re\c{c}oit une r\'eponse HTTP~202 Accepted
+et affiche un indicateur de chargement anim\'e.
+Le composant \texttt{Analysis.tsx} interroge
+\texttt{GET /api/v1/analyses/\{id\}} toutes les 3~secondes
+jusqu'\`a ce que \texttt{statut === "termin\'e"} ou \texttt{"erreur"}.
+Le traitement dure typiquement 30 \`a 90~secondes selon la taille
+du document et la charge de l'API Mistral.
+Si le statut bascule sur \texttt{"erreur"}, un message explicatif
+et un bouton de relance sont affich\'es.
 
-\begin{figure}[H]
+% ----------------------------------------------------------
+\subsection{Matrice des risques}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][9cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Matrice des risques Recharts]}\\[0.3cm]
-\small Matrice probabilit\'e $\times$ impact (1--5), bulles color\'ees\\
-par niveau (FAIBLE / MOYEN / \'ELEV\'E / CRITIQUE),\\
-liste d\'etaill\'ee des risques identifi\'es par Mistral.
-}}
-\caption{Matrice des risques extraits par l'IA}
+\fbox{\parbox{0.92\textwidth}{\centering\vspace{3.4cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Matrice des risques ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/risk\_matrix.png}
+  \vspace{3.4cm}}}
+\caption{Onglet Risques --- matrice Probabilit\'e $\times$ Impact et tableau d\'etaill\'e}
 \label{fig:sc-risks}
 \end{figure}
 
-\subsubsection{Tableau de conformit\'e}
+L'onglet \textbf{Risques} pr\'esente deux vues compl\'ementaires.
+La matrice $5\times5$ (Probabilit\'e $\times$ Impact) construite avec Recharts
+positionne chaque risque comme un point color\'e selon sa s\'ev\'erit\'e~:
+vert (FAIBLE), jaune (MOYEN), orange (\'ELEV\'E), rouge (CRITIQUE).
+Sous la matrice, un tableau tritable et filtrable d\'etaille
+chaque risque~: libell\'e, cat\'egorie (CYBER / OPERATIONNEL / LEGAL /
+FINANCIER / RH), probabilit\'e, impact, score et section source dans le document.
+Les risques CRITIQUE sont mis en \'evidence par un badge rouge
+et affich\'es en t\^ete de liste.
+Cette vue permet \`a l'analyste d'identifier visuellement et imm\'ediatement
+les priorit\'es d'action.
 
-\begin{figure}[H]
+% ----------------------------------------------------------
+\subsection{\'Evaluation de la conformit\'e r\'eglementaire}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Radar de conformit\'e Recharts]}\\[0.3cm]
-\small Graphique radar affichant le taux de conformit\'e (0--100\%)\\
-pour ISO 27001, RGPD et Loi marocaine 09-08,\\
-avec d\'etail des contr\^oles conformes / non-conformes.
-}}
-\caption{Radar de conformit\'e multi-r\'ef\'erentiel}
+\fbox{\parbox{0.92\textwidth}{\centering\vspace{3.4cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Conformit\'e r\'eglementaire ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/compliance.png}
+  \vspace{3.4cm}}}
+\caption{Onglet Conformit\'e --- radar par r\'ef\'erentiel et d\'etail par domaine}
 \label{fig:sc-compliance}
 \end{figure}
 
-\subsection{Chat RAG et export}
+L'onglet \textbf{Conformit\'e} centralise les r\'esultats de l'\'evaluation
+automatis\'ee pour les trois r\'ef\'erentiels.
+Un radar chart Recharts par r\'ef\'erentiel repr\'esente le taux de conformit\'e
+par domaine~: 14~domaines (Annexe A) pour ISO~27001:2022,
+12~articles pour le RGPD, 11~exigences pour la Loi~09-08.
+Les axes sous~50\,\% sont signal\'es en rouge, permettant un diagnostic
+visuel rapide des zones de non-conformit\'e.
+Un tableau d\'etaill\'e compl\`ete le radar~:
+pour chaque domaine, il indique le statut
+(\texttt{CONFORME} / \texttt{PARTIEL} / \texttt{NON\_CONFORME}),
+le taux en pourcentage et l'observation textuelle g\'en\'er\'ee par Mistral.
+Cette vue constitue le c\oe{}ur de la valeur ajout\'ee GRC de la plateforme.
 
-\subsubsection{Interface de chat contextuel}
+% ----------------------------------------------------------
+\subsection{Plan de recommandations}
+% ----------------------------------------------------------
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Interface de chat RAG]}\\[0.3cm]
-\small Zone de question en langage naturel, r\'eponses contextualis\'ees\\
-bas\'ees sur les chunks ChromaDB du rapport analys\'e,\\
-historique de la conversation.
-}}
-\caption{Chat RAG contextuel sur le rapport analys\'e}
+\fbox{\parbox{0.88\textwidth}{\centering\vspace{3.2cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Recommandations ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/recommendations.png}
+  \vspace{3.2cm}}}
+\caption{Onglet Recommandations --- plan d'action QUICK\_WIN / LONG\_TERME prioris\'e}
+\label{fig:sc-reco}
+\end{figure}
+
+L'onglet \textbf{Recommandations} pr\'esente le plan d'action g\'en\'er\'e par Mistral,
+tri\'e par priorit\'e d\'ecroissante.
+Chaque recommandation affiche son intitul\'e, sa description d\'etaill\'ee,
+la priorit\'e (HAUTE / MOYENNE / FAIBLE), le type
+(QUICK\_WIN \`a effet imm\'ediat ou LONG\_TERME pour les
+transformations structurelles) et le risque source associ\'e.
+Les QUICK\_WIN sont identifi\'ees par un badge vert~: elles signalent
+les actions \`a fort impact et faible co\^ut que l'organisation
+peut engager imm\'ediatement sans investissement majeur.
+Cette priorisation permet \`a l'encadrant de construire une feuille
+de route GRC directement exploitable.
+
+% ----------------------------------------------------------
+\subsection{Assistant RAG conversationnel}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering\vspace{3.2cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Assistant RAG ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/chat\_rag.png}
+  \vspace{3.2cm}}}
+\caption{Onglet Assistant RAG --- chat contextuel multilingue sur le rapport}
 \label{fig:sc-chat}
 \end{figure}
 
-\subsubsection{Export PDF et Excel}
+L'onglet \textbf{Assistant RAG} offre une interface de chat permettant d'interroger
+le rapport analys\'e en langage naturel (fran\c{c}ais, anglais ou arabe).
+La r\'eponse est produite en trois \'etapes~: (1)~la question est encod\'ee
+par MiniLM en vecteur 384~dimensions~;
+(2)~ChromaDB retourne les 5~chunks les plus proches par similarit\'e cosinus~;
+(3)~Mistral g\'en\`ere une r\'eponse fond\'ee exclusivement sur ces extraits,
+\'elimin ant les hallucinations hors-document.
+Le r\'esultat s'affiche avec rendu Markdown (listes, gras, code).
+Cette fonctionnalit\'e transforme le rapport en base de connaissances
+interrogeable, r\'eduisant de plusieurs heures le temps de recherche
+dans de longs documents GRC.
 
-\begin{figure}[H]
+% ----------------------------------------------------------
+\subsection{Vue d'administration}
+% ----------------------------------------------------------
+
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Boutons d'export et rapport PDF g\'en\'er\'e]}\\[0.3cm]
-\small Export PDF complet (r\'esum\'e ex\'ecutif, risques, conformit\'e,\\
-recommandations) et export Excel pour audit trail.
-}}
-\caption{Export des r\'esultats en PDF et Excel}
-\label{fig:sc-export}
-\end{figure}
-
-\subsubsection{Interface d'administration}
-
-\begin{figure}[H]
-\centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Panneau d'administration]}\\[0.3cm]
-\small Gestion des utilisateurs, liste des rapports tous utilisateurs,\\
-statistiques globales de la plateforme (route \texttt{require\_admin}).
-}}
-\caption{Panneau d'administration}
+\fbox{\parbox{0.88\textwidth}{\centering\vspace{3.2cm}
+  \textcolor{darknavy!60}{\large\textit{[ Capture : Administration ]}}\\[0.5cm]
+  \small\texttt{figures/screenshots/admin.png}
+  \vspace{3.2cm}}}
+\caption{Vue Administration --- gestion des utilisateurs et supervision des analyses}
 \label{fig:sc-admin}
 \end{figure}
 
-\section{Bilan technique}
+La vue \textbf{Administration}, accessible uniquement au r\^ole \texttt{ADMIN},
+offre deux fonctionnalit\'es~:
+(1)~la gestion des comptes (cr\'eation d'un nouvel analyste,
+attribution du r\^ole, activation / d\'esactivation)~;
+(2)~la supervision de toutes les analyses en cours ou termin\'ees,
+avec acc\`es aux d\'etails de chaque rapport.
+Elle est prot\'eg\'ee c\^ot\'e API par le middleware \texttt{require\_admin}
+qui v\'erifie le champ \texttt{role} du JWT avant tout traitement.
+Un analyste essayant d'acc\'eder \`a cette route re\c{c}oit un HTTP~403 Forbidden.
 
-\subsection{M\'etriques de performance}
+% ============================================================
+\section{Bilan de l'impl\'ementation}
+% ============================================================
 
-Les tests effectu\'es sur des rapports r\'eels de 10 \`a 80 pages donnent les r\'esultats suivants~:
-
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|l|X|X|}
+\caption{Bilan des fonctionnalit\'es impl\'ement\'ees}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{p{5.2cm} p{4cm} p{4.3cm}}
+\toprule
+\textbf{Fonctionnalit\'e} & \textbf{Technologie} & \textbf{Statut} \\
+\midrule
+Authentification JWT & FastAPI + jose & Impl\'ement\'e \\
 \hline
-\textbf{M\'etrique} & \textbf{Valeur observ\'ee} & \textbf{Commentaire} \\
+Parsing PDF / DOCX / XLSX & PyMuPDF, python-docx & Impl\'ement\'e \\
 \hline
-Dur\'ee analyse compl\`ete & 45--120 s & D\'epend du volume et de la charge Mistral \\
+Extraction des risques (IA) & Mistral AI (JSON) & Impl\'ement\'e \\
 \hline
-Risques extraits (moy.) & 8--15 risques & Pr\'ecision estim\'ee \`a 85\% vs revue manuelle \\
+Conformit\'e ISO 27001 & Mistral AI & Impl\'ement\'e \\
 \hline
-Taux conformit\'e ISO & 40--75\% & Selon maturit\'e de l'organisation \\
+Conformit\'e RGPD & Mistral AI & Impl\'ement\'e \\
 \hline
-Latence chat RAG & $<$ 3 s & Top-5 chunks, temp\'erature 0.3 \\
+Conformit\'e Loi 09-08 & Mistral AI & Impl\'ement\'e \\
 \hline
-Taille collection ChromaDB & 80--400 chunks & Chunks 1500 caract\`eres, overlap 200 \\
+Recommandations prioris\'ees & Mistral AI & Impl\'ement\'e \\
 \hline
-\end{tabularx}
-\caption{M\'etriques de performance observ\'ees}
-\label{tab:perf}
+R\'esum\'e ex\'ecutif & Mistral AI & Impl\'ement\'e \\
+\hline
+RAG conversationnel & ChromaDB + MiniLM & Impl\'ement\'e \\
+\hline
+Export PDF & ReportLab & Impl\'ement\'e \\
+\hline
+Export Excel (4 feuilles) & XlsxWriter & Impl\'ement\'e \\
+\hline
+Interface React (4 onglets) & React 19 + Recharts & Impl\'ement\'e \\
+\hline
+Administration RBAC & FastAPI + JWT roles & Impl\'ement\'e \\
+\bottomrule
+\end{tabular}
+\label{tab:bilan}
 \end{table}
 
-\subsection{Couverture fonctionnelle}
+% ============================================================
+\section{Synth\`ese du chapitre}
+% ============================================================
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|X|c|c|}
-\hline
-\textbf{Fonctionnalit\'e} & \textbf{Impl\'ement\'ee} & \textbf{Test\'ee} \\
-\hline
-Upload PDF / DOCX / XLSX & \ding{51} & \ding{51} \\
-\hline
-Extraction de risques (Mistral) & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e ISO 27001 & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e RGPD & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e Loi 09-08 & \ding{51} & \ding{51} \\
-\hline
-Recommandations IA & \ding{51} & \ding{51} \\
-\hline
-R\'esum\'e ex\'ecutif & \ding{51} & \ding{51} \\
-\hline
-Chat RAG contextuel & \ding{51} & \ding{51} \\
-\hline
-Export PDF & \ding{51} & \ding{51} \\
-\hline
-Export Excel & \ding{51} & \ding{51} \\
-\hline
-Authentification JWT & \ding{51} & \ding{51} \\
-\hline
-Gestion multi-utilisateurs & \ding{51} & \ding{51} \\
-\hline
-Interface d'administration & \ding{51} & \ding{51} \\
-\hline
-\end{tabularx}
-\caption{Couverture fonctionnelle de GRC AI Analyzer}
-\label{tab:coverage}
-\end{table}
+Ce chapitre a d\'etaill\'e l'impl\'ementation compl\`ete de GRC AI Analyzer
+selon quatre phases progressives.
+Le socle d'authentification JWT et la gestion RBAC des r\^oles constituent
+le fondement s\'ecuritaire de la plateforme.
+Le pipeline d'ingestion documentaire garantit l'extraction fiable du texte
+quel que soit le format (PDF, DOCX, XLSX).
+Le pipeline d'analyse IA en deux phases parall\`eles, orchestr\'e par
+\texttt{asyncio.gather}, optimise les temps de traitement tout en
+contr\^olant les co\^uts API Mistral.
+Les huit captures d'\'ecran de la section~\ref{sec:screenshots} attestent
+de la compl\'etude fonctionnelle de la solution~:
+de la connexion s\'ecuris\'ee (figure~\ref{fig:sc-login})
+jusqu'\`a l'assistant RAG conversationnel (figure~\ref{fig:sc-chat}),
+en passant par la matrice des risques (figure~\ref{fig:sc-risks}),
+les tableaux de conformit\'e (figure~\ref{fig:sc-compliance})
+et le plan de recommandations (figure~\ref{fig:sc-reco}).
 
-\section{Synth\`ese}
 
-GRC AI Analyzer r\'epond \`a l'ensemble des besoins fonctionnels identifi\'es en chapitre 3. L'architecture asynchrone en deux phases garantit une analyse compl\`ete en moins de deux minutes pour la majorit\'e des rapports. Le pipeline RAG offre une interface conversationnelle directement ancr\'ee dans le document analys\'e, ce qui constitue un apport significatif par rapport aux solutions GRC traditionnelles qui se limitent \`a des tableaux statiques.
-
-Les principaux points d'am\'elioration identifi\'es pour une version de production sont~: l'ajout d'un queue distribu\'e (Celery + Redis) pour absorber les pics de charge, le passage \`a un mod\`ele Mistral fine-tun\'e sur des politiques GRC, et l'int\'egration de r\'ef\'erentiels suppl\'ementaires (SOC 2, PCI-DSS).
-
-%%===========================================================
-%% CONCLUSION GENERALE
-%%===========================================================
+% =============================================================================
+%  CONCLUSION GÉNÉRALE
+% =============================================================================
 \chapter*{Conclusion g\'en\'erale}
 \addcontentsline{toc}{chapter}{Conclusion g\'en\'erale}
-\markboth{Conclusion g\'en\'erale}{Conclusion g\'en\'erale}
 
-Ce projet de fin d'\'etudes a permis de concevoir, impl\'ementer et valider une plateforme compl\`ete d'analyse GRC assist\'ee par intelligence artificielle. GRC AI Analyzer automatise un processus traditionnellement long et co\^uteux~: l'analyse de conformit\'e et d'identification des risques dans les documents de gouvernance.
+Ce projet de fin d'\'etudes a permis de concevoir et d'impl\'ementer GRC AI Analyzer,
+une plateforme d'analyse automatis\'ee des rapports de gouvernance, risque et conformit\'e,
+bas\'ee sur l'intelligence artificielle g\'en\'erative.
+En r\'eponse \`a une probl\'ematique concr\`ete identifi\'ee au sein du cabinet
+Evolvity Partners, la solution d\'evelopp\'ee transforme un processus manuel
+de plusieurs jours en une analyse automatis\'ee en quelques minutes.
 
-\paragraph{Contributions techniques.}
-Sur le plan technique, le projet illustre la mise en \oe{}uvre d'un pipeline asynchrone \textit{full-stack}~: extraction documentaire multi-format (PDF/DOCX/XLSX), appels parall\`eles \`a un LLM de derni\`ere g\'en\'eration (Mistral Large), stockage vectoriel (ChromaDB) pour le RAG, et exposition via une API REST FastAPI consomm\'ee par un frontend React 19. La gestion des contraintes de production~--- limitation de d\'ebit API, validation des fichiers, authentification JWT, export multi-format~--- a fait l'objet d'une attention particuli\`ere.
+Les principaux apports du projet sont~: l'extraction structur\'ee des risques
+au format JSON normalis\'e, l'\'evaluation automatique de la conformit\'e
+vis-\`a-vis de trois r\'ef\'erentiels (ISO~27001:2022, RGPD, Loi~09-08),
+la g\'en\'eration de recommandations prioris\'ees, et un assistant conversationnel
+RAG permettant d'interroger le rapport en langage naturel.
+L'ensemble est expos\'e via une API REST FastAPI et une interface React moderne.
 
-\paragraph{Contributions m\'ethodologiques.}
-Sur le plan m\'ethodologique, le projet d\'emontre qu'un LLM g\'en\'eraliste, correctement prompt\'e et encadr\'e par un pipeline structur\'e, peut produire des analyses GRC exploitables sans fine-tuning sp\'ecifique. Le choix de s\'erialiser les appels Mistral via un s\'emaphore \texttt{asyncio} plut\^ot que de d\'eployer une queue distribu\'ee repr\'esente un compromis pertinent pour un prototype \`a usage acad\'emique.
+D'un point de vue technique, ce projet a n\'ecessit\'e la ma\^itrise de
+technologies vari\'ees~: les LLM via l'API Mistral AI, les bases vectorielles
+avec ChromaDB, les \textit{sentence transformers} pour les embeddings multilingues,
+l'ORM asynchrone SQLAlchemy~2.0 avec FastAPI, et le stockage objet MinIO.
+L'architecture en pipeline asynchrone \`a deux phases repr\'esente un choix
+technique pertinent pour optimiser les temps de traitement
+tout en contr\^olant les co\^uts API.
 
-\paragraph{Perspectives.}
-Les am\'eliorations envisag\'ees pour une version de production incluent~: l'int\'egration de Celery pour la gestion des t\^aches longues, le fine-tuning du mod\`ele sur un corpus GRC francophone, l'\'elargissement des r\'ef\'erentiels (SOC 2, PCI-DSS, NIS2), et le d\'eploiement Kubernetes avec auto-scaling des workers d'analyse.
+Les perspectives d'\'evolution sont multiples~: l'int\'egration de nouveaux
+r\'ef\'erentiels (NIS2, DORA, SOC~2), l'am\'elioration des prompts par
+\textit{few-shot learning}, le d\'eploiement cloud avec orchestration Kubernetes,
+et le d\'eveloppement d'un module de suivi temporel de la maturit\'e GRC.
+Ce projet constitue une base solide pour un produit commercialisable
+dans le domaine de la cybers\'ecurit\'e et de la conformit\'e r\'eglementaire.
 
-Ce travail confirme le potentiel de l'IA g\'en\'erative pour augmenter, voire automatiser partiellement, les audits de conformit\'e~--- un enjeu croissant dans le contexte r\'eglementaire marocain et europ\'een.
+% =============================================================================
+%  BIBLIOGRAPHIE
+% =============================================================================
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
 
-%%===========================================================
-%% BIBLIOGRAPHIE
-%%===========================================================
-\begin{thebibliography}{99}
+\begin{enumerate}[leftmargin=1.8em,itemsep=6pt]
 
-\bibitem{mistral2024}
-Mistral AI, \textit{Mistral Large --- Technical Report}, 2024.
-\url{https://mistral.ai}
+  \item ISO/IEC 27001:2022 --- \textit{Technologies de l'information ---
+  Techniques de s\'ecurit\'e --- Syst\`emes de management de la s\'ecurit\'e
+  de l'information --- Exigences}. Organisation internationale de normalisation,
+  Gen\`eve, 2022.
 
-\bibitem{iso27001}
-ISO/IEC 27001:2022, \textit{Information security, cybersecurity and privacy protection --- Information security management systems --- Requirements}, International Organization for Standardization, Gen\`eve, 2022.
+  \item R\`eglement (UE) 2016/679 du 27~avril~2016 relatif \`a la protection
+  des personnes physiques \`a l'\'egard du traitement des donn\'ees \`a caract\`ere
+  personnel (RGPD). \textit{Journal officiel de l'Union europ\'eenne}, L~119, 2016.
 
-\bibitem{rgpd2016}
-Parlement europ\'een et Conseil de l'Union europ\'eenne, \textit{R\`eglement (UE) 2016/679 relatif \`a la protection des personnes physiques \`a l'\'egard du traitement des donn\'ees \`a caract\`ere personnel (RGPD)}, Journal officiel de l'Union europ\'eenne, 2016.
+  \item Loi~n\textdegree~09-08 relative \`a la protection des personnes physiques
+  \`a l'\'egard du traitement des donn\'ees \`a caract\`ere personnel.
+  \textit{Bulletin officiel du Royaume du Maroc}, n\textdegree~5714, 2009.
 
-\bibitem{loi0908}
-Royaume du Maroc, \textit{Loi n\textdegree{} 09-08 relative \`a la protection des personnes physiques \`a l'\'egard du traitement des donn\'ees \`a caract\`ere personnel}, Bulletin officiel n\textdegree{} 5714, 2009.
+  \item Lewis, P., Perez, E., Piktus, A., et al.
+  \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}.
+  Advances in Neural Information Processing Systems (NeurIPS), 2020.
 
-\bibitem{fastapi}
-S. Ram\'irez, \textit{FastAPI~: Modern, fast (high-performance), web framework for building APIs with Python 3.8+}, 2019.
-\url{https://fastapi.tiangolo.com}
+  \item Touvron, H., et al. \textit{Mistral 7B}.
+  arXiv preprint arXiv:2310.06825, 2023.
 
-\bibitem{langchain_rag}
-J. Chase \textit{et al.}, \textit{LangChain~: Building applications with LLMs through composability}, 2022.
-\url{https://github.com/langchain-ai/langchain}
+  \item Reimers, N., Gurevych, I.
+  \textit{Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}.
+  Proceedings of EMNLP, 2019.
 
-\bibitem{chromadb}
-Chroma, \textit{ChromaDB~: The AI-native open-source embedding database}, 2023.
-\url{https://www.trychroma.com}
+  \item FastAPI Documentation.
+  \textit{FastAPI --- Modern, fast web framework for building APIs with Python}.
+  \url{https://fastapi.tiangolo.com}, consult\'e en 2025.
 
-\bibitem{react19}
-Meta, \textit{React 19 Release Candidate --- What's New}, 2024.
-\url{https://react.dev}
+  \item SQLAlchemy Documentation.
+  \textit{SQLAlchemy 2.0 --- The Python SQL Toolkit and ORM}.
+  \url{https://docs.sqlalchemy.org}, consult\'e en 2025.
 
-\bibitem{sentence_transformers}
-N. Reimers et I. Gurevych, \textit{Sentence-BERT~: Sentence Embeddings using Siamese BERT-Networks}, \textit{EMNLP 2019}, 2019.
+  \item ChromaDB Documentation.
+  \textit{Chroma --- The AI-native open-source embedding database}.
+  \url{https://docs.trychroma.com}, consult\'e en 2025.
 
-\bibitem{alembic}
-M. Bayer, \textit{Alembic~: Database migrations for SQLAlchemy}, 2013.
-\url{https://alembic.sqlalchemy.org}
+  \item React Documentation.
+  \textit{React --- The library for web and native user interfaces}.
+  \url{https://react.dev}, consult\'e en 2025.
 
-\bibitem{minio}
-MinIO, \textit{MinIO High Performance Object Storage}, 2024.
-\url{https://min.io}
-
-\bibitem{zustand}
-P. Henschel, D. Maskasky, \textit{Zustand~: Bear necessities for state management in React}, 2021.
-\url{https://github.com/pmndrs/zustand}
-
-\end{thebibliography}
+\end{enumerate}
 
 \end{document}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

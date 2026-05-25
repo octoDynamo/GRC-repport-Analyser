@@ -1,8 +1,9 @@
 """Auth API endpoints."""
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.limiter import limiter
 from app.database import get_db
 from app.schemas.auth import LoginRequest, RegisterRequest
 from app.services.auth_service import authenticate_user, register_user, generate_token
@@ -15,7 +16,8 @@ def api_response(data=None, message: str = "Success", success: bool = True):
 
 
 @router.post("/login")
-async def login(body: LoginRequest, db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("10/minute")
+async def login(request: Request, body: LoginRequest, db: Annotated[AsyncSession, Depends(get_db)]):
     try:
         user = await authenticate_user(db, body.email, body.password)
     except ValueError as e:
@@ -33,7 +35,8 @@ async def login(body: LoginRequest, db: Annotated[AsyncSession, Depends(get_db)]
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
-async def register(body: RegisterRequest, db: Annotated[AsyncSession, Depends(get_db)]):
+@limiter.limit("5/minute")
+async def register(request: Request, body: RegisterRequest, db: Annotated[AsyncSession, Depends(get_db)]):
     try:
         user = await register_user(db, body.nom, body.email, body.password, body.role)
     except ValueError as e:

@@ -1,26 +1,28 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Les quatre p\^oles de l'offre Evolvity Partners}}{2}{figure.1.1}%
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Limites identifi\'ees dans les pratiques actuelles}}{8}{figure.1.2}%
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Architecture simplifi\'ee de la solution cible}}{10}{figure.1.3}%
-\contentsline {figure}{\numberline {1.4}{\ignorespaces Processus g\'en\'eral de la m\'ethode Agile Scrum appliqu\'ee au projet}}{11}{figure.1.4}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Architecture simplifi\'ee de la solution cible}}{7}{figure.1.1}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Phases de d\'eveloppement du projet GRC AI Analyzer}}{8}{figure.1.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagramme des cas d'utilisation — GRC AI Analyzer}}{17}{figure.2.1}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Diagramme de classes — modèle du domaine GRC AI Analyzer}}{20}{figure.2.2}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Diagramme de séquence — Analyse d'un rapport GRC}}{24}{figure.2.3}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Diagramme d'activité — flux de traitement GRC AI Analyzer}}{27}{figure.2.4}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Limites identifi\'ees dans les pratiques actuelles}}{10}{figure.2.1}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Architecture RAG utilis\'ee dans GRC AI Analyzer}}{11}{figure.2.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Architecture globale de GRC AI Analyzer}}{31}{figure.3.1}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Organisation en couches du backend FastAPI}}{32}{figure.3.2}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Pipeline d'analyse en deux phases parall\`eles}}{33}{figure.3.3}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Pipeline RAG : indexation et requ\^etage}}{33}{figure.3.4}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Mod\`ele relationnel simplifi\'e}}{34}{figure.3.5}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagramme des cas d'utilisation — GRC AI Analyzer}}{18}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagramme de classes — modèle du domaine GRC AI Analyzer}}{21}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagramme de séquence — Analyse d'un rapport GRC}}{24}{figure.3.3}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Diagramme d'activité — flux de traitement GRC AI Analyzer}}{26}{figure.3.4}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Architecture globale --- GRC AI Analyzer}}{29}{figure.3.5}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagramme de d\'eploiement --- GRC AI Analyzer}}{30}{figure.3.6}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Diagramme de s\'equence -- Connexion JWT}}{37}{figure.4.1}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Organisation en cinq couches du backend FastAPI}}{34}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Mod\`ele relationnel de GRC AI Analyzer (PostgreSQL)}}{36}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Les quatre prompts Mistral et leurs sorties}}{40}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Pipeline d'analyse IA en deux phases parall\`eles}}{46}{figure.4.4}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Pipeline d'ingestion documentaire}}{39}{figure.5.1}%
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Pipeline d'analyse en deux phases parall\`eles}}{41}{figure.6.1}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Matrice probabilit\'e/impact -- exemple de visualisation des risques}}{43}{figure.6.2}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Page de connexion de GRC AI Analyzer}}{54}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Tableau de bord principal}}{55}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Interface de t\'el\'echargement d'un rapport}}{55}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Matrice des risques extraits par l'IA}}{56}{figure.5.4}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Radar de conformit\'e multi-r\'ef\'erentiel}}{56}{figure.5.5}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Chat RAG contextuel sur le rapport analys\'e}}{57}{figure.5.6}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Export des r\'esultats en PDF et Excel}}{57}{figure.5.7}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Panneau d'administration}}{58}{figure.5.8}%
