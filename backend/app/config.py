@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     # ── CORS ──────────────────────────────────────────────────────────────────
     frontend_url: str = "http://localhost:3000"
 
+    # ── HuggingFace (sentence-transformers offline mode) ──────────────────────
+    transformers_offline: str = "1"
+    hf_datasets_offline: str = "1"
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -66,3 +66,31 @@ export interface ApiResponse<T> {
   message: string;
   success: boolean;
 }
+
+export interface AdminUser {
+  id: string;
+  nom: string;
+  email: string;
+  role: 'ADMIN' | 'ANALYSTE';
+  created_at: string;
+  nb_rapports: number;
+}
+
+export interface AdminStats {
+  total_utilisateurs: number;
+  total_rapports: number;
+  total_analyses: number;
+  total_analyses_terminees: number;
+  total_risques: number;
+  total_recommandations: number;
+  score_maturite_moyen: number | null;
+}
+
+export interface ReferentielConfig {
+  id: string;
+  referentiel: 'ISO27001' | 'RGPD' | 'LOI0908';
+  actif: boolean;
+  seuil_conformite: number;
+  description: string | null;
+  updated_at: string;
+}

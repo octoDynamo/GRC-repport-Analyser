@@ -44,9 +44,10 @@ async def call_mistral(
     system_prompt: str,
     user_prompt: str,
     temperature: float = 0.1,
-    max_tokens: int = 8192,
+    max_tokens: int = 4096,
     max_retries: int = 5,
     response_format: dict | None = None,
+    timeout: float = 90.0,
 ) -> str:
     """
     Call Mistral API with retry logic.
@@ -91,7 +92,10 @@ async def call_mistral(
                 if response_format:
                     kwargs["response_format"] = response_format
 
-                response = await client.chat.complete_async(**kwargs)
+                response = await asyncio.wait_for(
+                    client.chat.complete_async(**kwargs),
+                    timeout=timeout,
+                )
 
             return response.choices[0].message.content
 

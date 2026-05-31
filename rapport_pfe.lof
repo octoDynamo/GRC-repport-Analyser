@@ -1,28 +1,45 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Architecture simplifi\'ee de la solution cible}}{7}{figure.1.1}%
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Phases de d\'eveloppement du projet GRC AI Analyzer}}{8}{figure.1.2}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Architecture simplifi\'ee de la solution cible}}{6}{figure.1.1}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Phases de d\'eveloppement du projet GRC AI Analyzer}}{7}{figure.1.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Limites identifi\'ees dans les pratiques actuelles}}{10}{figure.2.1}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Architecture RAG utilis\'ee dans GRC AI Analyzer}}{11}{figure.2.2}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Limites des pratiques manuelles d'analyse GRC}}{9}{figure.2.1}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Architecture RAG : indexation (haut) et interrogation (bas)}}{13}{figure.2.2}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Positionnement de GRC AI Analyzer \`a l'intersection de trois domaines}}{15}{figure.2.3}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagramme des cas d'utilisation — GRC AI Analyzer}}{18}{figure.3.1}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagramme de classes — modèle du domaine GRC AI Analyzer}}{21}{figure.3.2}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagramme de séquence — Analyse d'un rapport GRC}}{24}{figure.3.3}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Diagramme d'activité — flux de traitement GRC AI Analyzer}}{26}{figure.3.4}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Architecture globale --- GRC AI Analyzer}}{29}{figure.3.5}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagramme de d\'eploiement --- GRC AI Analyzer}}{30}{figure.3.6}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagramme des cas d'utilisation — GRC AI Analyzer}}{21}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagramme de classes — modèle du domaine GRC AI Analyzer}}{24}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagramme de séquence — Analyse d'un rapport GRC}}{27}{figure.3.3}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Diagramme d'activité — flux de traitement GRC AI Analyzer}}{29}{figure.3.4}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Architecture globale --- GRC AI Analyzer}}{32}{figure.3.5}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagramme de d\'eploiement --- GRC AI Analyzer}}{34}{figure.3.6}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Organisation en cinq couches du backend FastAPI}}{34}{figure.4.1}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Mod\`ele relationnel de GRC AI Analyzer (PostgreSQL)}}{36}{figure.4.2}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Les quatre prompts Mistral et leurs sorties}}{40}{figure.4.3}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Pipeline d'analyse IA en deux phases parall\`eles}}{46}{figure.4.4}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Organisation en cinq couches du backend FastAPI}}{37}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Mod\`ele relationnel de GRC AI Analyzer (PostgreSQL)}}{39}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Sch\'ema physique PostgreSQL --- tables et cl\'es \'etrang\`eres}}{40}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Console MinIO --- bucket \texttt {grc-reports} et structure des objets}}{41}{figure.4.4}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Collections ChromaDB --- une collection par analyse, index HNSW cosinus}}{41}{figure.4.5}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Les six appels LLM Mistral (quatre prompts) et leurs sorties}}{45}{figure.4.6}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Pipeline d'analyse IA en deux phases parall\`eles}}{51}{figure.4.7}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Page de connexion de GRC AI Analyzer}}{54}{figure.5.1}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Tableau de bord principal}}{55}{figure.5.2}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Interface de t\'el\'echargement d'un rapport}}{55}{figure.5.3}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Matrice des risques extraits par l'IA}}{56}{figure.5.4}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Radar de conformit\'e multi-r\'ef\'erentiel}}{56}{figure.5.5}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Chat RAG contextuel sur le rapport analys\'e}}{57}{figure.5.6}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Export des r\'esultats en PDF et Excel}}{57}{figure.5.7}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Panneau d'administration}}{58}{figure.5.8}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Sortie du script \texttt {start.bat} --- démarrage des services backend}}{59}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces D\'emarrage du serveur de d\'eveloppement Vite (frontend React/Vite)}}{59}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Page de connexion de GRC AI Analyzer}}{60}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Tableau de bord principal avec indicateurs de conformité globale}}{61}{figure.5.4}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Interface de gestion des rapports avec liste des documents}}{62}{figure.5.5}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Nouveau rapport \texttt {Vul scan.pdf} importé en attente d'analyse}}{62}{figure.5.6}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Écran d'attente pendant l'analyse IA par Mistral}}{63}{figure.5.7}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Logs backend --- indexation ChromaDB (34 chunks) et persistance des 18 risques}}{63}{figure.5.8}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Logs des requêtes API SQLAlchemy lors de la consultation d'une analyse}}{64}{figure.5.9}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Résumé exécutif généré par l'IA}}{64}{figure.5.10}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Matrice des risques --- visualisation Recharts probabilité/impact}}{65}{figure.5.11}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Liste détaillée des risques cyber extraits par Mistral}}{65}{figure.5.12}%
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Évaluation de conformité ISO 27001 / RGPD / Loi 09-08}}{66}{figure.5.13}%
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Plan d'action priorisé avec recommandations de remédiation}}{67}{figure.5.14}%
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Chat RAG contextuel --- exemple de question sur le risque le plus critique}}{67}{figure.5.15}%
+\contentsline {figure}{\numberline {5.16}{\ignorespaces Page de couverture du rapport PDF export\'e}}{68}{figure.5.16}%
+\contentsline {figure}{\numberline {5.17}{\ignorespaces Page de contenu du rapport PDF --- tableau des risques}}{68}{figure.5.17}%
+\contentsline {figure}{\numberline {5.18}{\ignorespaces Export Excel --- classeur multi-feuilles pour l'audit trail}}{69}{figure.5.18}%
+\contentsline {figure}{\numberline {5.19}{\ignorespaces Documentation interactive Swagger UI (\texttt {/docs})}}{70}{figure.5.19}%
+\contentsline {figure}{\numberline {5.20}{\ignorespaces Panneau d'administration --- gestion des utilisateurs (route \texttt {require\_admin})}}{71}{figure.5.20}%
+\contentsline {figure}{\numberline {5.21}{\ignorespaces Panneau d'administration --- gestion des r\'ef\'erentiel (route \texttt {require\_admin})}}{71}{figure.5.21}%

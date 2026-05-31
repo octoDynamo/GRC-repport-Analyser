@@ -116,7 +116,7 @@
 \fancyhead[L]{\textit{\small GRC AI Analyzer}}
 \fancyhead[R]{\textit{\small Rapport PFE}}
 \fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrulewidth}{0.3pt}
 \renewcommand{\footrulewidth}{0pt}
 
 \fancypagestyle{plain}{
@@ -137,86 +137,162 @@
 %  PAGE DE GARDE (modele ENSEM)
 % =============================================================================
 \begin{titlepage}
-\thispagestyle{empty}
-
-% --- Bandeau d'en-tete ---
-\noindent\rule{\textwidth}{1.5pt}
-\begin{center}
-{\small\bfseries Royaume du Maroc \quad $\bullet$ \quad Universit\'e Hassan II de Casablanca}\\
-{\small\bfseries \'Ecole Nationale Sup\'erieure d'\'Electricit\'e et de M\'ecanique -- ENSEM}
-\end{center}
-\noindent\rule{\textwidth}{0.5pt}
-
-\vspace{0.4cm}
-
-% --- Departement et Filiere ---
-{\bfseries\large
-D\'epartement~: G\'enie Informatique\\[0.3em]
-Fili\`ere\hspace{1.4em}: G\'enie Logiciel et Intelligence Artificielle
-}
-
-\vspace{1cm}
-
-% --- Logos universite / ecole (placeholders) ---
-\begin{center}
-\begin{tabular}{cc}
-\fbox{\parbox{6cm}{\centering\vspace{2cm}\Large\itshape Logo\\Universit\'e Hassan II\vspace{2cm}}}
-&
-\fbox{\parbox{6cm}{\centering\vspace{2cm}\Large\itshape Logo\\ENSEM\vspace{2cm}}}
-\\
-\end{tabular}
-\end{center}
-
-\vspace{1cm}
-
-% --- Titre principal ---
-\begin{center}
-{\Huge\bfseries\itshape\color{titleblue} RAPPORT DE PROJET\\[0.3em] DE FIN D'\'ETUDES}
-\end{center}
-
-\vspace{0.8cm}
-
-% --- Societe ---
-\begin{center}
-{\large\itshape R\'ealis\'e au sein de} {\large\bfseries\itshape [Nom de la Soci\'et\'e]}
-
-\vspace{0.6cm}
-
-\fbox{\parbox{6cm}{\centering\vspace{1.5cm}\Large\itshape Logo Soci\'et\'e\vspace{1.5cm}}}
-\end{center}
-
-\vspace{0.8cm}
-
-% --- Theme ---
-{\bfseries\large TH\`EME~:}
-
-\begin{center}
-\vspace{0.4cm}
-\fbox{\parbox{0.9\textwidth}{\centering\vspace{0.3cm}
-{\LARGE\bfseries\color{titleblue} GRC AI Analyzer}\\[0.4em]
-{\large Plateforme d'analyse automatis\'ee des rapports\\ de gouvernance, risque et conformit\'e\\ propuls\'ee par l'Intelligence Artificielle G\'en\'erative}
-\vspace{0.3cm}}}
-\end{center}
-
-\vspace{1cm}
-
-% --- Jury / encadrants ---
-\renewcommand{\arraystretch}{1.5}
-\noindent\begin{tabular}{p{8cm}p{7cm}}
-\bfseries Soutenu le~~\rule{0.6cm}{0.4pt}~-~\rule{0.6cm}{0.4pt}~-~2026 par~: & \bfseries Encadr\'e par~: \\
-\quad -- Mahdi BOUKHOUALI & \quad -- Prof.~[Nom Pr\'enom] (Encadrant ENSEM) \\
- & \quad -- M.~[Nom Pr\'enom] (Encadrant Industriel) \\[0.4em]
-\bfseries Devant les membres du jury~: & \\
-\quad -- Pr.~[Nom Pr\'enom] \hfill Pr\'esident & \\
-\quad -- Pr.~[Nom Pr\'enom] \hfill Rapporteur & \\
-\quad -- Pr.~[Nom Pr\'enom] \hfill Encadrant ENSEM & \\
-\quad -- M.~[Nom Pr\'enom] \hfill Encadrant Industriel & \\
-\end{tabular}
-
-\vfill
-
-\hfill{\bfseries\large Promotion 2026}
-
+	\thispagestyle{empty}
+	
+	%=================================================
+	% EN-TETE
+	%=================================================
+	
+	\noindent\rule{\textwidth}{0.5pt}
+	
+	\begin{center}
+		\begin{tabular}{c c c}
+			\includegraphics[height=2.2cm]{figures/Logo_UHIIC}
+			&
+			\begin{minipage}{10cm}
+				\centering
+				{\small\bfseries Royaume du Maroc}\\[0.1cm]
+				{\small\bfseries Université Hassan II de Casablanca}\\[0.1cm]
+				{\small\bfseries École Nationale Supérieure d'Électricité et de Mécanique}
+			\end{minipage}
+			&
+			\includegraphics[height=2.2cm]{figures/logo_ensem}
+		\end{tabular}
+	\end{center}
+	
+	\noindent\rule{\textwidth}{0.5pt}
+	
+	\begin{center}
+		{\small\bfseries Département : MATH-INFO \qquad|\qquad
+			Filière : Génie Logiciel et Digitalisation}
+	\end{center}
+	
+	\noindent\rule{\textwidth}{0.5pt}
+	
+	\vspace{0.8cm}
+	
+	%=================================================
+	% TITRE
+	%=================================================
+	
+	\begin{center}
+		{\Large\bfseries\color{titleblue}
+			RAPPORT DE PROJET DE FIN D'ÉTUDES}
+	\end{center}
+	
+	\vspace{1.0cm}
+	
+	%=================================================
+	% ENTREPRISE
+	%=================================================
+	
+	\begin{center}
+		
+		{\large\itshape Réalisé au sein de}
+		
+		\vspace{0.5cm}
+		
+		\includegraphics[height=3.5cm]{figures/logo_societe}
+		
+		\vspace{0.3cm}
+		
+		{\Large\bfseries Evolvity Partners}
+		
+	\end{center}
+	
+	\vspace{1.0cm}
+	
+	%=================================================
+	% THEME
+	%=================================================
+	
+	\begin{center}
+		
+		{\large\bfseries THÈME}
+		
+		\vspace{0.4cm}
+		
+		\fbox{
+			\parbox{0.92\textwidth}{
+				\centering
+				
+				\vspace{0.4cm}
+				
+				{\Huge\bfseries\color{titleblue}
+					GRC AI Analyzer}
+				
+				\vspace{0.5cm}
+				
+				{\large
+					Plateforme d'analyse automatisée des rapports de
+					gouvernance, risque et conformité}
+				
+				\vspace{0.15cm}
+				
+				{\large
+					propulsée par l'Intelligence Artificielle Générative}
+				
+				\vspace{0.4cm}
+			}
+		}
+		
+	\end{center}
+	
+	\vspace{1.2cm}
+	
+	%=================================================
+	% AUTEUR ET JURY
+	%=================================================
+	
+	\renewcommand{\arraystretch}{1.5}
+	
+	\begin{center}
+		\begin{tabular}{p{7cm}p{8cm}}
+			
+			\textbf{Réalisé par :}
+			&
+			Mahdi BOUKHOUALI
+			\\
+			
+			\textbf{Encadrant académique :}
+			&
+			Pr. Mehdi FARAH
+			\\
+			
+			\textbf{Encadrant industriel :}
+			&
+			M. Ghita SLAOUI
+			\\[0.3cm]
+			
+			\multicolumn{2}{l}{\textbf{Membres du jury}}
+			\\
+			
+			Président
+			&
+			Pr. [Nom Prénom]
+			\\
+			
+			Rapporteur
+			&
+			Pr. [Nom Prénom]
+			
+		\end{tabular}
+	\end{center}
+	
+	\vfill
+	
+	%=================================================
+	% PIED DE PAGE
+	%=================================================
+	
+	\noindent\rule{\textwidth}{0.5pt}
+	
+	\begin{center}
+		{\large\bfseries Promotion 2026}
+	\end{center}
+	
+	\noindent\rule{\textwidth}{1.5pt}
+	
 \end{titlepage}
 
 % =============================================================================
@@ -271,7 +347,7 @@ Dans un contexte mondial marqu\'e par la multiplication des r\'eglementations en
 
 C'est dans ce cadre que s'inscrit ce projet de fin d'\'etudes, dont l'objectif est la conception et la r\'ealisation de \textbf{GRC AI Analyzer}, une plateforme \emph{full-stack} d'analyse automatis\'ee des rapports GRC propuls\'ee par l'intelligence artificielle g\'en\'erative. Le syst\`eme permet l'import de documents aux formats PDF, DOCX et XLSX, puis exploite le mod\`ele \textbf{Mistral AI} pour extraire automatiquement les risques, \'evaluer la conformit\'e vis-\`a-vis des r\'ef\'erentiels \textbf{ISO~27001}, \textbf{RGPD} et de la \textbf{Loi 09-08} marocaine, et g\'en\'erer des recommandations concr\`etes.
 
-L'architecture repose sur un backend \textbf{FastAPI} asynchrone, une persistance \textbf{PostgreSQL}, un stockage objet \textbf{MinIO}, une base vectorielle \textbf{ChromaDB} pour le \emph{Retrieval Augmented Generation} (RAG), et une interface utilisateur \textbf{React/Vite} moderne. Un pipeline d'analyse en deux phases parall\`eles assure des temps de traitement r\'eduits, tandis qu'une interface conversationnelle bas\'ee sur le RAG permet \`a l'utilisateur d'interroger directement le rapport analys\'e.
+L'architecture repose sur un backend \textbf{FastAPI} asynchrone, une persistance \textbf{PostgreSQL}, un stockage objet \textbf{MinIO}, une base vectorielle \textbf{ChromaDB} pour le \emph{Retrieval Augmented Generation} (RAG), et une interface utilisateur \textbf{React/Vite} moderne. Un pipeline d'analyse en deux phases parall\`eles (phase~1~: 5~t\^aches simultan\'ees dont 4~appels LLM~; phase~2~: 2~appels LLM) assure des temps de traitement r\'eduits, tandis qu'une interface conversationnelle bas\'ee sur le RAG permet \`a l'utilisateur d'interroger directement le rapport analys\'e.
 
 \medskip
 \textbf{Mots-cl\'es :} GRC, Intelligence Artificielle, Mistral, RAG, ChromaDB, FastAPI, React, ISO~27001, RGPD, Loi 09-08, conformit\'e, gestion des risques.
@@ -285,7 +361,7 @@ In a global context marked by the multiplication of regulations regarding data p
 
 This end-of-studies project introduces \textbf{GRC AI Analyzer}, a full-stack platform for automated GRC report analysis powered by generative artificial intelligence. The system enables document upload in PDF, DOCX and XLSX formats, then leverages the \textbf{Mistral AI} model to automatically extract risks, evaluate compliance against \textbf{ISO~27001}, \textbf{GDPR} and Morocco's \textbf{Law 09-08}, and generate concrete recommendations.
 
-The architecture relies on an asynchronous \textbf{FastAPI} backend, a \textbf{PostgreSQL} database, a \textbf{MinIO} object store, a \textbf{ChromaDB} vector database for Retrieval Augmented Generation (RAG), and a modern \textbf{React/Vite} user interface. A two-phase parallel analysis pipeline ensures reduced processing times, while a conversational interface based on RAG allows users to directly interrogate analyzed reports.
+The architecture relies on an asynchronous \textbf{FastAPI} backend, a \textbf{PostgreSQL} database, a \textbf{MinIO} object store, a \textbf{ChromaDB} vector database for Retrieval Augmented Generation (RAG), and a modern \textbf{React/Vite} user interface. A two-phase asyncio.gather pipeline (5 tasks in phase 1 including 4 LLM calls, 2 LLM calls in phase 2) ensures reduced processing times, while a conversational interface based on RAG allows users to directly interrogate analyzed reports.
 
 \medskip
 \textbf{Keywords:} GRC, Artificial Intelligence, Mistral, RAG, ChromaDB, FastAPI, React, ISO~27001, GDPR, Law 09-08, compliance, risk management.
@@ -300,19 +376,36 @@ The architecture relies on an asynchronous \textbf{FastAPI} backend, a \textbf{P
 \addcontentsline{toc}{chapter}{Liste des acronymes}
 
 \begin{description}[leftmargin=2.5cm,style=nextline,itemsep=2pt]
+  \item[\textbf{AIPD}] Analyse d'Impact relative \`a la Protection des Donn\'ees
   \item[\textbf{API}] Application Programming Interface
+  \item[\textbf{ASGI}] Asynchronous Server Gateway Interface
+  \item[\textbf{CISO}] Chief Information Security Officer
+  \item[\textbf{CNDP}] Commission Nationale de contr\^ole de la protection des Donn\'ees \`a caract\`ere Personnel (Maroc)
+  \item[\textbf{CORS}] Cross-Origin Resource Sharing
   \item[\textbf{CRUD}] Create, Read, Update, Delete
+  \item[\textbf{CSP}] Content Security Policy
+  \item[\textbf{CVE}] Common Vulnerabilities and Exposures
+  \item[\textbf{CVSS}] Common Vulnerability Scoring System
+  \item[\textbf{CWE}] Common Weakness Enumeration
+  \item[\textbf{DPO}] Data Protection Officer (D\'el\'egu\'e \`a la Protection des Donn\'ees)
   \item[\textbf{DTO}] Data Transfer Object
   \item[\textbf{GRC}] Governance, Risk and Compliance
+  \item[\textbf{HMR}] Hot Module Replacement
+  \item[\textbf{HNSW}] Hierarchical Navigable Small World (algorithme d'indexation vectorielle)
   \item[\textbf{ISO}] International Organization for Standardization
   \item[\textbf{JWT}] JSON Web Token
   \item[\textbf{LLM}] Large Language Model
+  \item[\textbf{MinIO}] Logiciel de stockage objet open-source compatible S3
+  \item[\textbf{NIST}] National Institute of Standards and Technology
   \item[\textbf{ORM}] Object Relational Mapping
+  \item[\textbf{OWASP}] Open Web Application Security Project
   \item[\textbf{PDF}] Portable Document Format
   \item[\textbf{PFE}] Projet de Fin d'\'Etudes
   \item[\textbf{RAG}] Retrieval Augmented Generation
   \item[\textbf{REST}] Representational State Transfer
-  \item[\textbf{RGPD}] R\`eglement G\'en\'eral sur la Protection des Donn\'ees
+  \item[\textbf{RGPD}] R\`eglement G\'en\'eral sur la Protection des Donn\'ees (EU 2016/679)
+  \item[\textbf{RSSI}] Responsable de la S\'ecurit\'e des Syst\`emes d'Information
+  \item[\textbf{SMSI}] Syst\`eme de Management de la S\'ecurit\'e de l'Information
   \item[\textbf{SPA}] Single Page Application
   \item[\textbf{SQL}] Structured Query Language
   \item[\textbf{UI}] User Interface
@@ -347,7 +440,7 @@ L'offre d'Evolvity Partners est structur\'ee autour de quatre p\^oles compl\'eme
 
 \begin{itemize}
 	\item \textbf{Audit~:} Le p\^ole Audit d\'eploie des missions d'\'evaluation \`a plusieurs niveaux~:Organisationnel, Technique et Physique.
-	\item \textbf{GRC~:} Le p\^ole GRC constitue le c\oe ur strat\'egique de l'activit\'e et couvre~:
+	\item \textbf{GRC~:} Le p\^ole GRC constitue le c\oe ur strat\'egique de l'activit\'e et couvre~: la gestion des risques, les audits de conformit\'e (ISO~27001, RGPD, Loi~09-08), la r\'edaction de politiques de s\'ecurit\'e et l'accompagnement \`a la certification.
 	\item \textbf{Technologie~:} Le p\^ole Technologie couvre les domaines \'emergents~: Cloud, Blockchain, IoT et OT, avec une capacit\'e d'int\'egration de solutions s\'ecuris\'ees dans des environnements complexes et h\'et\'erog\`enes.
 	\item \textbf{ISS As A Service~:} Ce mod\`ele de prestation externalis\'ee met \`a disposition des clients des profils sp\'ecialis\'es en mode r\'egie ou forfait~: RSSI (\textit{Responsable de la S\'ecurit\'e des Syst\`emes d'Information}), SecOps, PMO et experts m\'etier, offrant ainsi une flexibilit\'e adapt\'ee aux organisations ne disposant pas de ces comp\'etences en interne.
 	
@@ -420,7 +513,7 @@ Le projet GRC AI Analyzer s'appuie sur trois r\'ef\'erentiels compl\'ementaires 
 \end{table}
 
 \subsubsection*{ISO 27001:2022}
-ISO~27001 est la norme internationale de gestion de la s\'ecurit\'e de l'information. Elle d\'efinit les exigences d'un SMSI (\textit{Syst\`eme de Management de la S\'ecurit\'e de l'Information}) et propose 93 contr\^oles de s\'ecurit\'e organisationnels, humains, physiques et technologiques.  
+ISO~27001 est la norme internationale de gestion de la s\'ecurit\'e de l'information. Elle d\'efinit les exigences d'un SMSI (\textit{Syst\`eme de Management de la S\'ecurit\'e de l'Information}). La version 2022 propose \textbf{93 contr\^oles} r\'eorganis\'es en 4~th\`emes (organisationnel, humain, physique, technologique). La version 2013 les structurait en \textbf{14~domaines} (A.5--A.18). Dans GRC AI Analyzer, l'\'evaluation de conformit\'e utilise les \textbf{14~domaines de l'Annexe~A (nomenclature 2013)} comme grille d'\'evaluation~--- approche justifi\'ee par la coh\'erence des r\'ef\'erentiels d'audit existants --- tout en r\'ef\'eren\c{c}ant ISO~27001:2022 comme norme cible.  
 La plateforme utilise ce r\'ef\'erentiel pour r\'ealiser des analyses d'\'ecarts (\textit{gap analysis}) et \'evaluer le niveau de conformit\'e des organisations.
 
 \subsubsection*{RGPD}
@@ -449,18 +542,6 @@ Dans le contexte marocain, les entreprises doivent souvent respecter \`a la fois
 \subsection{Enjeux de l'analyse documentaire GRC}
 
 Les cabinets de conseil en GRC produisent et analysent quotidiennement un volume consid\'erable de documents~: politiques de s\'ecurit\'e, rapports d'audit, plans de traitement des risques, preuves de conformit\'e. L'analyse manuelle de ces documents est chronophage, sujette aux erreurs d'interpr\'etation et difficile \`a standardiser entre consultants. C'est pr\'ecis\'ement ce verrou op\'erationnel que le projet GRC AI Analyzer vise \`a lever, en automatisant l'extraction, la structuration et l'\'evaluation des informations pertinentes contenues dans ces documents, au regard des exigences des r\'ef\'erentiels ISO~27001, RGPD et Loi~09-08.
-
-\section{\'Etude de l'existant}
-
-L'analyse documentaire GRC repose aujourd'hui sur des processus manuels chronophages et sujets aux erreurs. Les solutions commerciales (RSA Archer, ServiceNow GRC, MetricStream) et open-source (Eramba, SimpleRisk) couvrent la gestion des risques mais ne proposent pas d'analyse automatique de documents non structur\'es. L'\'etat de l'art complet, les pratiques actuelles et le positionnement de GRC AI Analyzer par rapport \`a ces solutions sont d\'etaill\'es au chapitre~\ref{chap:etatdelart}.
-
-\subsubsection*{Outils bas\'es sur les LLM}
-
-L'int\'egration des mod\`eles de langage dans le domaine GRC est embryonnaire. Quelques exp\'erimentations existent~: usage de ChatGPT en mode ad hoc pour r\'esumer des politiques, ou plugins Copilot pour l'analyse de documents Office. Ces usages restent non structur\'es, sans ancrage aux r\'ef\'erentiels normatifs, sans tra\c{c}abilit\'e des sources, et inadapt\'es \`a un contexte professionnel d'audit o\`u la pr\'ecision et la justification des \'ecarts sont indispensables.
-
-\begin{tcolorbox}[critiquestyle]
-	\textbf{Synth\`ese.} Aucune solution existante ne combine simultan\'ement une analyse automatis\'ee de documents non structur\'es, une couverture multi-r\'ef\'erentiels incluant la Loi~09-08, et une interface conversationnelle ancr\'ee aux normes GRC. Cette lacune justifie la conception de GRC AI Analyzer.
-\end{tcolorbox}
 
 \section{Probl\'ematique du projet}
 
@@ -551,114 +632,432 @@ Ce chapitre a permis de cadrer le projet dans son environnement professionnel et
 \chapter{\'Etat de l'art et \'etude de l'existant}
 \label{chap:etatdelart}
 
-\section{Introduction}
+\begin{tcolorbox}[infobox]
+	\itshape Ce chapitre dresse l'\'etat de l'art des technologies et solutions
+	pertinentes pour l'analyse GRC automatis\'ee. Il analyse les pratiques actuelles,
+	les limites des outils existants, les apports des LLM et du RAG, afin de
+	positionner la valeur ajout\'ee de GRC AI Analyzer.
+\end{tcolorbox}
 
-Ce chapitre dresse l'\'etat de l'art des technologies et solutions pertinentes pour le domaine de l'analyse GRC automatis\'ee. Il analyse les pratiques actuelles, les limites des outils existants et les apports des mod\`eles de langage de grande taille (LLM) et du Retrieval Augmented Generation (RAG), afin de positionner clairement la valeur ajout\'ee de GRC AI Analyzer.
+% =============================================================================
+\section{Contexte~: la conformit\'e GRC, un enjeu croissant}
+% =============================================================================
 
+La gouvernance, la gestion des risques et la conformit\'e (GRC) constituent
+aujourd'hui un pilier strat\'egique pour toute organisation traitant des
+donn\'ees sensibles. La multiplication des cadres r\'eglementaires ---
+ISO~27001 au niveau international, RGPD en Europe, Loi~09-08 au Maroc ---
+impose aux entreprises une obligation de surveillance et de documentation
+continue de leur posture de s\'ecurit\'e.
+
+Or, la production de rapports GRC explose~: audits de s\'ecurit\'e,
+rapports de tests d'intrusion, analyses d'impact sur la vie priv\'ee (AIPD),
+registres des risques, politiques de s\'ecurit\'e... Chaque document peut
+contenir des dizaines de constats, de vuln\'erabilit\'es et d'\'ecarts de
+conformit\'e qu'il faut identifier, classer et traiter. Face \`a ce volume
+croissant, les processus manuels atteignent leurs limites.
+
+% =============================================================================
 \section{Pratiques actuelles d'analyse des rapports GRC}
+% =============================================================================
 
-L'analyse des rapports de gouvernance, risque et conformit\'e est aujourd'hui enti\`erement manuelle au sein des cabinets de conseil. Ce processus mobilise un consultant senior pendant plusieurs jours et se d\'ecompose en six \'etapes s\'equentielles.
+L'analyse d'un rapport GRC est aujourd'hui un processus enti\`erement manuel,
+confié \`a un consultant senior. Il se d\'ecompose en six \'etapes s\'equentielles~:
 
-\begin{enumerate}[leftmargin=1.5em,itemsep=4pt]
-  \item \textbf{R\'eception du rapport~:} le document est transmis au cabinet sous forme de fichier PDF, Word ou scan.
-  \item \textbf{Lecture int\'egrale par un consultant senior~:} un expert parcourt l'int\'egralit\'e du document pour former un premier jugement.
-  \item \textbf{Surlignage manuel des passages \`a risque~:} le consultant annote les passages suspects sans garantie d'exhaustivit\'e.
-  \item \textbf{Saisie dans un tableur Excel ou Word~:} retranscription manuelle dans un mod\`ele de rapport structur\'e.
-  \item \textbf{Recoupement manuel avec les contr\^oles~:} mise en correspondance avec ISO~27001, RGPD, Loi 09-08.
-  \item \textbf{R\'edaction du rapport de synth\`ese~:} production d'un rapport final consolid\'e.
+\begin{enumerate}[leftmargin=1.5em,itemsep=6pt]
+	\item \textbf{R\'eception du rapport~:} le document arrive sous forme de
+	fichier PDF, DOCX ou scan num\'eris\'e, parfois sans couche texte
+	(OCR n\'ecessaire).
+	\item \textbf{Lecture int\'egrale~:} un expert parcourt l'int\'egralit\'e
+	du document --- souvent 50 \`a 200 pages --- pour former un premier
+	jugement global avant toute annotation.
+	\item \textbf{Identification et surlignage des risques~:} le consultant
+	annote manuellement les passages suspects. Cette \'etape est sujette
+	\`a des oublis et d\'epend fortement de l'exp\'erience de l'auditeur.
+	\item \textbf{Retranscription dans un tableur~:} les \'el\'ements identifi\'es
+	sont saisis manuellement dans un mod\`ele Excel ou Word. Toute erreur
+	de saisie se propage silencieusement dans le rapport final.
+	\item \textbf{Mise en correspondance avec les r\'ef\'erentiels~:} le consultant
+	compare chaque constat avec les contr\^oles ISO~27001, les articles RGPD
+	et --- rarement --- la Loi~09-08, faute de grilles de lecture standardis\'ees.
+	\item \textbf{R\'edaction du rapport de synth\`ese~:} production du livrable
+	final consolid\'e, souvent \`a partir de mod\`eles Word recycl\'es d'un
+	client \`a l'autre, au risque d'introduire des informations erron\'ees.
 \end{enumerate}
 
-\begin{figure}[ht]
+Ce processus mobilise un consultant senior pendant \textbf{5 \`a 10 jours} par
+rapport, ce qui repr\'esente un co\^ut significatif et limite la cadence d'analyse
+possible. Les principales limites identifi\'ees sont illustr\'ees ci-dessous~:
+
+\begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=0.4cm]
-  \tikzstyle{limit}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=10cm,minimum height=0.8cm,rounded corners=2pt,align=center]
-  \node[limit] (l1) {\textbf{Temps} : analyse manuelle de 5 \`a 10 jours par rapport};
-  \node[limit,below=of l1] (l2) {\textbf{Co\^ut} : mobilisation de consultants seniors};
-  \node[limit,below=of l2] (l3) {\textbf{Erreurs} : oubli ou mauvaise interpr\'etation};
-  \node[limit,below=of l3] (l4) {\textbf{Subjectivit\'e} : variabilit\'e entre auditeurs};
-  \node[limit,below=of l4] (l5) {\textbf{Scalabilit\'e} : difficile sur grands volumes};
-\end{tikzpicture}
-\caption{Limites identifi\'ees dans les pratiques actuelles}
+\begin{tabular}{|>{\bfseries}p{2.8cm}|p{9cm}|}
+\hline
+\rowcolor{lightgray}
+\textbf{Limite} & \textbf{Description} \\
+\hline
+Temps & 5 \`a 10 jours de travail consultant par rapport analys\'e \\
+\hline
+Co\^ut & Mobilisation de profils seniors \`a haute valeur ajout\'ee \\
+\hline
+Exhaustivit\'e & Risque d'oubli ou de mauvaise interpr\'etation des passages techniques \\
+\hline
+Subjectivit\'e & Variabilit\'e des conclusions entre auditeurs diff\'erents \\
+\hline
+Scalabilit\'e & Impossible de traiter plusieurs dizaines de rapports simultan\'ement \\
+\hline
+Tra\c{c}abilit\'e & Difficult\'e \`a lier chaque constat \`a une section pr\'ecise du document source \\
+\hline
+\end{tabular}
+\caption{Limites des pratiques manuelles d'analyse GRC}
 \label{fig:limites}
 \end{figure}
 
+% =============================================================================
 \section{Solutions du march\'e et leurs limites}
+% =============================================================================
 
-\subsection{Leaders du march\'e GRC}
+\subsection{Plateformes GRC commerciales (leaders du march\'e)}
 
-Les plateformes commerciales dominantes --- RSA Archer, ServiceNow GRC et MetricStream --- offrent des fonctionnalit\'es \'etendues de gestion des risques, des audits et de la conformit\'e. Destin\'ees aux grandes entreprises, elles souffrent de limitations communes~: co\^uts de licence prohibitifs, d\'eploiements longs et complexes, et surtout une architecture bas\'ee sur la saisie manuelle de donn\'ees structur\'ees. Aucune ne propose d'analyse automatique de documents non structur\'es, et aucune ne couvre nativement le cadre r\'eglementaire marocain (Loi~09-08).
+Les plateformes commerciales dominantes --- \textbf{RSA Archer},
+\textbf{ServiceNow GRC} et \textbf{MetricStream} --- offrent des fonctionnalit\'es
+\'etendues de gestion des risques, des audits et de la conformit\'e.
+Destin\'ees aux grandes entreprises (Fortune~500), elles partagent les
+caract\'eristiques suivantes~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item \textbf{Architecture base de donn\'ees structur\'ee~:} les risques et
+	contr\^oles sont saisis manuellement dans des formulaires pr\'ed\'efinis.
+	Aucune analyse automatique de documents textuels n'est propos\'ee.
+	\item \textbf{Co\^uts prohibitifs~:} licences annuelles de plusieurs dizaines
+	de milliers d'euros, n\'ecessitant en outre des int\'egrateurs certifi\'es
+	pour le d\'eploiement et la configuration.
+	\item \textbf{Rigide couverture r\'eglementaire~:} ces outils couvrent principalement
+	les cadres anglo-saxons (SOX, PCI-DSS, HIPAA). La Loi marocaine~09-08 est
+	absente de leurs biblioth\`eques de contr\^oles.
+	\item \textbf{Temps de d\'eploiement long~:} plusieurs mois sont n\'ecessaires
+	pour param\'etrer, former les \'equipes et int\'egrer les sources de donn\'ees
+	existantes.
+\end{itemize}
 
 \subsection{Solutions open-source}
 
-Des outils tels qu'Eramba, SimpleRisk ou OpenGRC proposent des alternatives accessibles. Leurs limites sont toutefois significatives~: interfaces rudimentaires, absence de support des r\'ef\'erentiels r\'egionaux, communaut\'es restreintes, et aucune capacit\'e d'analyse s\'emantique ou d'intelligence artificielle int\'egr\'ee.
+Des outils tels qu'\textbf{Eramba}, \textbf{SimpleRisk} ou \textbf{OpenGRC}
+proposent des alternatives accessibles financi\`erement. Leurs limites sont
+toutefois significatives pour un usage professionnel~:
 
-\subsection{Outils bas\'es sur les LLM}
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item Interfaces utilisateur rudimentaires, peu adapt\'ees aux \'equipes
+	GRC non techniques.
+	\item Absence de support des r\'ef\'erentiels r\'egionaux (Loi~09-08, normes
+	africaines ou arabes).
+	\item Aucune capacit\'e d'analyse s\'emantique ou d'intelligence artificielle
+	int\'egr\'ee~: tout reste manuel.
+	\item Communaut\'es restreintes, documentation sparse, mises \`a jour irr\'eguli\`eres.
+\end{itemize}
 
-L'int\'egration des mod\`eles de langage dans le domaine GRC est embryonnaire. Quelques exp\'erimentations existent~: usage de ChatGPT en mode ad hoc pour r\'esumer des politiques, ou plugins Copilot pour l'analyse de documents Office. Ces usages restent non structur\'es, sans ancrage aux r\'ef\'erentiels normatifs, sans tra\c{c}abilit\'e des sources.
+\subsection{Usages ad hoc des LLM (ChatGPT, Copilot)}
 
-\begin{table}[ht]
-\centering
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-\rowcolor{lightgray}
-\textbf{Solution} & \textbf{Analyse auto} & \textbf{Multi-r\'ef.} & \textbf{Loi 09-08} & \textbf{RAG} & \textbf{Open} \\
-\hline
-RSA Archer & \ding{55} & \ding{51} & \ding{55} & \ding{55} & \ding{55} \\
-\hline
-ServiceNow GRC & \ding{55} & \ding{51} & \ding{55} & \ding{55} & \ding{55} \\
-\hline
-Eramba & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{51} \\
-\hline
-ChatGPT (ad hoc) & \ding{51} & \ding{55} & \ding{55} & \ding{55} & \ding{55} \\
-\hline
-\textbf{GRC AI Analyzer} & \ding{51} & \ding{51} & \ding{51} & \ding{51} & \ding{51} \\
-\hline
-\end{tabular}
-\caption{Comparatif des solutions GRC existantes}
-\label{tab:comparatif}
+L'int\'egration des mod\`eles de langage dans le domaine GRC est encore embryonnaire.
+Les usages observ\'es se limitent \`a~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item \textbf{R\'esum\'e ad hoc~:} copier-coller d'extraits de politiques dans
+	ChatGPT pour obtenir un r\'esum\'e non structur\'e, sans ancrage aux
+	r\'ef\'erentiels normatifs.
+	\item \textbf{Copilot pour Office~:} analyse superficielle de documents Word,
+	sans extraction structur\'ee des risques ni \'evaluation de conformit\'e.
+	\item \textbf{Absence de tra\c{c}abilit\'e~:} les r\'eponses ne citent pas les
+	sections sources du document, rendant l'audit trail impossible.
+	\item \textbf{Risque d'hallucination~:} sans m\'ecanisme RAG, le LLM peut
+	inventer des constats non pr\'esents dans le document.
+\end{itemize}
+
+\subsection{Tableau comparatif}
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.35}
+	\begin{tabularx}{\textwidth}{|X|c|c|c|c|c|c|}
+		\hline
+		\rowcolor{lightgray}
+		\textbf{Solution} & \textbf{Analyse} & \textbf{Multi-} & \textbf{Loi} & \textbf{RAG} &
+		\textbf{Export} & \textbf{Open} \\
+		\rowcolor{lightgray}
+		& \textbf{auto} & \textbf{r\'ef.} & \textbf{09-08} & & \textbf{PDF/XLS} & \textbf{source} \\
+		\hline
+		RSA Archer         & \ding{55} & \ding{51} & \ding{55} & \ding{55} & \ding{51} & \ding{55} \\
+		\hline
+		ServiceNow GRC     & \ding{55} & \ding{51} & \ding{55} & \ding{55} & \ding{51} & \ding{55} \\
+		\hline
+		MetricStream       & \ding{55} & \ding{51} & \ding{55} & \ding{55} & \ding{51} & \ding{55} \\
+		\hline
+		Eramba             & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{51} \\
+		\hline
+		SimpleRisk         & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{51} \\
+		\hline
+		ChatGPT (ad hoc)   & \ding{51} & \ding{55} & \ding{55} & \ding{55} & \ding{55} & \ding{55} \\
+		\hline
+		\textbf{GRC AI Analyzer} & \ding{51} & \ding{51} & \ding{51} & \ding{51} & \ding{51} & \ding{51} \\
+		\hline
+	\end{tabularx}
+	\caption{Comparatif des solutions GRC existantes}
+	\label{tab:comparatif}
 \end{table}
 
 \begin{tcolorbox}[critiquestyle]
-  \textbf{Synth\`ese.} Aucune solution existante ne combine simultan\'ement une analyse automatis\'ee de documents non structur\'es, une couverture multi-r\'ef\'erentiels incluant la Loi~09-08, et une interface conversationnelle ancr\'ee aux normes GRC. Cette lacune justifie la conception de GRC AI Analyzer.
+	\textbf{Synth\`ese.}
+	Aucune solution existante ne combine simultan\'ement~:
+	une analyse automatis\'ee de documents non structur\'es (PDF, DOCX, XLSX),
+	une couverture multi-r\'ef\'erentiels incluant la Loi~09-08 marocaine,
+	un moteur RAG pour l'interrogation conversationnelle ancr\'ee aux normes,
+	et un export PDF/Excel pour l'audit trail.
+	Cette lacune justifie la conception de GRC AI Analyzer.
 \end{tcolorbox}
 
+% =============================================================================
 \section{Fondements technologiques retenus}
+% =============================================================================
 
 \subsection{Les grands mod\`eles de langage (LLM)}
 
-Les LLM (\textit{Large Language Models}) sont des mod\`eles de Deep Learning entra\^in\'es sur d'immenses corpus textuels. Ils permettent de comprendre et g\'en\'erer du langage naturel avec une qualit\'e proche de celle d'un expert humain. Dans le cadre de GRC AI Analyzer, le mod\`ele \textbf{Mistral Large} a \'et\'e retenu pour ses performances sur les t\^aches d'extraction JSON structur\'ee, sa compatibilit\'e avec la langue fran\c{c}aise et sa disponibilit\'e via une API.
+Les LLM (\textit{Large Language Models}) sont des mod\`eles de Deep Learning
+bas\'es sur l'architecture Transformer, entra\^in\'es sur des corpus textuels
+de plusieurs dizaines de milliards de tokens. Ils d\'eveloppent une
+compr\'ehension du langage naturel suffisamment riche pour~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item \textbf{Extraire de l'information structur\'ee~:} identifier des entit\'es
+	(risques, vuln\'erabilit\'es, contrôles) et les retourner dans un format
+	JSON pr\'edefini, exploitable par une application.
+	\item \textbf{Raisonner sur des r\'ef\'erentiels normatifs~:} \'evaluer la conformit\'e
+	d'un document par rapport aux exigences d'ISO~27001 ou du RGPD, en
+	produisant un score et une justification textuelle.
+	\item \textbf{G\'en\'erer du contenu expert~:} r\'ediger un r\'esum\'e ex\'ecutif
+	destin\'e \`a un RSSI, formuler des recommandations techniques d\'etaill\'ees
+	avec r\'ef\'erences OWASP et NIST.
+\end{itemize}
+
+\paragraph{Pourquoi Mistral Large~?}
+Parmi les LLM disponibles via API en 2024--2025, \textbf{Mistral Large}
+a \'et\'e retenu pour plusieurs raisons~:
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.3}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Crit\`ere} & \textbf{Justification} \\
+		\hline
+		Qualit\'e du fran\c{c}ais & Meilleure ma\^itrise du fran\c{c}ais technique que GPT-4o
+		sur les tests internes (terminologie GRC, r\'ef\'erentiels ISO) \\
+		\hline
+		Sorties JSON structur\'ees & Respect fiable du format JSON impos\'e par les prompts,
+		r\'eduisant les erreurs de parsing \\
+		\hline
+		Fen\^etre de contexte & 128k tokens~: permet d'analyser des documents de 80+ pages \\
+		\hline
+		Tarification & Co\^ut API significativement inf\'erieur \`a GPT-4o pour un volume
+		\'equivalent de tokens \\
+		\hline
+		Souverainet\'e & Mod\`ele europ\'een, compatible avec les exigences RGPD de
+		localisation des donn\'ees \\
+		\hline
+	\end{tabularx}
+	\caption{Justification du choix de Mistral Large}
+	\label{tab:mistral}
+\end{table}
 
 \subsection{Le Retrieval Augmented Generation (RAG)}
 
-Le RAG\footnote{Lewis et al., \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}, NeurIPS 2020.} est une architecture hybride qui combine la recherche s\'emantique dans une base vectorielle et la g\'en\'eration de texte par un LLM. Plut\^ot que de s'appuyer uniquement sur sa m\'emoire param\'etrique, le mod\`ele re\c{c}oit des extraits pertinents du document source comme contexte, ce qui r\'eduit les hallucinations et am\'eliore la pr\'ecision des r\'eponses.
+Le RAG\footnote{Lewis et al., \textit{Retrieval-Augmented Generation for
+		Knowledge-Intensive NLP Tasks}, NeurIPS 2020.} est une architecture hybride
+qui pallie la principale limite des LLM~: leur \textbf{m\'emoire param\'etrique fig\'ee}.
+Un LLM seul ne peut r\'epondre qu'\`a partir de ce qu'il a appris lors de son
+entra\^inement~; il ne ``conna\^it'' pas le rapport GRC soumis par l'utilisateur.
 
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}[node distance=1.0cm and 1.4cm]
-  \tikzstyle{box}=[rectangle,draw=darknavy,thick,fill=lightgray,minimum width=2.8cm,minimum height=0.9cm,rounded corners=2pt,align=center,font=\small]
-  \node[box] (q) {Question\\utilisateur};
-  \node[box,right=of q] (emb) {Embedding\\(MiniLM)};
-  \node[box,right=of emb] (chroma) {ChromaDB\\(top-k chunks)};
-  \node[box,right=of chroma] (mistral) {Mistral AI\\(g\'en\'eration)};
-  \node[box,right=of mistral] (rep) {R\'eponse\\sourcée};
-  \draw[-{Latex[length=2mm]}] (q) -- (emb);
-  \draw[-{Latex[length=2mm]}] (emb) -- (chroma);
-  \draw[-{Latex[length=2mm]}] (chroma) -- (mistral);
-  \draw[-{Latex[length=2mm]}] (mistral) -- (rep);
-\end{tikzpicture}
-\caption{Architecture RAG utilis\'ee dans GRC AI Analyzer}
-\label{fig:rag-arch}
+Le RAG r\'esout ce probl\`eme en deux temps~:
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=6pt]
+	\item \textbf{Indexation (\textit{offline})~:} le document est d\'ecoup\'e en
+	fragments (\textit{chunks}), chacun transform\'e en vecteur num\'erique
+	(\textit{embedding}) repr\'esentant sa signification s\'emantique, puis
+	stock\'e dans une base vectorielle.
+	\item \textbf{Interrogation (\textit{online})~:} \`a chaque question, la requ\^ete
+	est encod\'ee de la m\^eme fa\c{c}on, et les $k$ fragments les plus proches
+	s\'emantiquement sont r\'ecup\'er\'es pour \^etre inject\'es comme contexte
+	dans le prompt envoy\'e au LLM.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tikzpicture}[node distance=0.5cm and 0.8cm]
+			
+			\tikzstyle{box}=[rectangle,draw=darknavy,thick,fill=lightgray,
+			minimum width=2.2cm,minimum height=0.8cm,rounded corners=2pt,
+			align=center,font=\small]
+			
+			\tikzstyle{boxg}=[rectangle,draw=darkgreen,thick,fill=darkgreen!12,
+			minimum width=2.2cm,minimum height=0.8cm,rounded corners=2pt,
+			align=center,font=\small]
+			
+			\tikzstyle{lbl}=[font=\footnotesize\bfseries\color{darknavy}]
+			\tikzstyle{arr}=[-{Latex[length=2mm]},thick]
+			
+			% Indexation
+			\node[lbl] (il) {Indexation};
+			\node[box,right=0.3cm of il]   (doc)   {Document\\PDF/DOCX};
+			\node[box,right=0.6cm of doc]  (chunk) {Chunking\\1500\,/\,200};
+			\node[box,right=0.6cm of chunk](emb1)  {Embedding\\MiniLM};
+			\node[box,right=0.6cm of emb1] (db)    {ChromaDB\\index HNSW};
+			
+			% Interrogation
+			\node[lbl,below=1.6cm of il] (ql) {Interrogation};
+			\node[boxg,right=0.3cm of ql]   (q)    {Question\\utilisateur};
+			\node[boxg,right=0.6cm of q]    (emb2) {Embedding\\requête};
+			\node[boxg,right=0.6cm of emb2] (ret)  {Top-5 chunks\\cosinus};
+			\node[boxg,right=0.6cm of ret]  (llm)  {Mistral AI\\génération};
+			\node[boxg,right=0.6cm of llm]  (ans)  {Réponse\\sourcée};
+			
+			\draw[arr] (doc)--(chunk);
+			\draw[arr] (chunk)--(emb1);
+			\draw[arr] (emb1)--(db);
+			
+			\draw[arr] (q)--(emb2);
+			\draw[arr] (emb2)--(ret);
+			\draw[arr] (ret)--(llm);
+			\draw[arr] (llm)--(ans);
+			
+			\draw[arr,dashed] (db) -- node[right,font=\scriptsize\itshape]{vecteurs} (ret);
+			
+		\end{tikzpicture}
+	}
+	\caption{Architecture RAG : indexation (haut) et interrogation (bas)}
+	\label{fig:rag-arch}
 \end{figure}
+
+Les b\'en\'efices du RAG dans le contexte GRC sont directs~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item \textbf{R\'eduction des hallucinations~:} le LLM r\'epond \textit{uniquement}
+	\`a partir des extraits r\'ecup\'er\'es, pas de sa m\'emoire g\'en\'erale.
+	\item \textbf{Tra\c{c}abilit\'e des sources~:} chaque r\'eponse peut citer les
+	passages exacts du document qui la justifient.
+	\item \textbf{Pas de fine-tuning n\'ecessaire~:} le m\^eme mod\`ele Mistral
+	s'adapte \`a n'importe quel rapport sans r\'eentra\^inement.
+	\item \textbf{Multilinguisme~:} le mod\`ele d'embedding
+	\texttt{paraphrase-multilingual-MiniLM-L12-v2} supporte 50+ langues,
+	permettant d'analyser des documents en fran\c{c}ais, en arabe ou en anglais.
+\end{itemize}
 
 \subsection{Les bases vectorielles}
 
-Une base vectorielle (\textit{vector store}) indexe des repr\'esentations s\'emantiques denses (embeddings) de fragments textuels. La recherche par similarit\'e cosinus permet de retrouver les passages les plus proches s\'emantiquement d'une requ\^ete. \textbf{ChromaDB} a \'et\'e retenu pour sa facilit\'e d'int\'egration en mode HTTP et son support natif des collections isol\'ees par analyse.
+Une base vectorielle (\textit{vector store}) indexe des repr\'esentations
+s\'emantiques denses (\textit{embeddings}) de fragments textuels et permet
+une recherche par similarit\'e en temps quasi-r\'eel. Contrairement \`a une
+recherche plein texte (\textit{full-text search}) qui cherche des mots exacts,
+la recherche vectorielle retrouve des passages \textit{s\'emantiquement proches}
+m\^eme sans correspondance lexicale.
 
-\section{Synth\`ese et positionnement}
+\paragraph{Pourquoi ChromaDB~?}
+\textbf{ChromaDB} a \'et\'e retenu parmi les alternatives (Pinecone, Weaviate,
+FAISS, Qdrant) pour les raisons suivantes~:
 
-GRC AI Analyzer se positionne \`a l'intersection de trois domaines~: la gestion des risques et de la conformit\'e (GRC), le traitement automatique du langage naturel (NLP/LLM) et la recherche s\'emantique (RAG). Cette combinaison inédite constitue la valeur diff\'erenciante de la plateforme par rapport aux solutions existantes.
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.3}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Crit\`ere} & \textbf{Avantage ChromaDB} \\
+		\hline
+		D\'eploiement & Mode serveur HTTP en un seul processus, sans infrastructure Kubernetes \\
+		\hline
+		Isolation & Collections nomm\'ees nativement~: une collection par analyse,
+		suppression atomique \`a la suppression du rapport \\
+		\hline
+		Licence & Apache~2.0, open-source, pas de quotas ni de frais d'API \\
+		\hline
+		Int\'egration Python & SDK Python natif, compatible \texttt{asyncio.to\_thread} \\
+		\hline
+		Algorithme & Index HNSW (\textit{Hierarchical Navigable Small World}),
+		recherche approximative en $O(\log n)$ \\
+		\hline
+	\end{tabularx}
+	\caption{Justification du choix de ChromaDB}
+	\label{tab:chromadb}
+\end{table}
 
+\subsection{Le framework FastAPI}
+
+FastAPI a \'et\'e retenu comme socle du backend pour sa combinaison unique
+d'asynchronisme natif, de validation automatis\'ee et de documentation g\'en\'er\'ee~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+	\item \textbf{ASGI et \texttt{asyncio}~:} chaque requ\^ete est g\'er\'ee de
+	fa\c{c}on non-bloquante. Les appels longs \`a Mistral (10--30 s) ne
+	p\'enalisent pas les autres requ\^etes concurrentes.
+	\item \textbf{BackgroundTask~:} le pipeline d'analyse peut \^etre d\'eclench\'e
+	en arri\`ere-plan (HTTP~202 imm\'ediat), le frontend polling le statut.
+	\item \textbf{Pydantic~v2~:} validation et s\'erialisation des donn\'ees
+	\`a la fronti\`ere de l'API, garantissant l'int\'egrit\'e des entr\'ees
+	et la normalisation des sorties.
+	\item \textbf{OpenAPI auto-g\'en\'er\'e~:} la documentation Swagger
+	(\texttt{/docs}) est produite automatiquement \`a partir des annotations
+	Python, constituant le contrat d'interface entre frontend et backend.
+\end{itemize}
+
+% =============================================================================
+\section{Synth\`ese et positionnement de GRC AI Analyzer}
+% =============================================================================
+
+GRC AI Analyzer se positionne \`a l'intersection de trois domaines~:
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\tikzstyle{bubble}=[circle,draw=darknavy,thick,fill=lightgray,
+		minimum size=3.2cm,align=center,font=\small]
+		\tikzstyle{center}=[circle,draw=darkgreen,thick,fill=darkgreen!20,
+		minimum size=2cm,align=center,font=\small\bfseries]
+		
+		\node[bubble] (grc)  at (0,2.2)    {Gestion des\\risques\\et conformit\'e\\(GRC)};
+		\node[bubble] (nlp)  at (-2.2,-1.3){Traitement\\du langage\\naturel\\(LLM / NLP)};
+		\node[bubble] (rag)  at ( 2.2,-1.3){Recherche\\s\'emantique\\(RAG /\\vecteurs)};
+		\node[center] (core) at (0,0)      {GRC AI\\Analyzer};
+		
+		\draw[thick,darknavy] (grc) -- (core);
+		\draw[thick,darknavy] (nlp) -- (core);
+		\draw[thick,darknavy] (rag) -- (core);
+	\end{tikzpicture}
+	\caption{Positionnement de GRC AI Analyzer \`a l'intersection de trois domaines}
+	\label{fig:positionnement}
+\end{figure}
+
+La combinaison de ces trois domaines produit une valeur ajout\'ee
+qui n'existe dans aucune solution actuelle~:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=6pt]
+	\item \textbf{GRC + LLM~:} automatisation de l'analyse de documents non
+	structur\'es, extraction de risques structur\'es et \'evaluation de
+	conformit\'e multi-r\'ef\'erentiels sans saisie manuelle.
+	\item \textbf{GRC + RAG~:} interrogation conversationnelle d'un rapport en
+	langage naturel, avec r\'eponses ancr\'ees aux passages sources du
+	document~--- \'eliminant le risque d'hallucination.
+	\item \textbf{LLM + RAG~:} g\'en\'eration augment\'ee~: le LLM ne s'appuie
+	pas sur sa m\'emoire param\'etrique mais sur les fragments pertinents
+	du rapport, rendant les r\'eponses factuelles et tra\c{c}ables.
+\end{itemize}
+
+\begin{tcolorbox}[critiquestyle]
+	\textbf{Conclusion.}
+	L'analyse de l'existant r\'ev\`ele une lacune claire~: aucune solution disponible
+	ne combine une analyse automatique de documents GRC non structur\'es,
+	une couverture des trois r\'ef\'erentiels ISO~27001 / RGPD / Loi~09-08,
+	un moteur RAG conversationnel ancr\'e aux normes, et un pipeline
+	open-source d\'eployable sans infrastructure complexe.
+	GRC AI Analyzer a \'et\'e con\c{c}u pour combler exactement cette lacune.
+\end{tcolorbox}
 % =============================================================================
 %  CHAPITRE 3 — ANALYSE DES BESOINS ET CONCEPTION
 % =============================================================================
@@ -690,7 +1089,7 @@ périmètres d'action sont distincts :
 	
 	\item \textbf{L'Administrateur} — responsable de la gouvernance applicative.
 	Il gère les comptes utilisateurs (création, attribution des rôles
-	\texttt{ADMIN} / \texttt{ANALYSTE}), consulte la piste d'audit et
+	\texttt{ADMIN} / \texttt{ANALYSTE}), consulte les journaux d'activité via l'export Excel (audit trail --- aucune table \texttt{PisteAudit} n'existe en v1) et
 	peut configurer les référentiels de conformité.
 	
 	\item \textbf{Mistral AI} — acteur externe (API tierce). Le modèle
@@ -712,7 +1111,7 @@ Les besoins fonctionnels ont été organisés en cinq modules cohérents :
 	supporté.
 	\item \textbf{BF-02} : Le système enregistre les métadonnées du rapport
 	(nom, format, date d'upload, statut) dans la base de données et stocke
-	le fichier binaire sur le serveur de fichiers local.
+	le fichier binaire dans le stockage objet \textbf{MinIO} (bucket \texttt{grc-reports}).
 	\item \textbf{BF-03} : L'analyste peut consulter l'historique de ses
 	rapports et filtrer par statut (\textit{en\_attente}, \textit{en\_cours},
 	\textit{termine}, \textit{erreur}).
@@ -744,8 +1143,7 @@ Les besoins fonctionnels ont été organisés en cinq modules cohérents :
 	les seuils : score $\geq$ 20 → CRITIQUE ; $\geq$ 12 → ÉLEVÉ ;
 	$\geq$ 6 → MOYEN ; $<$ 6 → FAIBLE.
 	\item \textbf{BF-10} : Le système vérifie la conformité du document par
-	rapport à trois référentiels en parallèle : ISO 27001:2013 (14 domaines
-	de l'Annexe A), RGPD (12 domaines), Loi 09-08 marocaine (11 domaines).
+	rapport à trois référentiels en parallèle : ISO~27001:2022 (14~domaines de l'Annexe~A selon la structure \textbf{2013 adopt\'ee par le prompt}, couvrant les 93~contr\'oles r\'eels de la version 2022 par regroupement), RGPD (12~domaines), Loi~09-08 marocaine (11~domaines).
 	Chaque domaine reçoit un statut (CONFORME / PARTIEL / NON\_CONFORME)
 	et un taux de conformité.
 	\item \textbf{BF-11} : Le système génère une recommandation priorisée
@@ -808,7 +1206,9 @@ Les besoins fonctionnels ont été organisés en cinq modules cohérents :
 	JWT (JSON Web Token). Le token est signé avec l'algorithme HS256,
 	stocké côté client dans le \textit{localStorage} via Zustand, et
 	transmis dans l'en-tête \texttt{Authorization: Bearer} à chaque
-	requête.
+	requête. \textit{(Note~: le stockage en \texttt{localStorage} expose le token
+	à une attaque XSS~; un cookie \texttt{httpOnly} aurait été plus sûr~;
+	ce compromis est assumé dans le cadre de ce prototype.)}
 	\item \textbf{BF-23} : Les mots de passe sont hachés avec bcrypt avant
 	stockage. La vérification à la connexion compare le hash stocké sans
 	jamais manipuler le mot de passe en clair.
@@ -907,7 +1307,7 @@ aux modules identifiés lors de l'analyse des besoins.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.92\textwidth]{figures/useC.png}
+	\includegraphics[width=0.82\textwidth]{figures/useC.png}
 	\caption{Diagramme des cas d'utilisation — GRC AI Analyzer}
 	\label{fig:use_case}
 \end{figure}
@@ -923,8 +1323,8 @@ aux modules identifiés lors de l'analyse des besoins.
 	\begin{enumerate}
 		\item L'analyste sélectionne un fichier (PDF, DOCX ou XLSX) via l'interface.
 		\item Le système valide le format (\texttt{validate\_file\_format}).
-		\item Le fichier est sauvegardé sur le serveur sous
-		\texttt{uploads/reports/\{uuid\}/\{nom\}}.
+		\item Le fichier est envoy\'e dans \textbf{MinIO} sous le chemin
+		\texttt{reports/\{uuid\}/\{nom\_sanitisé\}} (bucket \texttt{grc-reports}).
 		\item Un enregistrement \texttt{Rapport} est créé en base avec le statut
 		\textit{en\_attente}.
 		\item L'API retourne l'identifiant du rapport (HTTP 201).
@@ -1067,7 +1467,7 @@ le référentiel (\texttt{ISO27001}, \texttt{RGPD}, \texttt{LOI0908}), le
 nom du domaine évalué, le statut (\texttt{CONFORME} / \texttt{NON\_CONFORME}
 / \texttt{PARTIEL}), l'écart constaté (texte libre) et le taux de
 conformité (flottant). Une analyse peut produire jusqu'à 37 enregistrements
-de conformité (14 domaines ISO + 12 RGPD + 11 Loi 09-08).
+de conformit\'e (14~domaines \'evalu\'es de l'Annexe~A ISO + 12~domaines RGPD + 11~domaines Loi~09-08 = 37~enregistrements par analyse~; ces 14~domaines correspondent \`a la grille 2013 qui couvre par regroupement les 93~contr\^oles de la version 2022).
 
 \subsubsection*{Recommandation}
 
@@ -1079,26 +1479,30 @@ HAUTE / MOYENNE / FAIBLE), le type d'action (QUICK\_WIN ou LONG\_TERME),
 l'effort estimé (FAIBLE / MOYEN / ÉLEVÉ) et le statut de traitement
 (À\_FAIRE / EN\_COURS / CLÔTURÉ).
 
-\subsubsection*{MessageChat}
+\subsubsection*{MessageChat \textnormal{\small(classe conceptuelle, non persist\'ee en base)}}
 
-La classe \texttt{MessageChat} (présente dans le modèle conceptuel) stocke
-l'historique des interactions conversationnelles : la question posée par
-l'utilisateur, la réponse générée par Mistral et les sources citées
-(tableau JSON des extraits ChromaDB).
+La classe \texttt{MessageChat} est pr\'esente dans le mod\`ele conceptuel UML
+mais n'est \textbf{pas persist\'ee} dans PostgreSQL~: les messages du chat sont
+retourn\'es directement en r\'eponse API sans \'ecriture en base, pour des raisons
+de simplicit\'e et de performance. Elle stocke conceptuellement la question
+de l'utilisateur, la r\'eponse Mistral et les sources ChromaDB cit\'ees.
 
-\subsubsection*{ReferentielGRC}
+\subsubsection*{ReferentielGRC \textnormal{\small(classe conceptuelle, cod\'ee en dur)}}
 
-La classe \texttt{ReferentielGRC} représente la configuration des cadres
-normatifs : ISO 27001, RGPD et Loi 09-08. Elle stocke le code du
-référentiel, sa version, et la liste de ses domaines et exigences au
-format JSON.
+La classe \texttt{ReferentielGRC} est une \textbf{abstraction conceptuelle}~:
+les r\'ef\'erentiels (ISO~27001, RGPD, Loi~09-08) sont cod\'es en dur dans les
+prompts IA (\texttt{compliance\_prompts.py}) et ne n\'ecessitent pas de table
+PostgreSQL d\'edi\'ee. Elle figure dans le diagramme de classes pour formaliser
+la relation entre une analyse et ses r\'ef\'erentiels \'evalu\'es.
 
-\subsubsection*{PisteAudit}
+\subsubsection*{PisteAudit \textnormal{\small(classe conceptuelle, non impl\'ement\'ee v1)}}
 
-La classe \texttt{PisteAudit} enregistre les actions réalisées par les
-utilisateurs (upload, lancement d'analyse, modification de statut),
-permettant à l'administrateur de tracer les opérations sensibles via le
-type d'entité, l'identifiant de l'entité concernée et les détails en JSON.
+La classe \texttt{PisteAudit} est \textbf{pr\'evue pour une version future}~:
+elle enregistrerait les actions sensibles (upload, lancement d'analyse,
+modification de statut) pour l'audit trail administrateur. Dans la version~1
+actuelle, cette fonctionnalit\'e n'est pas encore impl\'ement\'ee en base PostgreSQL.
+Le diagramme de classes la conserve comme exigence de conception \`a satisfaire
+lors d'une prochaine it\'eration.
 
 % ============================================================
 \section{Diagramme de Séquence}
@@ -1143,7 +1547,7 @@ asynchrone matérialisée par la réponse HTTP 202.
 	l'\texttt{analyse\_id}.
 \end{enumerate}
 
-\subsubsection*{Phase asynchrone : Pipeline IA (8 appels Mistral)}
+\subsubsection*{Pipeline IA asynchrone~: 6~appels LLM, 4~prompts, 2~phases}
 
 Le service \texttt{analysis\_service.run\_analysis()} s'exécute dans
 une session SQLAlchemy dédiée. Il suit le pipeline suivant :
@@ -1154,29 +1558,27 @@ une session SQLAlchemy dédiée. Il suit le pipeline suivant :
 	
 	\item \textbf{Phase 1 — Parallélisation via \texttt{asyncio.gather}} :
 	\begin{itemize}
-		\item Indexation ChromaDB (embedding des chunks en mémoire)
-		\item Prompt 1 → Mistral : extraction exhaustive des risques
-		(JSON structuré)
-		\item Prompt 2 → Mistral : scoring probabilité × impact des risques
-		\item Prompt 3 → Mistral : vérification conformité ISO 27001
-		(14 domaines)
-		\item Prompt 4 → Mistral : vérification conformité RGPD (12 domaines)
-		\item Prompt 5 → Mistral : vérification conformité Loi 09-08
-		(11 domaines)
+		\item Indexation ChromaDB (embedding des chunks en mémoire --- non-LLM)
+		\item \textbf{Appel LLM 1} $\to$ Mistral : extraction exhaustive des risques (JSON structur\'e)
+		\item \textbf{Appel LLM 2} $\to$ Mistral : v\'erification conformit\'e ISO~27001 (14 domaines Annexe~A)
+		\item \textbf{Appel LLM 3} $\to$ Mistral : v\'erification conformit\'e RGPD (12 domaines)
+		\item \textbf{Appel LLM 4} $\to$ Mistral : v\'erification conformit\'e Loi~09-08 (11 domaines)
 	\end{itemize}
-	Les résultats sont validés (sévérités, catégories, doublons) et
-	persistés en base de données.
+	Le scoring probabilit\'e $\times$ impact et le calcul de s\'ev\'erit\'e sont
+	\textbf{d\'eterministes} (formule $p \times i$, seuils fix\'es) --- pas d'appel LLM.
+	Les r\'esultats sont valid\'es et persist\'es en base de donn\'ees.
 	
-	\item \textbf{Gap Analysis consolidée} — à partir des taux de conformité
-	calculés, le score de maturité global est déterminé (moyenne des
-	trois référentiels).
+	\item \textbf{Gap Analysis consolid\'ee} --- le score de maturit\'e global
+	est calcul\'e de fa\c{c}on \textbf{arithm\'etique}~:
+	$\overline{t} = (t_{\text{ISO}} + t_{\text{RGPD}} + t_{\text{Loi}}) / 3$.
+	Aucun appel LLM.
 	
-	\item \textbf{Phase 2 — Parallélisation via \texttt{asyncio.gather}} :
+	\item \textbf{Phase 2 --- Parall\'elisation via \texttt{asyncio.gather}} :
 	\begin{itemize}
-		\item Prompt 7 → Mistral : génération des recommandations priorisées
-		(une par risque identifié)
-		\item Prompt 8 → Mistral : génération du résumé exécutif
-		(350-450 mots, structuré en 6 sections)
+		\item \textbf{Appel LLM 5} $\to$ Mistral : g\'en\'eration des recommandations prioris\'ees
+		(une par risque identifi\'e)
+		\item \textbf{Appel LLM 6} $\to$ Mistral : g\'en\'eration du r\'esum\'e ex\'ecutif
+		(350--450 mots, structur\'e en 6 sections)
 	\end{itemize}
 	
 	\item \textbf{Sauvegarde finale} — l'enregistrement \texttt{Analyse}
@@ -1187,7 +1589,7 @@ une session SQLAlchemy dédiée. Il suit le pipeline suivant :
 \subsubsection*{Phase de consultation}
 
 Le frontend React interroge \texttt{GET /api/analyses/\{id\}} toutes les
-4 secondes (polling) jusqu'à obtenir le statut \textit{terminé}.
+3~secondes (polling) jusqu'\`a obtenir le statut \textit{termin\'e}.
 À ce moment, trois requêtes parallèles (\texttt{Promise.all}) récupèrent
 les risques, les résultats de conformité et les recommandations, qui sont
 affichés dans les onglets correspondants de la page d'analyse.
@@ -1246,7 +1648,7 @@ activités parallèles, matérialisant l'utilisation de
 	score (\textit{score = probabilité × impact}) et classification
 	automatique de la sévérité selon les seuils définis.
 	\item \textbf{Vérification ISO 27001 (Mistral)} — évaluation des
-	14 domaines de l'Annexe A avec statut CONFORME/PARTIEL/NON\_CONFORME
+	14~domaines de la grille Annexe~A (nomenclature ISO~27001:2013, compatible 2022) avec statut CONFORME/PARTIEL/NON\_CONFORME
 	et taux par domaine.
 	\item \textbf{Vérification RGPD (Mistral)} — évaluation des 12 articles
 	RGPD pertinents.
@@ -1254,8 +1656,9 @@ activités parallèles, matérialisant l'utilisation de
 	11 domaines de la loi marocaine de protection des données.
 \end{itemize}
 
-Un nœud de jonction (\textit{join}) synchronise les cinq activités
-parallèles avant de passer à la consolidation.
+Un nœud de jonction (\textit{join}) synchronise les cinq activit'es
+parallèles (dont 4~appels LLM~; l'indexation ChromaDB est la seule t\^ache non-LLM)
+avant de passer à la consolidation.
 
 \subsubsection*{Bloc 3 — Consolidation et génération (Phase 2)}
 
@@ -1375,7 +1778,7 @@ d'ex\'ecution et les protocoles de communication entre eux.
 \begin{figure}[htbp]
   \centering
   \makebox[\textwidth][c]{%
-    \includegraphics[width=1\textwidth, keepaspectratio]{figures/deploi.png}%
+    \includegraphics[width=0.8\textwidth, keepaspectratio]{figures/deploi.png}%
   }
   \caption{Diagramme de d\'eploiement --- GRC AI Analyzer}
   \label{fig:deploiement}
@@ -1396,7 +1799,7 @@ Ce n\oe{}ud h\'eberge deux composants distincts~:
   \item \textbf{Frontend Server (:5173 dev / :80 prod)~:} sert le build statique
   Vite (\texttt{dist/}) en production.
   \item \textbf{Backend API Server --- Uvicorn (:8000)~:} ex\'ecute l'application
-  FastAPI (Python~3.12, SQLAlchemy Async, Pydantic~v2, slowapi).
+  FastAPI (Python~3.11, SQLAlchemy Async, Pydantic~v2, slowapi).
   Les analyses longues sont d\'el\'egu\'ees \`a \texttt{asyncio.BackgroundTask}
   pour ne pas bloquer la boucle d'\'ev\'enements.
   Le composant \textbf{Alembic Migrations SQL} est invoqu\'e au d\'emarrage
@@ -1482,7 +1885,7 @@ parall\`ele), \textbf{robustesse} (persistance multi-moteurs) et
 		\hline
 		Interface & Recharts & Matrice risques (ScatterChart) et radar conformit\'e \\
 		\hline
-		Backend & FastAPI 0.115 + Python 3.12 & ASGI async, doc OpenAPI auto, BackgroundTask \\
+		Backend & FastAPI 0.115 + Python 3.11 & ASGI async, doc OpenAPI auto, BackgroundTask \\
 		\hline
 		Backend & SQLAlchemy 2 + asyncpg & ORM async natif, z\'ero thread bloquant \\
 		\hline
@@ -1680,6 +2083,59 @@ La formule de s\'ev\'erit\'e est d\'eterministe~:
 \]
 
 % =============================================================================
+
+\subsection{Architecture des bases de donn\'ees}
+
+GRC AI Analyzer utilise trois moteurs de stockage compl\'ementaires,
+chacun optimis\'e pour un type de donn\'ees diff\'erent~:
+\textbf{PostgreSQL} pour les donn\'ees relationnelles structur\'ees,
+\textbf{MinIO} pour les fichiers binaires bruts,
+et \textbf{ChromaDB} pour les vecteurs s\'emantiques du moteur RAG.
+
+\subsubsection*{Sch\'ema PostgreSQL}
+
+PostgreSQL stocke les \textbf{six entit\'es m\'etier persist\'ees}. Les trois classes conceptuelles non persist\'ees (\texttt{MessageChat}, \texttt{ReferentielGRC}, \texttt{PisteAudit}) sont des abstractions UML sans table physique.
+Le diagramme ci-dessous montre le sch\'ema physique g\'en\'er\'e
+par Alembic~:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/Postgre.png}
+  \caption{Sch\'ema physique PostgreSQL --- tables et cl\'es \'etrang\`eres}
+  \label{fig:db-postgres}
+\end{figure}
+
+Les conventions de nommage sont~: cl\'es primaires \texttt{UUID~v4},
+cl\'es \'etrang\`eres avec \texttt{ON DELETE CASCADE},
+enums PostgreSQL natifs (\texttt{categorie\_risque\_enum},
+\texttt{severite\_enum}, \texttt{statut\_analyse\_enum}).
+
+\subsubsection*{Stockage objet MinIO}
+
+MinIO stocke les fichiers bruts uploadés dans le bucket \texttt{grc-reports}
+sous la structure \texttt{reports/\{uuid\}/\{nom\_sanitisé\}}~:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{figures/minio.png}
+  \caption{Console MinIO --- bucket \texttt{grc-reports} et structure des objets}
+  \label{fig:db-minio}
+\end{figure}
+
+\subsubsection*{Collections vectorielles ChromaDB}
+
+ChromaDB maintient une collection par analyse, nommée
+\texttt{analyse\_\{uuid\}} (tirets remplacés par underscores).
+Chaque collection contient les chunks avec leurs embeddings
+384-dimensionnels et leurs métadonnées~:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chromadb.png}
+  \caption{Collections ChromaDB --- une collection par analyse, index HNSW cosinus}
+  \label{fig:db-chroma}
+\end{figure}
+
 \section{Conception des routes API}
 % =============================================================================
 
@@ -1838,10 +2294,7 @@ explicitement le token.
 \section{Conception des prompts IA}
 % =============================================================================
 
-GRC AI Analyzer utilise quatre prompts distincts envoy\'es \`a
-Mistral~Large. Chaque prompt est compos\'e d'un \textit{system prompt}
-(r\^ole et r\`egles strictes) et d'un \textit{user prompt}
-(donn\'ees et format de sortie attendu).
+GRC AI Analyzer effectue \textbf{six appels LLM} \`a Mistral~Large, r\'epartis en \textbf{quatre prompts sp\'ecialis\'es}~: le prompt d'extraction des risques (1 appel), le prompt de conformit\'e instanci\'e trois fois~--- ISO~27001:2022, RGPD, Loi~09-08 (3~appels), le prompt de recommandations (1 appel) et le prompt de r\'esum\'e ex\'ecutif (1 appel). Chaque appel comprend un \textit{system prompt} (r\^ole et r\`egles) et un \textit{user prompt} (donn\'ees + format JSON attendu).
 
 \begin{figure}[H]
 	\centering
@@ -1867,7 +2320,7 @@ Mistral~Large. Chaque prompt est compos\'e d'un \textit{system prompt}
 		\draw[arr] (p1)--(o1); \draw[arr] (p2)--(o2);
 		\draw[arr] (p3)--(o3); \draw[arr] (p4)--(o4);
 	\end{tikzpicture}
-	\caption{Les quatre prompts Mistral et leurs sorties}
+	\caption{Les six appels LLM Mistral (quatre prompts) et leurs sorties}
 	\label{fig:prompts}
 \end{figure}
 
@@ -2188,7 +2641,7 @@ consomme leurs r\'esultats agr\'eg\'es.
 	\label{fig:pipeline}
 \end{figure}
 
-\subsection{Phase 1 --- cinq t\^aches simultan\'ees}
+\subsection{Phase~1 --- cinq t\^aches simultan\'ees (4~appels LLM + 1~indexation)}
 
 \begin{lstlisting}[language=Python,
 	caption={Phase 1 : indexation + extraction + 3 conformit\'es en parall\`ele (analysis\_service.py)}]
@@ -2483,251 +2936,397 @@ Le chapitre suivant pr\'esente les r\'esultats obtenus sur des
 rapports r\'eels.
 
 
-\chapter{Impl\'ementation et r\'esultats}
+\chapter{Implémentation et résultats}
 
-\section{Environnement de d\'eveloppement}
+\section{Environnement de développement}
 
 \subsection{Configuration de l'environnement}
 
-Le projet a \'et\'e d\'evelopp\'e et test\'e dans l'environnement suivant~:
+Le projet a été développé et testé dans l'environnement suivant~:
 
 \begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|l|X|}
-\hline
-\textbf{Composant} & \textbf{Version / D\'etail} \\
-\hline
-Syst\`eme d'exploitation & Windows 11 + WSL2 (Ubuntu 22.04) \\
-\hline
-Python & 3.11 \\
-\hline
-Node.js & 20 LTS \\
-\hline
-PostgreSQL & 15 (natif Windows, port 5433) \\
-\hline
-MinIO & RELEASE.2024-01 (binaire Windows) \\
-\hline
-ChromaDB & 0.4.x (pip, mode HTTP) \\
-\hline
-Mistral AI & mistral-large-latest (API cloud) \\
-\hline
-IDE & VS Code + extensions Python/Volar \\
-\hline
-\end{tabularx}
-\caption{Environnement de d\'eveloppement}
-\label{tab:env-dev}
+	\centering
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Composant} & \textbf{Version / Détail} \\
+		\hline
+		Système d'exploitation & Windows 11 + WSL2 (Ubuntu 22.04) \\
+		\hline
+		Python & 3.11 \\
+		\hline
+		Node.js & 20 LTS \\
+		\hline
+		PostgreSQL & 15 (natif Windows, port 5433) \\
+		\hline
+		MinIO & RELEASE.2024-01 (binaire Windows) \\
+		\hline
+		ChromaDB & 0.4.x (pip, mode HTTP) \\
+		\hline
+		Mistral AI & mistral-large-latest (API cloud) \\
+		\hline
+		IDE & VS Code + extensions Python/Volar \\
+		\hline
+	\end{tabularx}
+	\caption{Environnement de développement}
+	\label{tab:env-dev}
 \end{table}
 
 \subsection{Lancement du projet}
 
-Un script \texttt{start.bat} automatise le d\'emarrage de l'ensemble des services~:
+Un script \texttt{start.bat} automatise le démarrage de l'ensemble des services backend (MinIO, ChromaDB, migrations Alembic, FastAPI)~:
 
-\begin{lstlisting}[language=bash, caption={Script de d\'emarrage start.bat}]
-@echo off
-REM Lancement MinIO
-start "" "C:\minio\minio.exe" server C:\minio\data --address :9000 --console-address :9001
-
-REM Lancement ChromaDB
-start "" chroma run --path ./chroma_data --host 0.0.0.0 --port 8001
-
-REM Migrations Alembic
-cd backend
-call venv\Scripts\activate
-alembic upgrade head
-
-REM Demarrage backend FastAPI
-uvicorn main:app --reload --port 8000
+\begin{lstlisting}[language=bash, caption={Script de démarrage start.bat}]
+	@echo off
+	REM Lancement MinIO
+	start "" "C:\minio\minio.exe" server C:\minio\data --address :9000 --console-address :9001
+	
+	REM Lancement ChromaDB
+	start "" chroma run --path ./chroma_data --host 0.0.0.0 --port 8001
+	
+	REM Migrations Alembic
+	cd backend
+	call venv\Scripts\activate
+	alembic upgrade head
+	
+	REM Demarrage backend FastAPI
+	uvicorn main:app --reload --port 8000
 \end{lstlisting}
 
-\section{R\'esultats obtenus}
+L'exécution du script affiche un récapitulatif des services lancés avec leurs ports respectifs, comme illustré ci-dessous~:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{figures/startup_backend.png}
+	\caption{Sortie du script \texttt{start.bat} --- démarrage des services backend}
+	\label{fig:sc-startup-backend}
+\end{figure}
+
+Le script vérifie séquentiellement la disponibilité de MinIO (port 9000, console 9001), ChromaDB (port 8001), applique les migrations Alembic sur la base PostgreSQL, puis démarre l'API FastAPI sur le port 8000. Le frontend React est ensuite lancé séparément via Vite~:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{figures/startup_frontend.png}
+	\caption{D\'emarrage du serveur de d\'eveloppement Vite (frontend React/Vite)}
+	\label{fig:sc-startup-frontend}
+\end{figure}
+
+Vite expose l'interface utilisateur sur \url{http://localhost:5173} avec rechargement à chaud (HMR) activé pour faciliter le développement.
+
+\section{Résultats obtenus}
 \label{sec:screenshots}
 
-Les captures d'\'ecran suivantes illustrent les fonctionnalit\'es principales de la plateforme GRC AI Analyzer apr\`es d\'eploiement complet.
+Les captures d'écran suivantes illustrent les fonctionnalités principales de la plateforme GRC AI Analyzer après déploiement complet, depuis l'authentification jusqu'à la génération des résultats d'analyse.
 
 \subsection{Authentification et tableau de bord}
 
 \subsubsection{Page de connexion}
 
+L'accès à la plateforme est protégé par une authentification JWT. La page de connexion présente le branding de l'application et un formulaire de saisie des identifiants professionnels.
+
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Page de connexion JWT]}\\[0.3cm]
-\small Formulaire email / mot de passe, logo GRC AI Analyzer,\\
-redirection automatique vers le dashboard apr\`es authentification.
-}}
-\caption{Page de connexion de GRC AI Analyzer}
-\label{fig:sc-login}
+	\centering
+	\includegraphics[width=\textwidth]{figures/0.png}
+	\caption{Page de connexion de GRC AI Analyzer}
+	\label{fig:sc-login}
 \end{figure}
+
+Après validation, le backend émet un token JWT signé (HS256) qui est stocké côté client et joint à chaque requête API via l'en-tête \texttt{Authorization: Bearer}.
 
 \subsubsection{Tableau de bord principal}
 
+Une fois authentifié, l'utilisateur est redirigé vers le tableau de bord qui agrège les indicateurs clés de l'ensemble de ses rapports~: nombre total de documents, analyses terminées, analyses en cours et risques critiques nécessitant une action immédiate.
+
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Dashboard principal]}\\[0.3cm]
-\small Vue synth\'etique~: liste des rapports upload\'es, statuts d'analyse\\
-(\texttt{en\_cours} / \texttt{termine} / \texttt{erreur}), bouton d'import.
-}}
-\caption{Tableau de bord principal}
-\label{fig:sc-dashboard}
+	\centering
+	\includegraphics[width=\textwidth]{figures/1.png}
+	\caption{Tableau de bord principal avec indicateurs de conformité globale}
+	\label{fig:sc-dashboard}
 \end{figure}
 
-\subsection{Analyse d'un rapport GRC}
+La section \textit{Moyenne de Conformité Globale} affiche trois jauges semi-circulaires synthétisant le taux moyen de conformité aux trois référentiels supportés (ISO 27001, RGPD, Loi marocaine 09-08), calculé en agrégeant les résultats de toutes les analyses de l'utilisateur.
 
-\subsubsection{T\'el\'echargement d'un document}
+\subsection{Gestion et analyse des rapports GRC}
+
+\subsubsection{Liste des rapports et téléchargement d'un document}
+
+La section \textit{Rapports} centralise la gestion documentaire~: zone d'upload pour les nouveaux fichiers (PDF, DOCX, XLSX) et liste des documents déjà importés avec leur statut d'analyse.
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Upload d'un rapport PDF/DOCX]}\\[0.3cm]
-\small Zone de drag-and-drop, s\'election du fichier (PDF, DOCX, XLSX),\\
-validation magic bytes c\^ot\'e serveur avant stockage MinIO.
-}}
-\caption{Interface de t\'el\'echargement d'un rapport}
-\label{fig:sc-upload}
+	\centering
+	\includegraphics[width=\textwidth]{figures/2.png}
+	\caption{Interface de gestion des rapports avec liste des documents}
+	\label{fig:sc-rapports}
 \end{figure}
 
-\subsubsection{R\'esultats de l'analyse des risques}
+Le composant d'upload valide le type MIME et les \textit{magic bytes} côté serveur avant de stocker le fichier dans le bucket MinIO. Chaque entrée affiche le format, la date d'import, le statut (\texttt{EN ATTENTE}, \texttt{EN COURS}, \texttt{TERMINE}) et propose les actions appropriées (analyser, voir l'analyse, supprimer).
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][9cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Matrice des risques Recharts]}\\[0.3cm]
-\small Matrice probabilit\'e $\times$ impact (1--5), bulles color\'ees\\
-par niveau (FAIBLE / MOYEN / \'ELEV\'E / CRITIQUE),\\
-liste d\'etaill\'ee des risques identifi\'es par Mistral.
-}}
-\caption{Matrice des risques extraits par l'IA}
-\label{fig:sc-risks}
+	\centering
+	\includegraphics[width=\textwidth]{figures/3.png}
+	\caption{Nouveau rapport \texttt{Vul scan.pdf} importé en attente d'analyse}
+	\label{fig:sc-upload}
 \end{figure}
 
-\subsubsection{Tableau de conformit\'e}
+\subsubsection{Phase d'analyse asynchrone}
+
+Le déclenchement d'une analyse via le bouton \textit{Analyser} lance le pipeline asynchrone en deux phases (extraction des risques puis évaluation de conformité). Pendant le traitement, l'interface affiche un écran de chargement informatif.
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Radar de conformit\'e Recharts]}\\[0.3cm]
-\small Graphique radar affichant le taux de conformit\'e (0--100\%)\\
-pour ISO 27001, RGPD et Loi marocaine 09-08,\\
-avec d\'etail des contr\^oles conformes / non-conformes.
-}}
-\caption{Radar de conformit\'e multi-r\'ef\'erentiel}
-\label{fig:sc-compliance}
+	\centering
+	\includegraphics[width=\textwidth]{figures/4.png}
+	\caption{Écran d'attente pendant l'analyse IA par Mistral}
+	\label{fig:sc-loading}
 \end{figure}
 
-\subsection{Chat RAG et export}
-
-\subsubsection{Interface de chat contextuel}
+En arrière-plan, le backend FastAPI orchestre l'extraction du texte, le chunking, l'indexation vectorielle dans ChromaDB et les appels à l'API Mistral. Les logs serveur permettent de tracer chaque étape du traitement~:
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Interface de chat RAG]}\\[0.3cm]
-\small Zone de question en langage naturel, r\'eponses contextualis\'ees\\
-bas\'ees sur les chunks ChromaDB du rapport analys\'e,\\
-historique de la conversation.
-}}
-\caption{Chat RAG contextuel sur le rapport analys\'e}
-\label{fig:sc-chat}
+	\centering
+	\includegraphics[width=\textwidth]{figures/backend_logs_indexing.png}
+	\caption{Logs backend --- indexation ChromaDB (34 chunks) et persistance des 18 risques}
+	\label{fig:sc-logs-indexing}
 \end{figure}
 
-\subsubsection{Export PDF et Excel}
+Ces logs montrent les op\'erations critiques du pipeline~: indexation de 34~chunks dans ChromaDB, sauvegarde de 18~risques extraits, puis insertion des r\'esultats de conformit\'e dans PostgreSQL via SQLAlchemy. \textit{Note~: le score de maturit\'e affich\'e sur le \textbf{dashboard} est un agr\'egat sur l'ensemble des analyses de l'utilisateur~; le score d'une \textbf{analyse individuelle} correspond \`a la moyenne des taux de conformit\'e des trois r\'ef\'erentiels pour ce seul rapport.}
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Boutons d'export et rapport PDF g\'en\'er\'e]}\\[0.3cm]
-\small Export PDF complet (r\'esum\'e ex\'ecutif, risques, conformit\'e,\\
-recommandations) et export Excel pour audit trail.
-}}
-\caption{Export des r\'esultats en PDF et Excel}
-\label{fig:sc-export}
+	\centering
+	\includegraphics[width=\textwidth]{figures/backend_logs_api.png}
+	\caption{Logs des requêtes API SQLAlchemy lors de la consultation d'une analyse}
+	\label{fig:sc-logs-api}
 \end{figure}
 
-\subsubsection{Interface d'administration}
+\subsection{Résultats de l'analyse}
+
+Une fois l'analyse terminée, l'utilisateur accède à une vue détaillée organisée en cinq onglets~: Résumé Exécutif, Cartographie des Risques, Conformités, Plan d'Action et Assistant RAG.
+
+\subsubsection{Résumé exécutif}
+
+L'onglet \textit{R\'esum\'e Ex\'ecutif} pr\'esente une synth\`ese r\'edig\'ee par Mistral incluant le contexte du document, les principales conclusions et le score de maturit\'e global. Ce score est calcul\'e comme la \textbf{moyenne arithm\'etique} des trois taux de conformit\'e~: $\overline{t} = (t_{\text{ISO}} + t_{\text{RGPD}} + t_{\text{Loi}}) / 3$. Les valeurs affich\'ees dans les captures correspondent \`a l'analyse d'un rapport de scan de vuln\'erabilit\'es sp\'ecifique~; elles varient d'un rapport \`a l'autre selon la maturit\'e de l'organisation audit\'ee.
 
 \begin{figure}[H]
-\centering
-\fbox{\parbox[c][7cm][c]{0.85\textwidth}{\centering
-\textit{[Capture d'\'ecran --- Panneau d'administration]}\\[0.3cm]
-\small Gestion des utilisateurs, liste des rapports tous utilisateurs,\\
-statistiques globales de la plateforme (route \texttt{require\_admin}).
-}}
-\caption{Panneau d'administration}
-\label{fig:sc-admin}
+	\centering
+	\includegraphics[width=\textwidth]{figures/5.png}
+	\caption{Résumé exécutif généré par l'IA}
+	\label{fig:sc-resume}
+\end{figure}
+
+\subsubsection{Cartographie des risques}
+
+L'onglet \textit{Cartographie des Risques} affiche une matrice probabilité $\times$ impact (échelle 1--5) où chaque bulle représente un risque identifié, coloré selon son niveau de sévérité.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/6.png}
+	\caption{Matrice des risques --- visualisation Recharts probabilité/impact}
+	\label{fig:sc-risks-matrix}
+\end{figure}
+
+Sous la matrice, une liste détaillée énumère chaque risque avec sa description complète, sa catégorie, son score (P$\times$I) et son niveau de sévérité.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/7.png}
+	\caption{Liste détaillée des risques cyber extraits par Mistral}
+	\label{fig:sc-risks-list}
+\end{figure}
+
+Dans cet exemple, l'analyse d'un rapport de scan de vulnérabilités a identifié 18 risques (absence de tokens Anti-CSRF, défauts de configuration CSP, en-têtes de sécurité manquants, etc.), tous référencés par leur CWE associé.
+
+\subsubsection{Évaluation de conformité multi-référentiel}
+
+L'onglet \textit{Conformités} présente trois colonnes parallèles (ISO 27001, RGPD, Loi 09-08) avec leur taux de conformité respectif et le détail des contrôles évalués.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/8.png}
+	\caption{Évaluation de conformité ISO 27001 / RGPD / Loi 09-08}
+	\label{fig:sc-compliance}
+\end{figure}
+
+Chaque contrôle est étiqueté \textit{Conforme}, \textit{Partiel} ou \textit{Non Conforme}, accompagné d'une justification textuelle générée par l'IA expliquant l'écart constaté.
+
+\subsubsection{Plan d'action priorisé}
+
+L'onglet \textit{Plan d'Action} liste les recommandations de remédiation générées par Mistral, chacune annotée d'une priorité, d'un indicateur \textit{Quick Win} et d'un niveau d'effort estimé.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/9.png}
+	\caption{Plan d'action priorisé avec recommandations de remédiation}
+	\label{fig:sc-plan}
+\end{figure}
+
+Chaque action inclut des références normatives (OWASP, NIST SP 800-53, CWE) et un statut modifiable par l'utilisateur (\textit{À faire}, \textit{En cours}, \textit{Terminé}) pour assurer le suivi opérationnel.
+
+\subsubsection{Assistant RAG contextuel}
+
+L'onglet \textit{Assistant RAG} offre une interface conversationnelle permettant d'interroger le rapport en langage naturel. Les réponses sont contextualisées via les chunks récupérés depuis ChromaDB.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/10.png}
+	\caption{Chat RAG contextuel --- exemple de question sur le risque le plus critique}
+	\label{fig:sc-rag}
+\end{figure}
+
+L'assistant cite explicitement ses sources (\texttt{[Extrait 1]}, \texttt{[Page 4]}) garantissant la traçabilité et évitant les hallucinations~: les réponses sont strictement ancrées dans le contenu du document analysé.
+
+\subsubsection{Export PDF}
+
+La plateforme g\'en\`ere un rapport PDF complet accessible via
+\texttt{GET /api/v1/export/\{id\}/pdf}. Le document produit comprend
+une page de couverture, le r\'esum\'e ex\'ecutif, la liste des risques,
+les tableaux de conformit\'e et les recommandations prioris\'ees.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/pdf.png}
+  \caption{Page de couverture du rapport PDF export\'e}
+  \label{fig:sc-export-pdf-cover}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/pdf2.png}
+  \caption{Page de contenu du rapport PDF --- tableau des risques}
+  \label{fig:sc-export-pdf-content}
+\end{figure}
+
+\subsubsection{Export Excel (audit trail)}
+
+L'export Excel (\texttt{GET /api/v1/export/\{id\}/excel}) g\'en\`ere
+un classeur \texttt{.xlsx} multi-feuilles destin\'e \`a l'audit trail~:
+une feuille par type de r\'esultat (Risques, Conformit\'e ISO 27001,
+Conformit\'e RGPD, Conformit\'e Loi 09-08, Recommandations).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/excel.png}
+  \caption{Export Excel --- classeur multi-feuilles pour l'audit trail}
+  \label{fig:sc-export-excel}
+\end{figure}
+
+\subsection{Documentation API Swagger}
+
+FastAPI g\'en\`ere automatiquement une documentation interactive
+OpenAPI accessible \`a \texttt{http://localhost:8000/docs}.
+Cette interface Swagger UI permet de tester chaque endpoint
+directement depuis le navigateur avec authentification JWT int\'egr\'ee.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/docs.png}
+  \caption{Documentation interactive Swagger UI (\texttt{/docs})}
+  \label{fig:sc-swagger}
+\end{figure}
+
+La documentation Swagger constitue le contrat d'interface entre
+le frontend et le backend~: chaque param\`etre, sch\'ema Pydantic
+et code de retour est document\'e automatiquement \`a partir
+des annotations Python, garantissant la coh\'erence permanente
+entre le code et la documentation.
+
+\subsection{Panneau d'administration}
+
+La route \texttt{GET /api/v1/admin/users} est prot\'eg\'ee par
+la d\'ependance \texttt{require\_admin} qui v\'erifie le r\^ole
+\texttt{admin} dans le token JWT. L'interface d'administration
+permet \`a un super-utilisateur de visualiser tous les comptes
+et rapports de la plateforme.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/admin1.png}
+  \caption{Panneau d'administration --- gestion des utilisateurs (route \texttt{require\_admin})}
+  \label{fig:sc-admin1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/admin2.png}
+	\caption{Panneau d'administration --- gestion des r\'ef\'erentiel (route \texttt{require\_admin})}
+	\label{fig:sc-admin2}
 \end{figure}
 
 \section{Bilan technique}
 
-\subsection{M\'etriques de performance}
+\subsection{Métriques de performance}
 
-Les tests effectu\'es sur des rapports r\'eels de 10 \`a 80 pages donnent les r\'esultats suivants~:
+Les tests effectués sur des rapports réels de 10 à 80 pages donnent les résultats suivants~:
 
 \begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|l|X|X|}
-\hline
-\textbf{M\'etrique} & \textbf{Valeur observ\'ee} & \textbf{Commentaire} \\
-\hline
-Dur\'ee analyse compl\`ete & 45--120 s & D\'epend du volume et de la charge Mistral \\
-\hline
-Risques extraits (moy.) & 8--15 risques & Pr\'ecision estim\'ee \`a 85\% vs revue manuelle \\
-\hline
-Taux conformit\'e ISO & 40--75\% & Selon maturit\'e de l'organisation \\
-\hline
-Latence chat RAG & $<$ 3 s & Top-5 chunks, temp\'erature 0.3 \\
-\hline
-Taille collection ChromaDB & 80--400 chunks & Chunks 1500 caract\`eres, overlap 200 \\
-\hline
-\end{tabularx}
-\caption{M\'etriques de performance observ\'ees}
-\label{tab:perf}
+	\centering
+	\begin{tabularx}{\textwidth}{|l|X|X|}
+		\hline
+		\textbf{Métrique} & \textbf{Valeur observée} & \textbf{Commentaire} \\
+		\hline
+		Durée analyse complète & 45--120 s & Dépend du volume et de la charge Mistral \\
+		\hline
+		Risques extraits (moy.) & 8--18 risques & Pr\'ecision indicative \textasciitilde85\% estim\'ee par comparaison qualitative sur 5 rapports tests~; aucun protocole formel d'\'evaluation (voir limites \S\ref{sec:synthese}) \\
+		\hline
+		Taux conformité ISO & 15--75\% & Selon maturité de l'organisation \\
+		\hline
+		Latence chat RAG & $<$ 3 s & Top-5 chunks, température 0.3 \\
+		\hline
+		Taille collection ChromaDB & 34--400 chunks & Chunks 1500 caractères, overlap 200 \\
+		\hline
+	\end{tabularx}
+	\caption{Métriques de performance observées}
+	\label{tab:perf}
 \end{table}
 
 \subsection{Couverture fonctionnelle}
 
 \begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|X|c|c|}
-\hline
-\textbf{Fonctionnalit\'e} & \textbf{Impl\'ement\'ee} & \textbf{Test\'ee} \\
-\hline
-Upload PDF / DOCX / XLSX & \ding{51} & \ding{51} \\
-\hline
-Extraction de risques (Mistral) & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e ISO 27001 & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e RGPD & \ding{51} & \ding{51} \\
-\hline
-Conformit\'e Loi 09-08 & \ding{51} & \ding{51} \\
-\hline
-Recommandations IA & \ding{51} & \ding{51} \\
-\hline
-R\'esum\'e ex\'ecutif & \ding{51} & \ding{51} \\
-\hline
-Chat RAG contextuel & \ding{51} & \ding{51} \\
-\hline
-Export PDF & \ding{51} & \ding{51} \\
-\hline
-Export Excel & \ding{51} & \ding{51} \\
-\hline
-Authentification JWT & \ding{51} & \ding{51} \\
-\hline
-Gestion multi-utilisateurs & \ding{51} & \ding{51} \\
-\hline
-Interface d'administration & \ding{51} & \ding{51} \\
-\hline
-\end{tabularx}
-\caption{Couverture fonctionnelle de GRC AI Analyzer}
-\label{tab:coverage}
+	\centering
+	\begin{tabularx}{\textwidth}{|X|c|c|}
+		\hline
+		\textbf{Fonctionnalité} & \textbf{Implémentée} & \textbf{Testée} \\
+		\hline
+		Upload PDF / DOCX / XLSX & \ding{51} & \ding{51} \\
+		\hline
+		Extraction de risques (Mistral) & \ding{51} & \ding{51} \\
+		\hline
+		Conformité ISO 27001 & \ding{51} & \ding{51} \\
+		\hline
+		Conformité RGPD & \ding{51} & \ding{51} \\
+		\hline
+		Conformité Loi 09-08 & \ding{51} & \ding{51} \\
+		\hline
+		Recommandations IA & \ding{51} & \ding{51} \\
+		\hline
+		Résumé exécutif & \ding{51} & \ding{51} \\
+		\hline
+		Chat RAG contextuel & \ding{51} & \ding{51} \\
+		\hline
+		Export PDF & \ding{51} & \ding{51} \\
+		\hline
+		Export Excel & \ding{51} & \ding{51} \\
+		\hline
+		Authentification JWT & \ding{51} & \ding{51} \\
+		\hline
+		Gestion multi-utilisateurs & \ding{51} & \ding{51} \\
+		\hline
+	\end{tabularx}
+	\caption{Couverture fonctionnelle de GRC AI Analyzer}
+	\label{tab:coverage}
 \end{table}
 
-\section{Synth\`ese}
+\section{Synth\`ese et limites}
+\label{sec:synthese}
 
-GRC AI Analyzer r\'epond \`a l'ensemble des besoins fonctionnels identifi\'es en chapitre 3. L'architecture asynchrone en deux phases garantit une analyse compl\`ete en moins de deux minutes pour la majorit\'e des rapports. Le pipeline RAG offre une interface conversationnelle directement ancr\'ee dans le document analys\'e, ce qui constitue un apport significatif par rapport aux solutions GRC traditionnelles qui se limitent \`a des tableaux statiques.
+GRC AI Analyzer r\'epond \`a l'ensemble des besoins fonctionnels identifi\'es en chapitre~3. L'architecture asynchrone en deux phases garantit une analyse compl\`ete en moins de deux minutes pour la majorit\'e des rapports. Le pipeline RAG offre une interface conversationnelle directement ancr\'ee dans le document analys\'e, ce qui constitue un apport significatif par rapport aux solutions GRC traditionnelles.
 
-Les principaux points d'am\'elioration identifi\'es pour une version de production sont~: l'ajout d'un queue distribu\'e (Celery + Redis) pour absorber les pics de charge, le passage \`a un mod\`ele Mistral fine-tun\'e sur des politiques GRC, et l'int\'egration de r\'ef\'erentiels suppl\'ementaires (SOC 2, PCI-DSS).
+\paragraph{Limites m\'ethodologiques.}
+Trois limites m\'eritent d'\^etre explicit\'ees pour une lecture rigoureuse des r\'esultats~:
+\begin{enumerate}[leftmargin=1.5em,itemsep=4pt]
+  \item \textbf{M\'etrique de pr\'ecision.} La pr\'ecision indicative de \textasciitilde85\% a \'et\'e estim\'ee par comparaison qualitative sur 5~rapports de test. Aucun protocole formel (gold standard, calcul recall/pr\'ecision, double revue ind\'ependante) n'a \'et\'e appliqu\'e. Ce chiffre est \`a consid\'erer comme un ordre de grandeur et non comme une m\'etrique valid\'ee.
+  \item \textbf{Chunking fixe.} Le d\'ecoupage \`a 1\,500~caract\`eres peut couper une phrase au milieu, d\'egradant la qualit\'e de l'embedding et du retrieval. Un chunking s\'emantique (d\'ecoupage aux fronti\`eres de paragraphes) am\'eliorerait la coh\'erence des chunks.
+  \item \textbf{Hallucinations LLM sur la conformit\'e.} M\^eme avec des prompts strictement cadr\'es, Mistral peut d\'eduire une non-conformit\'e ISO~27001:2022 \`a partir d'indices implicites~--- et se tromper. L'\'evaluation de conformit\'e pr\'esente dans l'interface est une aide \`a la d\'ecision, non un audit certifiant.
+\end{enumerate}
+
+Les principaux points d'am\'elioration identifi\'es pour une version de production sont~: l'ajout d'un queue distribu\'e (Celery + Redis) pour absorber les pics de charge, le passage \`a un mod\`ele Mistral fine-tun\'e sur des politiques GRC, et l'int\'egration de r\'ef\'erentiels suppl\'ementaires (SOC~2, PCI-DSS).
 
 %%===========================================================
 %% CONCLUSION GENERALE
@@ -2739,7 +3338,7 @@ Les principaux points d'am\'elioration identifi\'es pour une version de producti
 Ce projet de fin d'\'etudes a permis de concevoir, impl\'ementer et valider une plateforme compl\`ete d'analyse GRC assist\'ee par intelligence artificielle. GRC AI Analyzer automatise un processus traditionnellement long et co\^uteux~: l'analyse de conformit\'e et d'identification des risques dans les documents de gouvernance.
 
 \paragraph{Contributions techniques.}
-Sur le plan technique, le projet illustre la mise en \oe{}uvre d'un pipeline asynchrone \textit{full-stack}~: extraction documentaire multi-format (PDF/DOCX/XLSX), appels parall\`eles \`a un LLM de derni\`ere g\'en\'eration (Mistral Large), stockage vectoriel (ChromaDB) pour le RAG, et exposition via une API REST FastAPI consomm\'ee par un frontend React 19. La gestion des contraintes de production~--- limitation de d\'ebit API, validation des fichiers, authentification JWT, export multi-format~--- a fait l'objet d'une attention particuli\`ere.
+Sur le plan technique, le projet illustre la mise en \oe{}uvre d'un pipeline asynchrone \textit{full-stack}~: extraction documentaire multi-format (PDF/DOCX/XLSX), appels parall\`eles \`a un LLM de derni\`ere g\'en\'eration (Mistral Large), stockage vectoriel (ChromaDB) pour le RAG, et exposition via une API REST FastAPI consomm\'ee par un frontend React~18. La gestion des contraintes de production~--- limitation de d\'ebit API, validation des fichiers, authentification JWT, export multi-format~--- a fait l'objet d'une attention particuli\`ere.
 
 \paragraph{Contributions m\'ethodologiques.}
 Sur le plan m\'ethodologique, le projet d\'emontre qu'un LLM g\'en\'eraliste, correctement prompt\'e et encadr\'e par un pipeline structur\'e, peut produire des analyses GRC exploitables sans fine-tuning sp\'ecifique. Le choix de s\'erialiser les appels Mistral via un s\'emaphore \texttt{asyncio} plut\^ot que de d\'eployer une queue distribu\'ee repr\'esente un compromis pertinent pour un prototype \`a usage acad\'emique.
@@ -2780,7 +3379,7 @@ Chroma, \textit{ChromaDB~: The AI-native open-source embedding database}, 2023.
 \url{https://www.trychroma.com}
 
 \bibitem{react19}
-Meta, \textit{React 19 Release Candidate --- What's New}, 2024.
+Meta, \textit{React 18 --- Release Notes}, 2022. \url{https://react.dev/blog/2022/03/29/react-v18}
 \url{https://react.dev}
 
 \bibitem{sentence_transformers}
@@ -2801,4 +3400,3 @@ P. Henschel, D. Maskasky, \textit{Zustand~: Bear necessities for state managemen
 \end{thebibliography}
 
 \end{document}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

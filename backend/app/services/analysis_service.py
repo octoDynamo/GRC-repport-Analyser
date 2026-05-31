@@ -86,6 +86,27 @@ async def run_analysis(
     analyse = result.scalar_one()
 
     try:
+        await asyncio.wait_for(_run_analysis_pipeline(db, rapport, analyse, analyse_id, user), timeout=600)
+    except asyncio.TimeoutError:
+        logger.error(f"Analysis {analyse_id} timed out after 10 minutes")
+        analyse.statut = "erreur"
+        rapport.statut = "erreur"
+        await db.flush()
+    except Exception as exc:
+        logger.error(f"Analysis {analyse_id} failed: {exc}")
+        analyse.statut = "erreur"
+        rapport.statut = "erreur"
+        await db.flush()
+
+
+async def _run_analysis_pipeline(
+    db: AsyncSession,
+    rapport: Rapport,
+    analyse: Analyse,
+    analyse_id: uuid.UUID,
+    user: Utilisateur,
+) -> None:
+    try:
         # Step 1: Download document from MinIO and extract text
         file_bytes = await get_report_bytes(rapport.chemin)
         text = await asyncio.to_thread(extract_text, file_bytes, rapport.format)
@@ -94,9 +115,8 @@ async def run_analysis(
         # Phase 1: Parallelize ChromaDB index, Risk extraction, and all Compliance checks
         chunks = await asyncio.to_thread(chunk_text, text)
 
-        # Use as much text as possible — risk extraction needs the full document
-        risk_text = _full_or_sampled(text, max_chars=30000)
-        comp_text = _full_or_sampled(text, max_chars=20000)
+        risk_text = _full_or_sampled(text, max_chars=20000)
+        comp_text = _full_or_sampled(text, max_chars=15000)
 
         task_chroma = index_document_chunks(str(analyse_id), chunks)
 
@@ -289,11 +309,11 @@ async def run_analysis(
         logger.info(f"Analysis {analyse_id} completed successfully")
 
     except Exception as exc:
-        logger.error(f"Analysis {analyse_id} failed: {exc}")
+        logger.error(f"Analysis pipeline error: {exc}")
         analyse.statut = "erreur"
         rapport.statut = "erreur"
         await db.flush()
-        # Do not raise here; allow the transaction to commit the 'erreur' status
+        raise  # re-raise so the outer wait_for can catch it
 
 
 async def get_analyse(db: AsyncSession, analyse_id: uuid.UUID) -> Analyse | None:

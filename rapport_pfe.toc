@@ -3,7 +3,7 @@
 \contentsline {chapter}{Remerciements}{II}{chapter*.2}%
 \contentsline {chapter}{R\'esum\'e}{III}{chapter*.3}%
 \contentsline {chapter}{Abstract}{IV}{chapter*.4}%
-\contentsline {chapter}{Liste des acronymes}{XI}{chapter*.8}%
+\contentsline {chapter}{Liste des acronymes}{XII}{chapter*.8}%
 \contentsline {chapter}{\numberline {1}Contexte du projet}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Pr\'esentation de l'organisme d'accueil}{1}{section.1.2}%
@@ -15,103 +15,113 @@
 \contentsline {subsection}{\numberline {1.3.1}Les trois piliers de la GRC}{3}{subsection.1.3.1}%
 \contentsline {subsection}{\numberline {1.3.2}Cadres r\'eglementaires et normatifs retenus}{4}{subsection.1.3.2}%
 \contentsline {subsection}{\numberline {1.3.3}Enjeux de l'analyse documentaire GRC}{5}{subsection.1.3.3}%
-\contentsline {section}{\numberline {1.4}\'Etude de l'existant}{5}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Probl\'ematique du projet}{6}{section.1.5}%
-\contentsline {section}{\numberline {1.6}Solution envisag\'ee}{6}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Objectifs du projet}{7}{section.1.7}%
-\contentsline {section}{\numberline {1.8}Conduite du projet}{8}{section.1.8}%
-\contentsline {section}{\numberline {1.9}Synth\`ese du chapitre}{8}{section.1.9}%
-\contentsline {chapter}{\numberline {2}\'Etat de l'art et \'etude de l'existant}{9}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Introduction}{9}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Pratiques actuelles d'analyse des rapports GRC}{9}{section.2.2}%
+\contentsline {section}{\numberline {1.4}Probl\'ematique du projet}{5}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Solution envisag\'ee}{6}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Objectifs du projet}{6}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Conduite du projet}{7}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Synth\`ese du chapitre}{7}{section.1.8}%
+\contentsline {chapter}{\numberline {2}\'Etat de l'art et \'etude de l'existant}{8}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Contexte~: la conformit\'e GRC, un enjeu croissant}{8}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Pratiques actuelles d'analyse des rapports GRC}{8}{section.2.2}%
 \contentsline {section}{\numberline {2.3}Solutions du march\'e et leurs limites}{9}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Leaders du march\'e GRC}{10}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.1}Plateformes GRC commerciales (leaders du march\'e)}{9}{subsection.2.3.1}%
 \contentsline {subsection}{\numberline {2.3.2}Solutions open-source}{10}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Outils bas\'es sur les LLM}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.3}Usages ad hoc des LLM (ChatGPT, Copilot)}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Tableau comparatif}{11}{subsection.2.3.4}%
 \contentsline {section}{\numberline {2.4}Fondements technologiques retenus}{11}{section.2.4}%
 \contentsline {subsection}{\numberline {2.4.1}Les grands mod\`eles de langage (LLM)}{11}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Le Retrieval Augmented Generation (RAG)}{11}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Les bases vectorielles}{12}{subsection.2.4.3}%
-\contentsline {section}{\numberline {2.5}Synth\`ese et positionnement}{12}{section.2.5}%
-\contentsline {chapter}{\numberline {3}Analyse des besoins et conception}{13}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Introduction}{13}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Analyse des besoins}{13}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Identification des acteurs}{13}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Besoins fonctionnels}{13}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Besoins non fonctionnels}{16}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Diagramme des Cas d'Utilisation}{17}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Description générale}{17}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Description des cas d'utilisation principaux}{19}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}Diagramme de Classes}{20}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Vue d'ensemble}{20}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Description des classes principales}{21}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Diagramme de Séquence}{23}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Séquence principale : Analyse d'un rapport GRC}{23}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Description détaillée des interactions}{24}{subsection.3.5.2}%
-\contentsline {section}{\numberline {3.6}Diagramme d'Activité}{26}{section.3.6}%
-\contentsline {subsection}{\numberline {3.6.1}Vue d'ensemble du flux de traitement}{26}{subsection.3.6.1}%
-\contentsline {subsection}{\numberline {3.6.2}Description des activités}{27}{subsection.3.6.2}%
-\contentsline {section}{\numberline {3.7}Architecture globale de la solution}{28}{section.3.7}%
-\contentsline {subsection}{\numberline {3.7.1}Vue d'ensemble en couches}{28}{subsection.3.7.1}%
-\contentsline {paragraph}{Zone Frontend --- React~18 / Vite (:5173).}{29}{paragraph*.9}%
-\contentsline {paragraph}{Zone Backend API --- FastAPI (:8000).}{29}{paragraph*.10}%
-\contentsline {paragraph}{Zone Moteur IA / RAG.}{29}{paragraph*.11}%
-\contentsline {paragraph}{Zone Infrastructure.}{30}{paragraph*.12}%
-\contentsline {subsection}{\numberline {3.7.2}Diagramme de d\'eploiement}{30}{subsection.3.7.2}%
-\contentsline {paragraph}{Poste utilisateur --- Navigateur Web.}{31}{paragraph*.13}%
-\contentsline {paragraph}{Serveur d'Application (Windows / Linux).}{31}{paragraph*.14}%
-\contentsline {paragraph}{MinIO Server (:9000 / :9001).}{31}{paragraph*.15}%
-\contentsline {paragraph}{PostgreSQL Server (:5433).}{31}{paragraph*.16}%
-\contentsline {paragraph}{ChromaDB Server (:8001).}{31}{paragraph*.17}%
-\contentsline {paragraph}{Mistral AI Cloud (\texttt {api.mistral.ai}) --- acteur externe.}{31}{paragraph*.18}%
-\contentsline {paragraph}{Protocoles de communication.}{32}{paragraph*.19}%
-\contentsline {section}{\numberline {3.8}Synth\`ese du chapitre}{32}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Conception technique et choix technologiques}{33}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Pile technologique retenue}{33}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Architecture en couches du backend}{34}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Conception du mod\`ele de donn\'ees}{35}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Conception des routes API}{37}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Lancement d'une analyse (HTTP 202 + BackgroundTask)}{38}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Polling du statut d'analyse (frontend)}{39}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}Interface de chat RAG}{39}{subsection.4.4.3}%
-\contentsline {section}{\numberline {4.5}Conception des prompts IA}{40}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Prompt d'extraction des risques}{40}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Prompts de v\'erification de conformit\'e}{42}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Prompt de g\'en\'eration des recommandations}{43}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Prompt du r\'esum\'e ex\'ecutif}{45}{subsection.4.5.4}%
-\contentsline {section}{\numberline {4.6}Pipeline d'analyse IA asynchrone}{46}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Phase 1 --- cinq t\^aches simultan\'ees}{46}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Phase 2 --- recommandations et r\'esum\'e}{47}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}S\'erialisation anti-429 des appels Mistral}{48}{subsection.4.6.3}%
-\contentsline {section}{\numberline {4.7}Parseur de documents et pipeline RAG}{49}{section.4.7}%
-\contentsline {subsection}{\numberline {4.7.1}Extraction de texte multi-format}{49}{subsection.4.7.1}%
-\contentsline {subsection}{\numberline {4.7.2}Indexation et recherche vectorielle ChromaDB}{50}{subsection.4.7.2}%
-\contentsline {section}{\numberline {4.8}S\'ecurit\'e applicative}{51}{section.4.8}%
-\contentsline {subsection}{\numberline {4.8.1}Authentification JWT et hachage bcrypt}{51}{subsection.4.8.1}%
-\contentsline {subsection}{\numberline {4.8.2}Validation des fichiers (magic bytes)}{51}{subsection.4.8.2}%
-\contentsline {subsection}{\numberline {4.8.3}Rate limiting par adresse IP}{52}{subsection.4.8.3}%
-\contentsline {section}{\numberline {4.9}Synth\`ese du chapitre}{52}{section.4.9}%
-\contentsline {chapter}{\numberline {5}Impl\'ementation et r\'esultats}{53}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Environnement de d\'eveloppement}{53}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Configuration de l'environnement}{53}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Lancement du projet}{53}{subsection.5.1.2}%
-\contentsline {section}{\numberline {5.2}R\'esultats obtenus}{54}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Authentification et tableau de bord}{54}{subsection.5.2.1}%
-\contentsline {subsubsection}{Page de connexion}{54}{subsubsection*.20}%
-\contentsline {subsubsection}{Tableau de bord principal}{55}{subsubsection*.21}%
-\contentsline {subsection}{\numberline {5.2.2}Analyse d'un rapport GRC}{55}{subsection.5.2.2}%
-\contentsline {subsubsection}{T\'el\'echargement d'un document}{55}{subsubsection*.22}%
-\contentsline {subsubsection}{R\'esultats de l'analyse des risques}{56}{subsubsection*.23}%
-\contentsline {subsubsection}{Tableau de conformit\'e}{56}{subsubsection*.24}%
-\contentsline {subsection}{\numberline {5.2.3}Chat RAG et export}{56}{subsection.5.2.3}%
-\contentsline {subsubsection}{Interface de chat contextuel}{57}{subsubsection*.25}%
-\contentsline {subsubsection}{Export PDF et Excel}{57}{subsubsection*.26}%
-\contentsline {subsubsection}{Interface d'administration}{58}{subsubsection*.27}%
-\contentsline {section}{\numberline {5.3}Bilan technique}{58}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}M\'etriques de performance}{58}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Couverture fonctionnelle}{59}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Synth\`ese}{59}{section.5.4}%
-\contentsline {chapter}{Conclusion g\'en\'erale}{60}{chapter*.28}%
-\contentsline {paragraph}{Contributions techniques.}{60}{paragraph*.29}%
-\contentsline {paragraph}{Contributions m\'ethodologiques.}{60}{paragraph*.30}%
-\contentsline {paragraph}{Perspectives.}{60}{paragraph*.31}%
+\contentsline {paragraph}{Pourquoi Mistral Large~?}{12}{paragraph*.9}%
+\contentsline {subsection}{\numberline {2.4.2}Le Retrieval Augmented Generation (RAG)}{12}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Les bases vectorielles}{13}{subsection.2.4.3}%
+\contentsline {paragraph}{Pourquoi ChromaDB~?}{13}{paragraph*.10}%
+\contentsline {subsection}{\numberline {2.4.4}Le framework FastAPI}{14}{subsection.2.4.4}%
+\contentsline {section}{\numberline {2.5}Synth\`ese et positionnement de GRC AI Analyzer}{14}{section.2.5}%
+\contentsline {chapter}{\numberline {3}Analyse des besoins et conception}{16}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{16}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Analyse des besoins}{16}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Identification des acteurs}{16}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Besoins fonctionnels}{16}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Besoins non fonctionnels}{19}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Diagramme des Cas d'Utilisation}{20}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Description générale}{20}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Description des cas d'utilisation principaux}{22}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Diagramme de Classes}{23}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Vue d'ensemble}{23}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Description des classes principales}{24}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Diagramme de Séquence}{26}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Séquence principale : Analyse d'un rapport GRC}{26}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Description détaillée des interactions}{27}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Diagramme d'Activité}{29}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Vue d'ensemble du flux de traitement}{29}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Description des activités}{30}{subsection.3.6.2}%
+\contentsline {section}{\numberline {3.7}Architecture globale de la solution}{31}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Vue d'ensemble en couches}{32}{subsection.3.7.1}%
+\contentsline {paragraph}{Zone Frontend --- React~18 / Vite (:5173).}{32}{paragraph*.11}%
+\contentsline {paragraph}{Zone Backend API --- FastAPI (:8000).}{32}{paragraph*.12}%
+\contentsline {paragraph}{Zone Moteur IA / RAG.}{32}{paragraph*.13}%
+\contentsline {paragraph}{Zone Infrastructure.}{33}{paragraph*.14}%
+\contentsline {subsection}{\numberline {3.7.2}Diagramme de d\'eploiement}{33}{subsection.3.7.2}%
+\contentsline {paragraph}{Poste utilisateur --- Navigateur Web.}{33}{paragraph*.15}%
+\contentsline {paragraph}{Serveur d'Application (Windows / Linux).}{33}{paragraph*.16}%
+\contentsline {paragraph}{MinIO Server (:9000 / :9001).}{34}{paragraph*.17}%
+\contentsline {paragraph}{PostgreSQL Server (:5433).}{34}{paragraph*.18}%
+\contentsline {paragraph}{ChromaDB Server (:8001).}{34}{paragraph*.19}%
+\contentsline {paragraph}{Mistral AI Cloud (\texttt {api.mistral.ai}) --- acteur externe.}{35}{paragraph*.20}%
+\contentsline {paragraph}{Protocoles de communication.}{35}{paragraph*.21}%
+\contentsline {section}{\numberline {3.8}Synth\`ese du chapitre}{35}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Conception technique et choix technologiques}{36}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Pile technologique retenue}{36}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Architecture en couches du backend}{37}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Conception du mod\`ele de donn\'ees}{38}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Architecture des bases de donn\'ees}{40}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Conception des routes API}{42}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Lancement d'une analyse (HTTP 202 + BackgroundTask)}{42}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Polling du statut d'analyse (frontend)}{43}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Interface de chat RAG}{44}{subsection.4.4.3}%
+\contentsline {section}{\numberline {4.5}Conception des prompts IA}{45}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Prompt d'extraction des risques}{45}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Prompts de v\'erification de conformit\'e}{47}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Prompt de g\'en\'eration des recommandations}{48}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Prompt du r\'esum\'e ex\'ecutif}{49}{subsection.4.5.4}%
+\contentsline {section}{\numberline {4.6}Pipeline d'analyse IA asynchrone}{51}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Phase~1 --- cinq t\^aches simultan\'ees (4~appels LLM + 1~indexation)}{51}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Phase 2 --- recommandations et r\'esum\'e}{52}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}S\'erialisation anti-429 des appels Mistral}{53}{subsection.4.6.3}%
+\contentsline {section}{\numberline {4.7}Parseur de documents et pipeline RAG}{54}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Extraction de texte multi-format}{54}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Indexation et recherche vectorielle ChromaDB}{55}{subsection.4.7.2}%
+\contentsline {section}{\numberline {4.8}S\'ecurit\'e applicative}{56}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Authentification JWT et hachage bcrypt}{56}{subsection.4.8.1}%
+\contentsline {subsection}{\numberline {4.8.2}Validation des fichiers (magic bytes)}{56}{subsection.4.8.2}%
+\contentsline {subsection}{\numberline {4.8.3}Rate limiting par adresse IP}{57}{subsection.4.8.3}%
+\contentsline {section}{\numberline {4.9}Synth\`ese du chapitre}{57}{section.4.9}%
+\contentsline {chapter}{\numberline {5}Implémentation et résultats}{58}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Environnement de développement}{58}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Configuration de l'environnement}{58}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Lancement du projet}{58}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Résultats obtenus}{60}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Authentification et tableau de bord}{60}{subsection.5.2.1}%
+\contentsline {subsubsection}{Page de connexion}{60}{subsubsection*.22}%
+\contentsline {subsubsection}{Tableau de bord principal}{60}{subsubsection*.23}%
+\contentsline {subsection}{\numberline {5.2.2}Gestion et analyse des rapports GRC}{61}{subsection.5.2.2}%
+\contentsline {subsubsection}{Liste des rapports et téléchargement d'un document}{61}{subsubsection*.24}%
+\contentsline {subsubsection}{Phase d'analyse asynchrone}{62}{subsubsection*.25}%
+\contentsline {subsection}{\numberline {5.2.3}Résultats de l'analyse}{64}{subsection.5.2.3}%
+\contentsline {subsubsection}{Résumé exécutif}{64}{subsubsection*.26}%
+\contentsline {subsubsection}{Cartographie des risques}{65}{subsubsection*.27}%
+\contentsline {subsubsection}{Évaluation de conformité multi-référentiel}{66}{subsubsection*.28}%
+\contentsline {subsubsection}{Plan d'action priorisé}{66}{subsubsection*.29}%
+\contentsline {subsubsection}{Assistant RAG contextuel}{67}{subsubsection*.30}%
+\contentsline {subsubsection}{Export PDF}{68}{subsubsection*.31}%
+\contentsline {subsubsection}{Export Excel (audit trail)}{69}{subsubsection*.32}%
+\contentsline {subsection}{\numberline {5.2.4}Documentation API Swagger}{69}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Panneau d'administration}{70}{subsection.5.2.5}%
+\contentsline {section}{\numberline {5.3}Bilan technique}{71}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Métriques de performance}{71}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Couverture fonctionnelle}{72}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Synth\`ese et limites}{73}{section.5.4}%
+\contentsline {paragraph}{Limites m\'ethodologiques.}{73}{paragraph*.33}%
+\contentsline {chapter}{Conclusion g\'en\'erale}{74}{chapter*.34}%
+\contentsline {paragraph}{Contributions techniques.}{74}{paragraph*.35}%
+\contentsline {paragraph}{Contributions m\'ethodologiques.}{74}{paragraph*.36}%
+\contentsline {paragraph}{Perspectives.}{74}{paragraph*.37}%

@@ -5,6 +5,7 @@ from app.models.analyse import Analyse
 from app.models.risque import Risque
 from app.models.conformite import ResultatConformite
 from app.models.recommandation import Recommandation
+from app.models.referentiel_config import ReferentielConfig
 
 __all__ = [
     "Utilisateur",
@@ -13,4 +14,5 @@ __all__ = [
     "Risque",
     "ResultatConformite",
     "Recommandation",
+    "ReferentielConfig",
 ]

@@ -1,10 +1,12 @@
 """FastAPI application entry point."""
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.api.v1 import (
+    admin,
     analyses,
     auth,
     chat,
@@ -14,6 +16,10 @@ from app.api.v1 import (
 )
 from app.config import settings
 from app.core.limiter import limiter
+
+# Set HuggingFace offline mode before sentence-transformers is imported
+os.environ.setdefault("TRANSFORMERS_OFFLINE", settings.transformers_offline)
+os.environ.setdefault("HF_DATASETS_OFFLINE", settings.hf_datasets_offline)
 
 app = FastAPI(
     title=settings.app_name,
@@ -45,6 +51,7 @@ async def health_check():
 
 # Include routers
 app.include_router(auth.router, prefix="/api/v1")
+app.include_router(admin.router, prefix="/api/v1")
 app.include_router(rapports.router, prefix="/api/v1")
 app.include_router(analyses.router, prefix="/api/v1")
 app.include_router(recommandations.router, prefix="/api/v1")

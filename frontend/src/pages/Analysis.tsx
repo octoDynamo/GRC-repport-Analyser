@@ -47,7 +47,7 @@ export function Analysis() {
         const currentAnalyse = aRes.data.data;
         setAnalyse(currentAnalyse);
 
-        if (currentAnalyse && (currentAnalyse.statut === 'termine' || currentAnalyse.statut === 'COMPLETED')) {
+        if (currentAnalyse && currentAnalyse.statut === 'termine') {
           // Analysis done — fetch sub-resources and stop polling
           if (pollInterval) {
             clearInterval(pollInterval);

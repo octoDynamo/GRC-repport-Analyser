@@ -35,7 +35,7 @@ export function Dashboard() {
         setReports(fetchedReports);
 
         // Fetch analyses for completed reports to compute real averages
-        const completedReports = fetchedReports.filter(r => r.statut === 'COMPLETED' || r.statut === 'termine');
+        const completedReports = fetchedReports.filter(r => r.statut === 'termine');
 
         if (completedReports.length === 0) {
           // No data yet — leave gauges null (will show placeholder)
@@ -122,8 +122,8 @@ export function Dashboard() {
     }
   };
 
-  const completed = reports.filter(r => r.statut === 'COMPLETED' || r.statut === 'termine').length;
-  const pending = reports.filter(r => r.statut === 'PROCESSING' || r.statut === 'en_cours' || r.statut === 'PENDING' || r.statut === 'en_attente').length;
+  const completed = reports.filter(r => r.statut === 'termine').length;
+  const pending = reports.filter(r => r.statut === 'en_cours' || r.statut === 'en_attente').length;
 
   if (loading) {
     return (
@@ -216,14 +216,14 @@ export function Dashboard() {
                   </div>
                   <div className="flex gap-2 items-center">
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      report.statut === 'COMPLETED' || report.statut === 'termine' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                      report.statut === 'PROCESSING' || report.statut === 'en_cours' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400' :
-                      report.statut === 'ERROR' || report.statut === 'erreur' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                      report.statut === 'termine' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' :
+                      report.statut === 'en_cours' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400' :
+                      report.statut === 'erreur' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
                       'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'
                     }`}>
                       {report.statut.toUpperCase()}
                     </span>
-                    {(report.statut === 'COMPLETED' || report.statut === 'termine') && (
+                    {report.statut === 'termine' && (
                       <button
                         onClick={() => goToAnalysis(report.id)}
                         className="inline-flex h-8 items-center justify-center rounded-md border text-foreground hover:bg-muted px-3 text-xs font-medium"

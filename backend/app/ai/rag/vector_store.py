@@ -44,11 +44,11 @@ async def index_document_chunks(analyse_id: str, chunks: list[str]) -> int:
     if not chunks:
         return 0
 
-    client = get_chroma_client()
-    model = get_embedding_model()
     collection_name = get_collection_name(analyse_id)
 
     try:
+        client = get_chroma_client()
+        model = get_embedding_model()
         # Get or create collection
         collection = await asyncio.to_thread(
             client.get_or_create_collection,
@@ -85,11 +85,11 @@ async def search_similar_chunks(
     Search for semantically similar chunks in ChromaDB.
     Returns a list of {'text': ..., 'distance': ...} dicts.
     """
-    client = get_chroma_client()
-    model = get_embedding_model()
     collection_name = get_collection_name(analyse_id)
 
     try:
+        client = get_chroma_client()
+        model = get_embedding_model()
         collection = await asyncio.to_thread(client.get_collection, collection_name)
         embeddings = await asyncio.to_thread(model.encode, [query], show_progress_bar=False)
         query_embedding = embeddings.tolist()
