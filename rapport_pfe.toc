@@ -59,69 +59,69 @@
 \contentsline {paragraph}{Zone Frontend --- React~18 / Vite (:5173).}{32}{paragraph*.11}%
 \contentsline {paragraph}{Zone Backend API --- FastAPI (:8000).}{32}{paragraph*.12}%
 \contentsline {paragraph}{Zone Moteur IA / RAG.}{32}{paragraph*.13}%
-\contentsline {paragraph}{Zone Infrastructure.}{33}{paragraph*.14}%
-\contentsline {subsection}{\numberline {3.7.2}Diagramme de d\'eploiement}{33}{subsection.3.7.2}%
-\contentsline {paragraph}{Poste utilisateur --- Navigateur Web.}{33}{paragraph*.15}%
-\contentsline {paragraph}{Serveur d'Application (Windows / Linux).}{33}{paragraph*.16}%
-\contentsline {paragraph}{MinIO Server (:9000 / :9001).}{34}{paragraph*.17}%
-\contentsline {paragraph}{PostgreSQL Server (:5433).}{34}{paragraph*.18}%
-\contentsline {paragraph}{ChromaDB Server (:8001).}{34}{paragraph*.19}%
+\contentsline {paragraph}{Zone Infrastructure.}{32}{paragraph*.14}%
+\contentsline {subsection}{\numberline {3.7.2}Diagramme de d\'eploiement}{34}{subsection.3.7.2}%
+\contentsline {paragraph}{Poste utilisateur --- Navigateur Web.}{34}{paragraph*.15}%
+\contentsline {paragraph}{Serveur d'Application (Windows / Linux).}{34}{paragraph*.16}%
+\contentsline {paragraph}{MinIO Server (:9000 / :9001).}{35}{paragraph*.17}%
+\contentsline {paragraph}{PostgreSQL Server (:5433).}{35}{paragraph*.18}%
+\contentsline {paragraph}{ChromaDB Server (:8001).}{35}{paragraph*.19}%
 \contentsline {paragraph}{Mistral AI Cloud (\texttt {api.mistral.ai}) --- acteur externe.}{35}{paragraph*.20}%
 \contentsline {paragraph}{Protocoles de communication.}{35}{paragraph*.21}%
 \contentsline {section}{\numberline {3.8}Synth\`ese du chapitre}{35}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Conception technique et choix technologiques}{36}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Pile technologique retenue}{36}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Architecture en couches du backend}{37}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Conception du mod\`ele de donn\'ees}{39}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Architecture des bases de donn\'ees}{40}{subsection.4.3.1}%
-\contentsline {section}{\numberline {4.4}Conception des routes API}{42}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Lancement d'une analyse (HTTP 202 + BackgroundTask)}{43}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Polling du statut d'analyse (frontend)}{44}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}Interface de chat RAG}{45}{subsection.4.4.3}%
-\contentsline {section}{\numberline {4.5}Conception des prompts IA}{46}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Prompt d'extraction des risques}{46}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Prompts de v\'erification de conformit\'e}{48}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Prompt de g\'en\'eration des recommandations}{50}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Prompt du r\'esum\'e ex\'ecutif}{51}{subsection.4.5.4}%
-\contentsline {section}{\numberline {4.6}Pipeline d'analyse IA asynchrone}{52}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Phase~1 --- cinq t\^aches simultan\'ees (4~appels LLM + 1~indexation)}{53}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Phase 2 --- recommandations et r\'esum\'e}{54}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}S\'erialisation anti-429 des appels Mistral}{54}{subsection.4.6.3}%
-\contentsline {section}{\numberline {4.7}Parseur de documents et pipeline RAG}{55}{section.4.7}%
-\contentsline {subsection}{\numberline {4.7.1}Extraction de texte multi-format}{56}{subsection.4.7.1}%
-\contentsline {subsection}{\numberline {4.7.2}Indexation et recherche vectorielle ChromaDB}{57}{subsection.4.7.2}%
-\contentsline {section}{\numberline {4.8}S\'ecurit\'e applicative}{58}{section.4.8}%
-\contentsline {subsection}{\numberline {4.8.1}Authentification JWT et hachage bcrypt}{58}{subsection.4.8.1}%
-\contentsline {subsection}{\numberline {4.8.2}Validation des fichiers (magic bytes)}{58}{subsection.4.8.2}%
-\contentsline {subsection}{\numberline {4.8.3}Rate limiting par adresse IP}{59}{subsection.4.8.3}%
-\contentsline {section}{\numberline {4.9}Synth\`ese du chapitre}{59}{section.4.9}%
-\contentsline {chapter}{\numberline {5}Implémentation et résultats}{60}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Environnement de développement}{60}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Configuration de l'environnement}{60}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Lancement du projet}{60}{subsection.5.1.2}%
-\contentsline {section}{\numberline {5.2}Résultats obtenus}{62}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Authentification et tableau de bord}{62}{subsection.5.2.1}%
-\contentsline {subsubsection}{Page de connexion}{62}{subsubsection*.22}%
-\contentsline {subsubsection}{Tableau de bord principal}{63}{subsubsection*.23}%
-\contentsline {subsection}{\numberline {5.2.2}Gestion et analyse des rapports GRC}{64}{subsection.5.2.2}%
-\contentsline {subsubsection}{Liste des rapports et téléchargement d'un document}{64}{subsubsection*.24}%
-\contentsline {subsubsection}{Phase d'analyse asynchrone}{65}{subsubsection*.25}%
-\contentsline {subsection}{\numberline {5.2.3}Résultats de l'analyse}{66}{subsection.5.2.3}%
-\contentsline {subsubsection}{Résumé exécutif}{66}{subsubsection*.26}%
-\contentsline {subsubsection}{Cartographie des risques}{67}{subsubsection*.27}%
-\contentsline {subsubsection}{Évaluation de conformité multi-référentiel}{68}{subsubsection*.28}%
-\contentsline {subsubsection}{Plan d'action priorisé}{69}{subsubsection*.29}%
-\contentsline {subsubsection}{Assistant RAG contextuel}{69}{subsubsection*.30}%
-\contentsline {subsubsection}{Export PDF}{70}{subsubsection*.31}%
-\contentsline {subsubsection}{Export Excel (audit trail)}{71}{subsubsection*.32}%
-\contentsline {subsection}{\numberline {5.2.4}Documentation API Swagger}{71}{subsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.2.5}Panneau d'administration}{72}{subsection.5.2.5}%
-\contentsline {section}{\numberline {5.3}Bilan technique}{73}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Métriques de performance}{73}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Couverture fonctionnelle}{74}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Synth\`ese et limites}{75}{section.5.4}%
-\contentsline {paragraph}{Limites m\'ethodologiques.}{75}{paragraph*.33}%
-\contentsline {chapter}{Conclusion g\'en\'erale}{76}{chapter*.34}%
-\contentsline {paragraph}{Contributions techniques.}{76}{paragraph*.35}%
-\contentsline {paragraph}{Contributions m\'ethodologiques.}{76}{paragraph*.36}%
-\contentsline {paragraph}{Perspectives.}{76}{paragraph*.37}%
+\contentsline {chapter}{\numberline {4}Conception technique et choix technologiques}{37}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Pile technologique retenue}{37}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Architecture en couches du backend}{38}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Conception du mod\`ele de donn\'ees}{40}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Architecture des bases de donn\'ees}{41}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Conception des routes API}{43}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Lancement d'une analyse (HTTP 202 + BackgroundTask)}{44}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Polling du statut d'analyse (frontend)}{45}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Interface de chat RAG}{46}{subsection.4.4.3}%
+\contentsline {section}{\numberline {4.5}Conception des prompts IA}{47}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Prompt d'extraction des risques}{47}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Prompts de v\'erification de conformit\'e}{49}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Prompt de g\'en\'eration des recommandations}{51}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Prompt du r\'esum\'e ex\'ecutif}{52}{subsection.4.5.4}%
+\contentsline {section}{\numberline {4.6}Pipeline d'analyse IA asynchrone}{53}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Phase~1 --- cinq t\^aches simultan\'ees (4~appels LLM + 1~indexation)}{54}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Phase 2 --- recommandations et r\'esum\'e}{55}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}S\'erialisation anti-429 des appels Mistral}{55}{subsection.4.6.3}%
+\contentsline {section}{\numberline {4.7}Parseur de documents et pipeline RAG}{56}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Extraction de texte multi-format}{57}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Indexation et recherche vectorielle ChromaDB}{58}{subsection.4.7.2}%
+\contentsline {section}{\numberline {4.8}S\'ecurit\'e applicative}{59}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Authentification JWT et hachage bcrypt}{59}{subsection.4.8.1}%
+\contentsline {subsection}{\numberline {4.8.2}Validation des fichiers (magic bytes)}{60}{subsection.4.8.2}%
+\contentsline {subsection}{\numberline {4.8.3}Limitation du d\'ebit (\textit {rate limiting}) par adresse IP}{60}{subsection.4.8.3}%
+\contentsline {section}{\numberline {4.9}Synth\`ese du chapitre}{61}{section.4.9}%
+\contentsline {chapter}{\numberline {5}Implémentation et résultats}{62}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Environnement de développement}{62}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Configuration de l'environnement}{62}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Lancement du projet}{62}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Résultats obtenus}{64}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Authentification et tableau de bord}{64}{subsection.5.2.1}%
+\contentsline {subsubsection}{Page de connexion}{64}{subsubsection*.22}%
+\contentsline {subsubsection}{Tableau de bord principal}{65}{subsubsection*.23}%
+\contentsline {subsection}{\numberline {5.2.2}Gestion et analyse des rapports GRC}{66}{subsection.5.2.2}%
+\contentsline {subsubsection}{Liste des rapports et téléchargement d'un document}{66}{subsubsection*.24}%
+\contentsline {subsubsection}{Phase d'analyse asynchrone}{67}{subsubsection*.25}%
+\contentsline {subsection}{\numberline {5.2.3}Résultats de l'analyse}{68}{subsection.5.2.3}%
+\contentsline {subsubsection}{Résumé exécutif}{68}{subsubsection*.26}%
+\contentsline {subsubsection}{Cartographie des risques}{69}{subsubsection*.27}%
+\contentsline {subsubsection}{Évaluation de conformité multi-référentiel}{70}{subsubsection*.28}%
+\contentsline {subsubsection}{Plan d'action priorisé}{71}{subsubsection*.29}%
+\contentsline {subsubsection}{Assistant RAG contextuel}{71}{subsubsection*.30}%
+\contentsline {subsubsection}{Export PDF}{72}{subsubsection*.31}%
+\contentsline {subsubsection}{Export Excel (audit trail)}{73}{subsubsection*.32}%
+\contentsline {subsection}{\numberline {5.2.4}Documentation API Swagger}{73}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Panneau d'administration}{74}{subsection.5.2.5}%
+\contentsline {section}{\numberline {5.3}Bilan technique}{75}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Métriques de performance}{75}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Couverture fonctionnelle}{76}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Synth\`ese et limites}{77}{section.5.4}%
+\contentsline {paragraph}{Limites m\'ethodologiques.}{77}{paragraph*.33}%
+\contentsline {chapter}{Conclusion g\'en\'erale}{78}{chapter*.34}%
+\contentsline {paragraph}{Contributions techniques.}{78}{paragraph*.35}%
+\contentsline {paragraph}{Contributions m\'ethodologiques.}{78}{paragraph*.36}%
+\contentsline {paragraph}{Perspectives.}{78}{paragraph*.37}%
