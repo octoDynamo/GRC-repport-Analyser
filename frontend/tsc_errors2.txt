@@ -1,4 +1,0 @@
-src/components/dashboard/KPICard.tsx(1,10): error TS1484: 'ReactNode' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-src/router.tsx(10,51): error TS2503: Cannot find namespace 'JSX'.
-src/store/authStore.ts(3,10): error TS1484: 'User' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-src/store/reportStore.ts(2,10): error TS1484: 'Rapport' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.

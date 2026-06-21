@@ -40,3 +40,24 @@ Thumbs.db
 
 # ─── Claude Code session data ────────────────────────────────────────────────
 .claude/
+
+# ─── Uploaded / generated reports ────────────────────────────────────────────
+backend/uploads/
+*.tmp.*
+
+# ─── PFE LaTeX report (kept local only) ──────────────────────────────────────
+figures/
+rapport_pfe.*
+chapitre_conception.tex
+*.aux
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+
+# ─── Lint / type-check error dumps ───────────────────────────────────────────
+mypy_errors.txt
+ruff_errors.txt
+tsc_errors*.txt
